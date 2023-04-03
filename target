@@ -1,0 +1,29 @@
+memperbaiki correct answer//
+menambah mathjax//
+memperbaiki navigasi//
+menambah preview button//
+menambah melihat view nilai//
+menambah judul pada slide//
+membuat sidebar//
+memisahkan looping script di learn blade//
+membuat slide editor//
+menambah register page//
+membuat landing page//
+membuat about page//
+membuat demo
+memperbaiki footer/
+mengubah tampilan aksi menu pada *dashboard*materi/
+mengubah tampilan slide admin/
+menambah fitur terima respon pada materi/
+menambahkan search page materi/
+upgrade ke versi laravel 10/
+refactor model dan controller/
+menambahkan fitur preview/
+menambahkan model baru yaitu mode kuis/
+menambahkan ajax krim sisa waktu/
+fitur salin dan edit/
+loading fetching setelah mengerjakan/
+ubah session manager agar bisa terus membuka materi/
+admin panel/
+list all user/
+list all package/
