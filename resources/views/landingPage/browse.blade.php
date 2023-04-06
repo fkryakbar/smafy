@@ -22,7 +22,7 @@
                     <form action="" method="GET" autocomplete="off">
                         <div class="input-group">
                             <input type="text" name="s" placeholder="Cari topik"
-                                class="input input-bordered lg:w-[500px]" value="{{ Request::get('s') }}" />
+                                class="input input-bordered lg:w-[500px] w-full" value="{{ Request::get('s') }}" />
                             <button type="submit" class="btn btn-square bg-amber-400 border-none hover:bg-amber-600">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
