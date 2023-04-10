@@ -15,6 +15,9 @@
 <body class="relative" x-data="{ sidebar_open: false }">
     {{-- navbar --}}
     @include('partials.navbar')
+    <div x-show="sidebar_open" x-cloak class="absolute w-full h-screen bg-black opacity-50">
+
+    </div>
     {{-- page --}}
     <div class="container mx-auto">
         <section class="">

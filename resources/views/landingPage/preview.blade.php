@@ -13,6 +13,9 @@
 
 <body class=" bg-slate-100" x-data="{ sidebar_open: false }">
     @include('partials.navbar')
+    <div x-show="sidebar_open" x-cloak class="absolute w-full h-screen bg-black opacity-50">
+
+    </div>
     <div class="px-2 lg:w-[800px] w-full lg:mx-auto">
         <div class="text-sm breadcrumbs mt-3">
             <ul>

@@ -13,6 +13,9 @@
 
 <body class=" bg-slate-100" x-data="{ sidebar_open: false }">
     @include('partials.navbar')
+    <div x-show="sidebar_open" x-cloak class="absolute w-full h-screen bg-black opacity-50">
+
+    </div>
     <div class="px-2 lg:w-[800px] w-full lg:mx-auto">
         <div class="py-5 px-3  bg-white  rounded-md mt-5 shadow-md">
             <h1 class="text-center lg:text-5xl text-2xl text-amber-400 font-bold">Smafy Library</h1>

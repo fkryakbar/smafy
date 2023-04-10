@@ -14,6 +14,9 @@
 
 <body class="relative" x-data="{ sidebar_open: false }">
     @include('partials.navbar')
+    <div x-show="sidebar_open" x-cloak class="absolute w-full h-screen bg-black opacity-50">
+
+    </div>
     <section class=" my-10">
         <div class="lg:w-[80%] w-[95%] mx-auto lg:flex">
             <div class="basis-[50%] flex items-center">
