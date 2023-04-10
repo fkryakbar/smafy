@@ -41,12 +41,14 @@ class DashboardController extends Controller
     public function post_tambah_materi(Request $request)
     {
         $request->validate([
-            'title' => 'required|max:30',
-            'description' => 'required|max:255',
+            'title' => 'required|max:150',
+            'description' => 'required|max:1000',
             'timer' => 'required|integer|min:0'
         ], [
             'title.required' => 'judul tidak boleh kosong',
+            'title.max' => 'judul tidak boleh lebih dari 150 karakter',
             'description.required' => 'Deskripsi tidak boleh kosong',
+            'description.max' => 'Deskripsi tidak boleh lebih dari 1000 karakter',
             'timer.required' => 'Waktu pengerjaan tidak boleh kosong',
             'timer.integer' => 'Waktu pengerjaan harus berupa bilangan bulat positif',
             'timer.min' => 'Waktu pengerjaan minimal 1 menit'
@@ -104,12 +106,12 @@ class DashboardController extends Controller
     {
         $request->validate([
             'content' => 'required',
-            'title' => 'required|max:40',
+            'title' => 'required|max:150',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ], [
             'content.required' => 'Konten wajib diisi',
             'title.required' => 'Judul wajib diisi',
-            'title.max' => 'Maksimal judul 40 karakter'
+            'title.max' => 'Maksimal judul 150 karakter'
         ]);
         $image_path = null;
         if ($request->file('image')) {
@@ -157,12 +159,14 @@ class DashboardController extends Controller
     public function post_materi_edit($slug, Request $request)
     {
         $request->validate([
-            'title' => 'required|max:30',
-            'description' => 'required|max:255',
+            'title' => 'required|max:150',
+            'description' => 'required|max:1000',
             'timer' => 'required|integer|min:0'
         ], [
             'title.required' => 'judul tidak boleh kosong',
+            'title.max' => 'judul tidak boleh lebih dari 150 karakter',
             'description.required' => 'Deskripsi tidak boleh kosong',
+            'description.max' => 'Deskripsi tidak boleh lebih dari 1000 karakter',
             'timer.required' => 'Waktu pengerjaan tidak boleh kosong',
             'timer.integer' => 'Waktu pengerjaan harus berupa bilangan bulat positif',
             'timer.min' => 'Waktu pengerjaan minimal 1 menit'
@@ -244,9 +248,13 @@ class DashboardController extends Controller
     {
         $request->validate([
             'content' => 'required',
-            'title' => 'required|max:40',
+            'title' => 'required|max:150',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'order_id' => 'required|numeric'
+            'order_id' => 'required|numeric|min:0'
+        ], [
+            'content.required' => 'Konten wajib diisi',
+            'title.required' => 'Judul wajib diisi',
+            'title.max' => 'Maksimal judul 150 karakter'
         ]);
         $data = QuestionsModel::where('user_id', Auth::user()->id)->where('package_slug', $slug)->where('id', $id)->firstOrFail();
         $image_path = $data->image_path;
