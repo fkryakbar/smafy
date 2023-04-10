@@ -52,6 +52,19 @@
                                         <tr>
                                             <th>{{ $index + 1 }}</th>
                                             <th>{{ $item->title }}</th>
+                                            @if ($item->topic_type == 'materi')
+                                                <th class="uppercase font-bold">
+                                                    <div class="badge bg-green-400 border-0">
+                                                        {{ $item->topic_type }}
+                                                    </div>
+                                                </th>
+                                            @else
+                                                <th class="uppercase font-bold">
+                                                    <div class="badge bg-amber-400 border-0">
+                                                        {{ $item->topic_type }}
+                                                    </div>
+                                                </th>
+                                            @endif
                                             <th><a href="/dashboard/hasil/{{ $item->slug }}"
                                                     class="btn btn-xs bg-green-500 border-none hover:bg-green-700">Lihat
                                                     nilai</a></th>

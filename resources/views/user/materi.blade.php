@@ -60,6 +60,15 @@
                                     <a href="/dashboard/topik/{{ $item->slug }}" class="basis-[75%] ">
                                         <p class="font-bold">
                                             {{ $item->title }}
+                                            @if ($item->topic_type == 'materi')
+                                                <span class="badge bg-green-400 border-0 uppercase">
+                                                    {{ $item->topic_type }}
+                                                </span>
+                                            @else
+                                                <span class="badge bg-amber-400 border-0 uppercase">
+                                                    {{ $item->topic_type }}
+                                                </span>
+                                            @endif
                                         </p>
                                         <p class="text-xs text-gray-500">
                                             {{ $item->created_at->diffForHumans() }}
@@ -86,7 +95,8 @@
                                                 </li>
                                                 <li><button onclick="copy_link_materi('{{ $item->slug }}')">Salin
                                                         link</button></li>
-                                                <li><button onclick="hapus_materi('{{ $item->slug }}')">Hapus</button>
+                                                <li><button
+                                                        onclick="hapus_materi('{{ $item->slug }}')">Hapus</button>
                                                 </li>
                                             </ul>
                                         </div>
