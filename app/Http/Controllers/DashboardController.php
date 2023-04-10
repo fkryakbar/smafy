@@ -183,8 +183,9 @@ class DashboardController extends Controller
 
     public function hasil_materi($slug)
     {
-        $data = DB::table('siswa')->join('package', 'siswa.package_id', '=', 'package.slug')->where('package.user_id', '=', Auth::user()->id)->where('package.slug', '=', $slug)->latest('siswa.created_at')->get();
+        $data = DB::table('siswa')->join('package', 'siswa.package_id', '=', 'package.slug')->where('package.user_id', '=', Auth::user()->id)->where('package.slug', '=', $slug)->latest('siswa.created_at')->select('siswa.id', 'siswa.u_id', 'siswa.name', 'siswa.kelas', 'siswa.score', 'siswa.created_at', 'siswa.updated_at', 'siswa.time_left', 'siswa.package_id')->get();
         $package = PackageModel::where('slug', $slug)->where('user_id', Auth::user()->id)->firstOrFail();
+        // dd($data);
         return view('user.hasil_materi', [
             'siswa' => $data,
             'package' => $package

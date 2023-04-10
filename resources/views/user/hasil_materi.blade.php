@@ -70,6 +70,8 @@
                                         @if ($package->topic_type == 'kuis')
                                             <th>Sisa waktu</th>
                                         @endif
+                                        <th>Waktu Mulai</th>
+                                        <th>Waktu Selesai</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -96,6 +98,8 @@
                                                 @endphp
                                                 <th>{{ $menit }}:{{ $detik }}</th>
                                             @endif
+                                            <th>{{ $item->created_at }}</th>
+                                            <th>{{ $item->updated_at }}</th>
                                             @php
                                                 $score_total = $score_total + (int) $item->score;
                                             @endphp
