@@ -25,15 +25,34 @@
                         dan dimana saja.</p>
                     <div class="mt-4 lg:block flex justify-center gap-2">
                         <a href="/register" class="btn bg-amber-400 hover:bg-amber-600 border-0 px-10">Daftar</a>
+                        <label for="try-demo" class="btn bg-slate-600 hover:bg-slate-800 border-0 px-10">Demo</label>
+                    </div>
+                </div>
+            </div>
+            <!-- The button to open modal -->
+
+            <!-- Put this part before </body> tag -->
+            <input type="checkbox" id="try-demo" class="modal-toggle" />
+            <div class="modal">
+                <div class="modal-box">
+                    <label for="try-demo" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                    <h3 class="font-bold text-lg">Coba Demo dari Smafy!</h3>
+                    <p class="mt-5 text-center">Coba smafy dari dua mode di bawah ini</p>
+                    <div class="mt-3 flex justify-center gap-2">
                         <a target="_blank" href="/learn/demo"
-                            class="btn bg-slate-600 hover:bg-slate-800 border-0 px-10">Demo</a>
+                            class="btn bg-amber-400 hover:bg-amber-800 border-0 px-10">Materi</a>
+                        <a target="_blank" href="/learn/demo-kuis"
+                            class="btn bg-green-400 hover:bg-green-800 border-0 px-10">Kuis</a>
+                        <div class="modal-action">
+                            <div class="modal-action">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="basis-[50%] w-full">
                 <img class="w-full mt-5" src="{{ asset('image/Education-pana.svg') }}" alt="">
             </div>
-        </div>
     </section>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
         <path fill="#fbbf24" fill-opacity="1"
