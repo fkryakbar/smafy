@@ -104,17 +104,17 @@ class LearnController extends Controller
 
     public function flush_session(Request $request)
     {
-        // $request->session()->forget('siswa');
-
-
         return redirect('/')->with('msg', 'Jawaban kamu sudah disimpan!');
     }
     public function clear_session(Request $request)
     {
         $request->session()->flush();
-
-
         return redirect('/')->with('msg', 'Riwayat berhasil dihapus');
+    }
+    public function clear_history($slug, Request $request)
+    {
+        $request->session()->forget($slug);
+        return back()->with('msg', 'Riwayat berhasil dihapus');
     }
 
 

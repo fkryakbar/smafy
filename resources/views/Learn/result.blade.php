@@ -22,14 +22,11 @@
                         <p>Soal Benar : {{ $benar }} dari {{ $total }} Soal</p>
                     @endif
                     <div class="flex gap-2 flex-wrap justify-center">
-                        @if ($package->topic_type == 'kuis' && $package->show_correction_quiz == 1)
-                            <div class="card-actions">
-                                <a href="/learn/{{ $package->slug }}"
-                                    class="btn btn-sm bg-blue-400 border-none hover:bg-blue-600">Lihat
-                                    Koreksi
-                                    Jawaban</a>
-                            </div>
-                        @endif
+                        <div class="card-actions">
+                            <a href="/learn/{{ $package->slug }}"
+                                class="btn btn-sm bg-blue-400 border-none hover:bg-blue-600">Lihat Kembali
+                                Pengerjaan</a>
+                        </div>
                         <div class="card-actions">
                             <a href="/flush" class="btn btn-sm bg-green-400 border-none hover:bg-green-600">Keluar</a>
                         </div>

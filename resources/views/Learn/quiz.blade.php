@@ -80,9 +80,9 @@
                     @foreach ($soal as $i => $item)
                         <li>
                             <button x-on:click="page={{ $i + 1 }}"
-                                @if ($item->result == 0) class="relative flex flex-row items-center h-11 w-60 focus:outline-none border-l-4 border-transparent  pr-6 @if ($item->result == 0 && session($package->slug)['is_finished'] == true) bg-red-400 text-white @else hover:bg-gray-50  hover:text-gray-800 hover:border-amber-500 @endif
+                                @if ($item->result == 0) class="relative flex flex-row items-center h-11 w-60 focus:outline-none border-l-4 border-transparent  pr-6 @if ($item->result == 0 && session($package->slug)['is_finished'] == true && $package->show_correction_quiz == 1) bg-red-400 text-white @else hover:bg-gray-50  hover:text-gray-800 hover:border-amber-500 @endif
                             rounded-r-md" @else
-                                class="relative flex flex-row items-center h-11 w-60 focus:outline-none border-l-4 border-transparent  pr-6 @if ($item->result == 1 && session($package->slug)['is_finished'] == true) bg-green-400 text-white @else hover:bg-gray-50  hover:text-gray-800 hover:border-amber-500 @endif rounded-r-md "
+                                class="relative flex flex-row items-center h-11 w-60 focus:outline-none border-l-4 border-transparent  pr-6 @if ($item->result == 1 && session($package->slug)['is_finished'] == true && $package->show_correction_quiz == 1) bg-green-400 text-white @else hover:bg-gray-50  hover:text-gray-800 hover:border-amber-500 @endif rounded-r-md "
                                 @endif
                                 :class="page == {{ $i + 1 }} ? 'bg-gray-100 text-gray-800 border-amber-400' : ''">
                                 <span class="inline-flex justify-center items-center ml-4">
@@ -105,7 +105,17 @@
                             </button>
                         </li>
                     @endforeach
-
+                    <br>
+                    @if (session($package->slug)['is_finished'] == true)
+                        <button onclick="clear_history('{{ $package->slug }}')"
+                            class="btn h-fit py-2 bg-red-500 hover:bg-red-700 border-none mx-auto gap-2 w-[90%] flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                            Ulangi Pengerjaan</button>
+                    @endif
                 </ul>
             </div>
         </div>
@@ -604,6 +614,25 @@
                 }
             });
         });
+
+        @if (session($package->slug)['is_finished'] == true)
+            function clear_history(slug) {
+                Swal.fire({
+                    title: "Ulangi?",
+                    text: "Riwayat Pengerjaan saat ini akan hilang",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Restart",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        sessionStorage.clear();
+                        window.location.href = `/clear_history/${slug}`;
+                    }
+                });
+            }
+        @endif
     </script>
 </body>
 

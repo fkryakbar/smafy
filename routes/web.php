@@ -54,6 +54,7 @@ Route::post('/learn/{code}', [LearnController::class, 'create_session']);
 Route::get('/learn/{code}/result', [LearnController::class, 'show_result']);
 Route::get('/flush', [LearnController::class, 'flush_session']);
 Route::get('/clear_session', [LearnController::class, 'clear_session']);
+Route::get('/clear_history/{slug}', [LearnController::class, 'clear_history']);
 
 
 Route::group(['middleware' => 'auth.admin', 'prefix' => 'admin'], function () {
