@@ -56,7 +56,7 @@
     {{-- sidebar --}}
     <div x-cloak
         class="min-h-screen fixed  z-[100] flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50 text-gray-800">
-        <div class="fixed  flex flex-col top-0  w-64 bg-white h-full border-r transition-all"
+        <div class="fixed  flex flex-col top-0  w-64 bg-white h-full border-r transition-all shadow-xl"
             :class="show_sidebar ? 'left-0' : '-left-[300px]'">
             <div class="flex justify-between py-5 pl-3 items-center pr-5 h-14 border-b text-amber-400">
                 <div class="tooltip tooltip-bottom" data-tip="{{ $package->title }}">
@@ -80,7 +80,10 @@
                     @foreach ($soal as $i => $item)
                         <li>
                             <button x-on:click="page={{ $i + 1 }}"
-                                class="relative flex flex-row items-center h-11 w-60 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-amber-500 pr-6 "
+                                @if ($item->result == 0 && ($item->type == 'isian' || $item->type == 'pilihan_ganda')) class="relative flex flex-row items-center h-11 w-60 focus:outline-none border-l-4 border-transparent  pr-6 @if ($item->result == 0 && session($package->slug)['is_finished'] == true) bg-red-400 text-white @else hover:bg-gray-50  hover:text-gray-800 hover:border-amber-500 @endif
+                            rounded-r-md" @else
+                                class="relative flex flex-row items-center h-11 w-60 focus:outline-none border-l-4 border-transparent  pr-6 @if ($item->result == 1 && session($package->slug)['is_finished'] == true) bg-green-400 text-white @else hover:bg-gray-50  hover:text-gray-800 hover:border-amber-500 @endif rounded-r-md "
+                                @endif
                                 :class="page == {{ $i + 1 }} ? 'bg-gray-50 text-gray-800 border-amber-500' : ''">
                                 <span class="inline-flex justify-center items-center ml-4">
                                     @if ($item->type == 'isian' || $item->type == 'pilihan_ganda')

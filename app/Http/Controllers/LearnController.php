@@ -39,6 +39,7 @@ class LearnController extends Controller
                                 })->get()
                             ]);
                         } else if ($package->topic_type == 'kuis') {
+                            // dd($soal);
                             return view('Learn.quiz', [
                                 'package' => $package,
                                 'soal' => $soal,
