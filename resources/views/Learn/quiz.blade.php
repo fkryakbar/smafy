@@ -111,35 +111,40 @@
         </div>
     </div>
     {{-- navbar --}}
-    <div id="coba" class="navbar fixed top-0 w-full bg-amber-400 shadow-xl z-50">
-        <div class="navbar-start text-white gap-2">
-            <div x-on:click="show_sidebar=true" class="btn bg-amber-400 hover:bg-amber-600 border-none">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                </svg>
-            </div>
+    <div class="fixed w-full">
+        <div id="coba" class="navbar top-0 w-full bg-amber-400 shadow-xl z-50">
+            <div class="navbar-start text-white gap-2">
+                <div x-on:click="show_sidebar=true" class="btn bg-amber-400 hover:bg-amber-600 border-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                </div>
 
-            <div class="tooltip tooltip-bottom " data-tip="{{ $package->title }}">
-                <div class="">
-                    <p
-                        class="font-bold text-white normal-case lg:text-xl lg:max-w-[300px] max-w-[120px] truncate text-left ">
-                        {{ $package->title }}</p>
+                <div class="tooltip tooltip-bottom " data-tip="{{ $package->title }}">
+                    <div class="">
+                        <p
+                            class="font-bold text-white normal-case lg:text-xl lg:max-w-[300px] max-w-[120px] truncate text-left ">
+                            {{ $package->title }}</p>
+                    </div>
                 </div>
             </div>
+            <div class="navbar-center hidden lg:flex">
+            </div>
+            <div class="navbar-end">
+                <a class="btn btn-ghost text-white normal-case text-lg min-[200px]:btn-sm " id="progress">
+                    <p class="animate-[mantul_1s_ease-in-out]" x-text="progress()"></p>
+                </a>
+                <button id="exit" class="btn btn-ghost text-white normal-case text-lg min-[200px]:btn-sm"><i
+                        class="bi bi-box-arrow-right text-2xl"></i></button>
+            </div>
         </div>
-        <div class="navbar-center hidden lg:flex">
-        </div>
-        <div class="navbar-end">
-            <a class="btn btn-ghost text-white normal-case text-lg min-[200px]:btn-sm " id="progress">
-                <p class="animate-[mantul_1s_ease-in-out]" x-text="progress()"></p>
-            </a>
-            <button id="exit" class="btn btn-ghost text-white normal-case text-lg min-[200px]:btn-sm"><i
-                    class="bi bi-box-arrow-right text-2xl"></i></button>
+        <div class="w-full h-1">
+            <div class="bg-orange-400 h-1 transition-all" style="width: 0%" id="progress_bar">
+            </div>
         </div>
     </div>
-
     {{-- endnavbar --}}
     {{-- main --}}
     <div id="capture"
@@ -481,7 +486,9 @@
                     }
                 },
                 progress() {
-                    return `${this.page} / ${App.page_total}`
+                    let proggress_bar = document.getElementById('progress_bar');
+                    proggress_bar.style["width"] = `${Math.floor(this.page/App.page_total*100)}%`;
+                    return `${this.page} / ${App.page_total}`;
                 },
                 async get_user_saved_answer() {
                     let responses = await fetch(`/api/get-saved-answer/${App.abstract.u_id}`, {
