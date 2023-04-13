@@ -531,7 +531,7 @@
         document.getElementById("exit").addEventListener("click", function() {
             Swal.fire({
                 title: "Keluar?",
-                text: "Setelah keluar tidak bisa kembali untuk mengerjakan",
+                text: "Yakin anda mau keluar?",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
