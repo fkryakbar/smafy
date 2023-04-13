@@ -428,7 +428,7 @@
                     }
                 },
                 progress() {
-                    return `Progress : ${Math.round(this.page/App.page_total*100)}%`
+                    return `${this.page} / ${App.page_total}`
                 },
                 async get_user_saved_answer() {
                     let responses = await fetch(`/api/get-saved-answer/${App.abstract.u_id}`, {
