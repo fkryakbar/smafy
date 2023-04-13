@@ -21,9 +21,6 @@
                 <div class="navbar-center hidden lg:flex">
                 </div>
                 <div class="navbar-end">
-                    <a class="btn btn-ghost text-white normal-case text-lg min-[200px]:btn-sm " id="progress">
-                        <p class="animate-[mantul_1s_ease-in-out]">Progress : 0%</p>
-                    </a>
                     <button id="exit" class="btn btn-ghost text-white normal-case text-lg min-[200px]:btn-sm"><i
                             class="bi bi-box-arrow-right text-2xl"></i></button>
                 </div>

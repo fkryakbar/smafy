@@ -84,7 +84,7 @@
                             rounded-r-md" @else
                                 class="relative flex flex-row items-center h-11 w-60 focus:outline-none border-l-4 border-transparent  pr-6 @if ($item->result == 1 && session($package->slug)['is_finished'] == true) bg-green-400 text-white @else hover:bg-gray-50  hover:text-gray-800 hover:border-amber-500 @endif rounded-r-md "
                                 @endif
-                                :class="page == {{ $i + 1 }} ? 'bg-gray-50 text-gray-800 border-amber-500' : ''">
+                                :class="page == {{ $i + 1 }} ? 'bg-gray-100 text-gray-800 border-amber-500' : ''">
                                 <span class="inline-flex justify-center items-center ml-4">
                                     @if ($item->type == 'isian' || $item->type == 'pilihan_ganda')
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
