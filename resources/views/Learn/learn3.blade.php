@@ -55,7 +55,7 @@
     </script>
     {{-- sidebar --}}
     <div x-cloak
-        class="min-h-screen fixed  z-[100] flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50 text-gray-800">
+        class="min-h-screen fixed  z-[1000000] flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50 text-gray-800">
         <div class="fixed  flex flex-col top-0  w-64 bg-white h-full border-r transition-all shadow-xl"
             :class="show_sidebar ? 'left-0' : '-left-[300px]'">
             <div class="flex justify-between py-5 pl-3 items-center pr-5 h-14 border-b text-amber-400">
@@ -121,7 +121,7 @@
         </div>
     </div>
     {{-- navbar --}}
-    <div class="fixed z-[99] w-full">
+    <div class="fixed z-[100000] w-full">
         <div id="coba" class="navbar top-0 w-full bg-amber-400 shadow-xl z-50">
             <div class="navbar-start text-white gap-2">
                 <div x-on:click="show_sidebar=true" class="btn bg-amber-400 hover:bg-amber-600 border-none">
