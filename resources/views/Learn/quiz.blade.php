@@ -121,7 +121,7 @@
         </div>
     </div>
     {{-- navbar --}}
-    <div class="fixed w-full">
+    <div class="fixed z-[99] w-full">
         <div id="coba" class="navbar top-0 w-full bg-amber-400 shadow-xl z-50">
             <div class="navbar-start text-white gap-2">
                 <div x-on:click="show_sidebar=true" class="btn bg-amber-400 hover:bg-amber-600 border-none">
