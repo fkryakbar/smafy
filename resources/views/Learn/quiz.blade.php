@@ -170,60 +170,61 @@
                     </div>
                 </div>
                 <script>
-                    const countdown = document.getElementById('countdown');
-                    let time = {{ (int) session($package->slug)['expired_time'] - time() }};
-                    let update = setInterval(() => {
-                        update_countdown()
-                    }, 1000);
+                    (function() {
+                        const countdown = document.getElementById('countdown');
+                        let time = {{ (int) session($package->slug)['expired_time'] - time() }};
+                        let update = setInterval(() => {
+                            update_countdown()
+                        }, 1000);
 
+                        function update_countdown() {
+                            let minutes = Math.floor(time / 60);
+                            let seconds = time % 60;
+                            if (time < 300) {
+                                countdown.classList.add('text-red-500')
+                            }
+                            if (seconds < 10) {
+                                seconds = '0' + seconds
+                            }
+                            if (minutes < 10) {
+                                minutes = '0' + minutes
+                            }
+                            if (time < 0) {
+                                seconds = '00'
+                                minutes = '00'
+                            }
+                            countdown.innerHTML = `${minutes} : ${seconds}`;
+                            if (time < 0) {
+                                clearInterval(update);
+                                stop_quiz();
+                            }
+                            time--
+                        }
 
-                    function update_countdown() {
-                        let minutes = Math.floor(time / 60);
-                        let seconds = time % 60;
-                        if (time < 300) {
-                            countdown.classList.add('text-red-500')
-                        }
-                        if (seconds < 10) {
-                            seconds = '0' + seconds
-                        }
-                        if (minutes < 10) {
-                            minutes = '0' + minutes
-                        }
-                        if (time < 0) {
-                            seconds = '00'
-                            minutes = '00'
-                        }
-                        countdown.innerHTML = `${minutes} : ${seconds}`;
-                        if (time < 0) {
-                            clearInterval(update);
-                            stop_quiz();
-                        }
-                        time--
-                    }
-
-                    function stop_quiz() {
-                        Swal.fire({
-                            title: "Kuis telah berakhir!",
-                            text: "Halaman akan di tutup dalam 5 detik",
-                            icon: "success",
-                            showCancelButton: true,
-                            confirmButtonColor: "#3085d6",
-                            cancelButtonColor: "#d33",
-                            confirmButtonText: "Keluar",
-                            cancelButtonText: "Kembali",
-                        }).then((result) => {
-                            if (result.isConfirmed) {
+                        function stop_quiz() {
+                            Swal.fire({
+                                title: "Kuis telah berakhir!",
+                                text: "Halaman akan di tutup dalam 5 detik",
+                                icon: "success",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Keluar",
+                                cancelButtonText: "Kembali",
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    sessionStorage.clear();
+                                    window.location.href =
+                                        `/learn/${App.abstract.package_id}/result`;
+                                }
+                            });
+                            setTimeout(() => {
                                 sessionStorage.clear();
                                 window.location.href =
                                     `/learn/${App.abstract.package_id}/result`;
-                            }
-                        });
-                        setTimeout(() => {
-                            sessionStorage.clear();
-                            window.location.href =
-                                `/learn/${App.abstract.package_id}/result`;
-                        }, 5000)
-                    }
+                            }, 5000)
+                        }
+                    })()
                 </script>
             </div>
         @endif
