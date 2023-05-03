@@ -55,7 +55,7 @@
     </script>
     {{-- sidebar --}}
     <div x-cloak
-        class="min-h-screen fixed  z-[1000000] flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50 text-gray-800">
+        class="min-h-screen fixed  z-[101] flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50 text-gray-800">
         <div class="fixed  flex flex-col top-0  w-64 bg-white h-full border-r transition-all shadow-xl"
             :class="show_sidebar ? 'left-0' : '-left-[300px]'">
             <div class="flex justify-between py-5 pl-3 items-center pr-5 h-14 border-b text-amber-400">
@@ -121,7 +121,7 @@
         </div>
     </div>
     {{-- navbar --}}
-    <div class="fixed z-[100000] w-full">
+    <div class="fixed z-[100] w-full">
         <div id="coba" class="navbar top-0 w-full bg-amber-400 shadow-xl z-50">
             <div class="navbar-start text-white gap-2">
                 <div x-on:click="show_sidebar=true" class="btn bg-amber-400 hover:bg-amber-600 border-none">
@@ -159,12 +159,15 @@
     {{-- endnavbar --}}
     {{-- main --}}
     <div id="capture"
-        class="bg-slate-100 mx-auto my-auto h-screen lg:w-[1000px] min-[200px]:w-full pt-[100px] py-9 pb-[100px] overflow-y-auto p-9 shadow-xl">
+        class="bg-slate-100 mx-auto my-auto h-screen lg:w-[1000px] min-[200px]:w-full pb-[100px] overflow-y-auto lg:p-9 p-3  shadow-xl">
+        <div class="h-[70px]">
+
+        </div>
         @foreach ($soal as $i => $item)
             <div class="main" x-show="page=={{ $i + 1 }}" x-transition.duration.150ms>
                 <div id="content">
                     <div class="bg-white mb-8 mt-5 p-5 border-l-8 border-amber-400 rounded-r-lg ">
-                        <h1 class="min-[200px]:text-4xl text-5xl font-bold text-slate-600">{{ $item->title }}</h1>
+                        <h1 class="text-2xl lg:text-5xl font-bold text-slate-600">{{ $item->title }}</h1>
                     </div>
                     @if ($item->image_path != null)
                         <img src="/{{ $item->image_path }}" class="lg:w-[500px] mx-auto mb-4">
@@ -385,6 +388,9 @@
 
             </div>
         @endforeach
+        <div class="h-[70px] lg:block hidden">
+
+        </div>
     </div>
 
     {{-- endmain --}}
