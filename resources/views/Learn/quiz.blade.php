@@ -60,7 +60,7 @@
             :class="show_sidebar ? 'left-0' : '-left-[300px]'">
             <div class="flex justify-between py-5 pl-3 items-center pr-5 h-14 border-b text-amber-400">
                 <div class="tooltip tooltip-bottom" data-tip="{{ $package->title }}">
-                    <p class="font-bold text-amber-400 normal-case max-w-[200px]  truncate text-left transition-all ">
+                    <p class="font-bold text-amber-400 normal-case max-w-[170px]  truncate text-left transition-all ">
                         {{ $package->title }}</p>
                 </div>
                 <div x-on:click="show_sidebar=false" class="btn bg-white hover:bg-slate-200 border-none text-amber-400">
