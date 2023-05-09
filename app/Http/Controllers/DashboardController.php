@@ -179,7 +179,7 @@ class DashboardController extends Controller
 
     public function list_hasil()
     {
-        $package = PackageModel::where('user_id', Auth::user()->id)->latest()->get();
+        $package = PackageModel::with('get_students')->where('user_id', Auth::user()->id)->latest()->get();
         return view('user.hasil', [
             'package' => $package
         ]);

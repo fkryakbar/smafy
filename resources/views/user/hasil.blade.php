@@ -52,6 +52,7 @@
                                         <tr>
                                             <th>{{ $index + 1 }}</th>
                                             <th>{{ $item->title }}</th>
+                                            <th>{{ count($item->get_students) }} Jawaban</th>
                                             @if ($item->topic_type == 'materi')
                                                 <th class="uppercase font-bold">
                                                     <div class="badge bg-green-400 border-0">
@@ -69,6 +70,7 @@
                                                     class="btn btn-xs bg-green-500 border-none hover:bg-green-700">Lihat
                                                     nilai</a></th>
                                         </tr>
+
                                     @empty
                                         <div class="text-center">
                                             Belum ada Hasil
