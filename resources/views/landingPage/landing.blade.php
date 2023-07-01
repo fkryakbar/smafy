@@ -42,9 +42,9 @@
                     <h3 class="font-bold text-lg">Coba Demo dari Smafy!</h3>
                     <p class="mt-5 text-center">Coba smafy dari dua mode di bawah ini</p>
                     <div class="mt-3 flex justify-center gap-2">
-                        <a target="_blank" href="/learn/demo"
+                        <a target="_blank" href="/learn/RKuL-7Po-6JI"
                             class="btn bg-amber-400 hover:bg-amber-800 border-0 px-10">Materi</a>
-                        <a target="_blank" href="/learn/demo-kuis"
+                        <a target="_blank" href="/learn/ijaq-Iiz-usZ"
                             class="btn bg-green-400 hover:bg-green-800 border-0 px-10">Kuis</a>
                         <div class="modal-action">
                             <div class="modal-action">
