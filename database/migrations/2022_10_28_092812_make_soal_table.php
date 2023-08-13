@@ -41,6 +41,6 @@ class MakeSoalTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('questions');
     }
 }

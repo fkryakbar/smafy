@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reports', function (Blueprint $table) {
+        Schema::create('collection', function (Blueprint $table) {
             $table->id();
-            $table->string('reporter');
-            $table->string('email');
-            $table->string('type');
+            $table->string('slug')->unique();
+            $table->string('user_id');
+            $table->string('title');
             $table->string('description');
+            $table->string('show_public');
+            $table->string('accept_responses');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reports');
+        Schema::dropIfExists('collection');
     }
 };

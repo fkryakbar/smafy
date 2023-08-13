@@ -39,16 +39,24 @@
                         </ul>
                     </div>
 
-                    <div class="bg-white p-3 rounded-md shadow mt-3 min-[500px]:w-full min-[200px]:w-[327px]">
-                        <h2 class="text-2xl font-semibold text-gray-700  inline">
+                    <div
+                        class="bg-white p-3 rounded-md shadow mt-3 min-[500px]:w-full min-[200px]:w-[327px] flex justify-between items-center">
+                        <h2 class="text-2xl font-semibold text-gray-700  inline m-2">
                             Topik
                         </h2>
-                        <a href="/dashboard/topik/tambah"
-                            class="btn border-none rounded-md btn-sm  text-white font-weight-bol bg-amber-400 hover:bg-amber-600 float-right">+
-                            Tambah
-                            Topik</a>
+                        <div class="flex gap-2 flex-wrap justify-end">
+                            <a href="/dashboard/koleksi/tambah"
+                                class="btn border-none rounded-md btn-sm  text-white font-weight-bol bg-green-400 hover:bg-green-600">+
+                                Tambah
+                                Koleksi</a>
+                            <a href="/dashboard/topik/tambah"
+                                class="btn border-none rounded-md btn-sm  text-white font-weight-bol bg-amber-400 hover:bg-amber-600">+
+                                Tambah
+                                Topik</a>
+                        </div>
                     </div>
-                    <div class="bg-white p-3 rounded-md shadow mt-6 min-[500px]:w-full min-[200px]:w-[327px] ">
+                    <h1 class="mt-6 font-semibold text-gray-600 text-xl">Topik</h1>
+                    <div class="bg-white p-3 rounded-md shadow mt-3 min-[500px]:w-full min-[200px]:w-[327px] ">
                         <div class="">
                             @forelse ($materi as $i => $item)
                                 <div class="flex w-full my-3 ml-3">
@@ -109,6 +117,59 @@
 
                         </div>
                     </div>
+                    @if (count($koleksi) > 0)
+                        <h1 class="mt-6 font-semibold text-gray-600 text-xl">Koleksi</h1>
+                        <div class="bg-white p-3 rounded-md shadow mt-3 min-[500px]:w-full min-[200px]:w-[327px] ">
+                            <div class="">
+                                @forelse ($koleksi as $i => $item)
+                                    <div class="flex w-full my-3 ml-3">
+                                        <div class="basis-[5%] ">
+                                            <div class="flex-start">
+                                                {{ $i + 1 }}
+                                            </div>
+                                        </div>
+                                        <a href="/dashboard/koleksi/{{ $item->slug }}" class="basis-[75%] ">
+                                            <p class="font-bold">
+                                                {{ $item->title }}
+                                            </p>
+                                            <p class="text-xs text-gray-500">
+                                                {{ $item->created_at->diffForHumans() }}
+                                            </p>
+                                        </a>
+                                        <div class="basis-[20%] flex justify-end px-3 ">
+                                            <div class="dropdown dropdown-end">
+                                                <label tabindex="0"
+                                                    class="btn btn-sm bg-green-400 border-none hover:bg-green-600 m-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        class="w-6 h-6">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                                                    </svg>
+                                                </label>
+                                                <ul tabindex="0"
+                                                    class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                                                    <li><a href="/dashboard/koleksi/{{ $item->slug }}">Pengaturan</a>
+                                                    </li>
+                                                    <li><a href="/play/{{ $item->slug }}" target="_blank">Buka
+                                                            Koleksi</a>
+                                                    </li>
+                                                    <li><button
+                                                            onclick="copy_link_koleksi('{{ $item->slug }}')">Salin
+                                                            link</button></li>
+                                                    <li><button
+                                                            onclick="hapus_koleksi('{{ $item->slug }}')">Hapus</button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <p class="text-center text-gray-500">Belum ada Koleksi yang dibuat</p>
+                                @endforelse
+                            </div>
+                        </div>
+                    @endif
 
 
 
@@ -141,6 +202,26 @@
             navigator.clipboard.writeText(`{{ env('APP_URL') }}/learn/${slug}`);
         }
 
+        function copy_link_koleksi(slug) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+                icon: 'success',
+                title: 'Link berhasil disalin'
+            })
+            navigator.clipboard.writeText(`{{ env('APP_URL') }}/play/${slug}`);
+        }
+
         function hapus_materi(slug) {
             Swal.fire({
                 title: 'Kamu Yakin?',
@@ -154,6 +235,43 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = `/dashboard/topik/${slug}/hapus`
+                }
+            })
+        }
+
+        function copy_link_koleksi(slug) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+                icon: 'success',
+                title: 'Link berhasil disalin'
+            })
+            navigator.clipboard.writeText(`{{ env('APP_URL') }}/play/${slug}`);
+        }
+
+        function hapus_koleksi(slug) {
+            Swal.fire({
+                title: 'Kamu Yakin?',
+                text: "Koleksi yang dihapus tidak dapat dikembalikan",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/dashboard/koleksi/${slug}/hapus`
                 }
             })
         }

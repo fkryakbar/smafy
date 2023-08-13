@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Collection;
 use App\Models\JawabanModel;
 use App\Models\PackageModel;
 use App\Models\QuestionsModel;
@@ -29,8 +30,10 @@ class DashboardController extends Controller
     public function materi()
     {
         $package = PackageModel::where('user_id', '=', Auth::user()->id)->latest()->get();
+        $collection = Collection::where('user_id', Auth::user()->id)->latest()->get();
         return view('user.materi', [
-            'materi' => $package
+            'materi' => $package,
+            'koleksi' => $collection
         ]);
     }
 

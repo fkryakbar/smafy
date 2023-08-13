@@ -31,6 +31,6 @@ class MakeJawabanTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('jawaban');
     }
 }

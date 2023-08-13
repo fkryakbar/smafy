@@ -5,10 +5,12 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminReportController;
 use App\Http\Controllers\AdminTopicController;
 use App\Http\Controllers\BrowseController;
+use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LearnController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PlayController;
 use App\Http\Controllers\PreviewController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +49,13 @@ Route::group(['middleware' => 'auth.user'], function () {
     Route::get('/dashboard/hasil/{slug}/export', [DashboardController::class, 'export']);
     Route::get('/dashboard/hasil/{u_id}/hapus', [DashboardController::class, 'hapus_jawaban']);
     Route::get('/dashboard/hasil/{slug}/{u_id}', [DashboardController::class, 'hasil_materi_detail']);
+
+
+    Route::get('/dashboard/koleksi/tambah', [CollectionController::class, 'index']);
+    Route::post('/dashboard/koleksi/tambah', [CollectionController::class, 'store']);
+    Route::get('/dashboard/koleksi/{slug}/hapus', [CollectionController::class, 'delete']);
+    Route::get('/dashboard/koleksi/{slug}', [CollectionController::class, 'detail']);
+    Route::post('/dashboard/koleksi/{slug}', [CollectionController::class, 'update']);
 });
 
 Route::get('/learn/{code}', [LearnController::class, 'index'])->name('learn');
@@ -55,6 +64,10 @@ Route::get('/learn/{code}/result', [LearnController::class, 'show_result']);
 Route::get('/flush', [LearnController::class, 'flush_session']);
 Route::get('/clear_session', [LearnController::class, 'clear_session']);
 Route::get('/clear_history/{slug}', [LearnController::class, 'clear_history']);
+
+
+Route::get('/play/{code}', [PlayController::class, 'index']);
+
 
 
 Route::group(['middleware' => 'auth.admin', 'prefix' => 'admin'], function () {

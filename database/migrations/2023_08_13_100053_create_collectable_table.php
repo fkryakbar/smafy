@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reports', function (Blueprint $table) {
+        Schema::create('collection_package', function (Blueprint $table) {
             $table->id();
-            $table->string('reporter');
-            $table->string('email');
-            $table->string('type');
-            $table->string('description');
+            $table->string('collection_slug');
+            $table->string('package_slug');
+
+            $table->foreign('collection_slug')->references('slug')->on('collection');
+            $table->foreign('package_slug')->references('slug')->on('package');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reports');
+        Schema::dropIfExists('collection_package');
     }
 };
