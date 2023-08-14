@@ -71,51 +71,74 @@
                             </form>
                         @endif
                     </div>
-                    <div class="mx-4 mt-4">
-                        <h1 class="text-gray-500 font-semibold ">Kamu akan mempelajari</h1>
-                        <div class="grid grid-cols-1 gap-2 mt-2 ">
-                            @foreach ($collection->packages as $package)
-                                <div
-                                    class="bg-white w-full drop-shadow p-3 rounded-lg hover:scale-105 transition-all cursor-pointer flex gap-2">
-                                    @if ($package->topic_type == 'materi')
-                                        <div
-                                            class="rounded-full bg-green-500 p-1 text-white flex justify-center items-center w-10 h-10">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                                            </svg>
+                    @if (!$collection->accept_responses == 0)
+                        <div class="mx-4 mt-4">
+                            <h1 class="text-gray-500 font-semibold ">Kamu akan mempelajari</h1>
+                            <div class="grid grid-cols-1 gap-2 mt-2 ">
+                                @foreach ($collection->packages as $package)
+                                    <div
+                                        class="bg-white w-full drop-shadow p-3 rounded-lg hover:scale-105 transition-all cursor-pointer flex gap-2">
+                                        @if ($package->topic_type == 'materi')
+                                            <div
+                                                class="rounded-full bg-green-500 p-1 text-white flex justify-center items-center w-10 h-10">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="w-5 h-5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                                </svg>
+                                            </div>
+                                        @else
+                                            <div
+                                                class="rounded-full bg-amber-500 p-1 text-white flex justify-center items-center w-10 h-10">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="w-5 h-w-5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" />
+                                                </svg>
+                                            </div>
+                                        @endif
+                                        <div>
+                                            <p class="text-gray-500 font-semibold ">{{ $package->title }}
+                                                @if ($package->topic_type == 'materi')
+                                                    <span
+                                                        class="bg-green-500 p-1 rounded text-white text-xs">Materi</span>
+                                                @else
+                                                    <span
+                                                        class="bg-amber-500 p-1 rounded text-white text-xs">Kuis</span>
+                                                @endif
+                                            </p>
+                                            <p class="text-xs italic text-gray-400">{{ $package->description }}</p>
                                         </div>
-                                    @else
-                                        <div
-                                            class="rounded-full bg-amber-500 p-1 text-white flex justify-center items-center w-10 h-10">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="1.5" stroke="currentColor" class="w-5 h-w-5">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" />
-                                            </svg>
-                                        </div>
-                                    @endif
-                                    <div>
-                                        <p class="text-gray-500 font-semibold ">{{ $package->title }}
-                                            @if ($package->topic_type == 'materi')
-                                                <span class="bg-green-500 p-1 rounded text-white text-xs">Materi</span>
-                                            @else
-                                                <span class="bg-amber-500 p-1 rounded text-white text-xs">Kuis</span>
-                                            @endif
-                                        </p>
-                                        <p class="text-xs italic text-gray-400">{{ $package->description }}</p>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 @else
+                    @php
+                        $activities = session($collection->slug)['activities'];
+                        $score = 0;
+                        $finished = 0;
+                        foreach ($activities as $key => $activity) {
+                            $score = $score + $activity['score'];
+                            if ($activity['is_finished'] == true) {
+                                $finished = $finished + 1;
+                            }
+                        }
+                        $progress = round(($finished / count($activities)) * 100);
+                    @endphp
                     <div class="mx-4 mt-4">
                         <div class="flex flex-col items-center justify-center mb-5 p-4 rounded-lg bg-white drop-shadow">
                             <h1 class="mb-2 font-bold text-gray-700">Halo! {{ session($collection->slug)['name'] }}</h1>
-                            <p class="text-gray-600 text-sm mb-2">Skor Belajar kamu</p>
-                            <div class="radial-progress text-green-500" style="--value:70; --size:8rem">70%</div>
+                            <p class="text-gray-600 text-sm mb-2">Progress Belajar kamu</p>
+                            <div class="radial-progress text-green-500"
+                                style="--value:{{ $progress }}; --size:8rem">{{ $progress }}%</div>
+                            <p class="mt-2 text-gray-500 text-sm">
+                                Skor Kamu saat ini
+                            </p>
+                            <p class="font-bold text-amber-500">{{ $score }}</p>
                             <p class="mt-5">Klik Activities di bawah untuk lanjut belajar</p>
                         </div>
                         <h3 class="text-gray-500 font-semibold ">Activities</h3>
@@ -128,22 +151,34 @@
                                             @if ($package->topic_type == 'materi')
                                                 <div
                                                     class="rounded-full bg-green-500 p-1 text-white flex justify-center items-center w-10 h-10">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                        class="w-5 h-5">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                                                    </svg>
+                                                    @if (session($collection->slug)['activities'][$package->slug]['is_finished'])
+                                                        <p class="font-bold text-sm">
+                                                            {{ session($collection->slug)['activities'][$package->slug]['score'] }}
+                                                        </p>
+                                                    @else
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="1.5"
+                                                            stroke="currentColor" class="w-5 h-5">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                                        </svg>
+                                                    @endif
                                                 </div>
                                             @else
                                                 <div
                                                     class="rounded-full bg-amber-500 p-1 text-white flex justify-center items-center w-10 h-10">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                        class="w-5 h-w-5">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" />
-                                                    </svg>
+                                                    @if (session($collection->slug)['activities'][$package->slug]['is_finished'])
+                                                        <p class="font-bold text-sm">
+                                                            {{ session($collection->slug)['activities'][$package->slug]['score'] }}
+                                                        </p>
+                                                    @else
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="1.5"
+                                                            stroke="currentColor" class="w-5 h-w-5">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" />
+                                                        </svg>
+                                                    @endif
                                                 </div>
                                             @endif
                                             <div class="">
@@ -162,15 +197,35 @@
                                         </div>
                                         <div>
                                             <div class="">
-                                                <a href="/play/{{ $collection->slug }}/{{ $package->slug }}"
-                                                    class="bg-green-500 p-2 rounded-full hover:bg-green-800 text-xs font-semibold text-white ">Buka</a>
+                                                @if (session($collection->slug)['activities'][$package->slug]['is_finished'])
+                                                    <a href="/play/{{ $collection->slug }}/{{ $package->slug }}"
+                                                        class="bg-green-500 hover:bg-green-800 p-2 rounded-full  text-xs font-semibold text-white ">Selesai</a>
+                                                @else
+                                                    <a href="/play/{{ $collection->slug }}/{{ $package->slug }}"
+                                                        class="bg-amber-500 hover:bg-amber-800 p-2 rounded-full  text-xs font-semibold text-white ">Buka</a>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             @endforeach
                         </div>
+                        @if ($progress == 100 && $collection->allow_to_restart_activity == 1)
+                            <div class="flex justify-center items-center mt-5">
+                                <button onclick="restart()"
+                                    class="p-2 bg-red-500 text-white font-semibold rounded-lg text-xs flex gap-2 items-center transition-all active:scale-105">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                    </svg>
+                                    <p>
+                                        Mulai
+                                        ulang
+                                    </p>
+                                </button>
+                            </div>
+                        @endif
                     </div>
                 @endif
             </div>
@@ -191,10 +246,29 @@
             confirmButtonText: 'Keluar'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = "/flush";
+                window.location.href = "/";
             }
         })
     })
+
+    function restart() {
+        Swal.fire({
+            title: "Mulai ulang?",
+            text: "Riwayat pengerjaan saat ini akan hilang",
+            icon: "success",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Mulai ulang",
+            cancelButtonText: "Kembali",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                sessionStorage.clear();
+                window.location.href =
+                    `/play/{{ $collection->slug }}/restart`;
+            }
+        });
+    }
 </script>
 
 </html>

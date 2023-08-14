@@ -13,6 +13,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PlayController;
 use App\Http\Controllers\PreviewController;
 use App\Http\Controllers\RegisterController;
+use App\Models\Collection;
 use Illuminate\Support\Facades\Route;
 
 
@@ -68,6 +69,9 @@ Route::get('/clear_history/{slug}', [LearnController::class, 'clear_history']);
 
 Route::get('/play/{slug}', [PlayController::class, 'index']);
 Route::post('/play/{slug}', [PlayController::class, 'create_session']);
+Route::get('/play/{collection_slug}/restart', [PlayController::class, 'restart']);
+Route::get('/play/{collection_slug}/{package_slug}', [PlayController::class, 'play']);
+Route::get('/play/{collection_slug}/{package_slug}/save', [PlayController::class, 'save']);
 
 
 
@@ -90,3 +94,7 @@ Route::get('/api/get_soal/{package_id}', [LearnController::class, 'get_soal']);
 Route::post('/api/submit-jawaban', [LearnController::class, 'submit_jawaban']);
 Route::post('/api/submit-jawaban/quiz', [LearnController::class, 'submit_jawaban_quiz']);
 Route::get('/api/get-saved-answer/{u_id}', [LearnController::class, 'get_saved']);
+
+
+Route::post('/api/collection/submit-jawaban/{collection_slug}', [PlayController::class, 'submit_jawaban_api']);
+Route::post('/api/collection/submit-jawaban-kuis/{collection_slug}', [PlayController::class, 'submit_jawaban_kuis_api']);

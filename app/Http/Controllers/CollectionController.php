@@ -25,6 +25,7 @@ class CollectionController extends Controller
             'description' => 'required|max:1000',
             'show_public' => 'required',
             'accept_responses' => 'required',
+            'allow_to_restart_activity' => 'required',
             'packages' => 'required'
         ]);
         $slug = Str::random(4) . '-' . Str::random(3) . '-' . Str::random(3);

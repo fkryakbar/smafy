@@ -115,6 +115,17 @@
                                     </option>
                                 </select>
                             </div>
+                            <div class="form-control w-full">
+                                <label class="label">
+                                    <span class="label-text">Bisa Mengulang Aktivitas</span>
+                                </label>
+                                <select class="select select-bordered" name="allow_to_restart_activity">
+                                    <option value="1" @if (old('allow_to_restart_activity') == '1') selected @endif>Ya
+                                    </option>
+                                    <option value="0" @if (old('allow_to_restart_activity') == '0') selected @endif>Tidak
+                                    </option>
+                                </select>
+                            </div>
                             <button type="submit"
                                 class="btn btn-sm bg-amber-400 border-none hover:bg-amber-600 mt-3">Simpan</button>
                         </form>

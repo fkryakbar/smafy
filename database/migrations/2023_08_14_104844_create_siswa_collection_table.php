@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('collection', function (Blueprint $table) {
+        Schema::create('siswa_collection', function (Blueprint $table) {
             $table->id();
-            $table->string('slug')->unique();
-            $table->string('user_id');
-            $table->string('title');
-            $table->string('description');
-            $table->string('show_public');
-            $table->string('allow_to_restart_activity');
-            $table->string('accept_responses');
+            $table->string('u_id')->unique();
+            $table->string('collection_slug');
+            $table->string('name');
+            $table->string('kelas');
+            $table->json('activities');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('collection');
+        Schema::dropIfExists('siswa_collection');
     }
 };
