@@ -66,7 +66,8 @@ Route::get('/clear_session', [LearnController::class, 'clear_session']);
 Route::get('/clear_history/{slug}', [LearnController::class, 'clear_history']);
 
 
-Route::get('/play/{code}', [PlayController::class, 'index']);
+Route::get('/play/{slug}', [PlayController::class, 'index']);
+Route::post('/play/{slug}', [PlayController::class, 'create_session']);
 
 
 

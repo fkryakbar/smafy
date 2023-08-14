@@ -7,7 +7,7 @@
         integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <title>Koleksi</title>
+    <title>Aktivitas</title>
 </head>
 
 <body>
@@ -37,14 +37,14 @@
                                         d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                     </path>
                                 </svg>
-                                Tambah Koleksi
+                                Tambah Aktivitas
                             </li>
                         </ul>
                     </div>
 
                     <div class="bg-white p-3 rounded-md shadow mt-3">
                         <h2 class="text-2xl font-semibold text-gray-700  inline">
-                            Tambah Koleksi
+                            Tambah Aktivitas
                         </h2>
                     </div>
 
@@ -71,7 +71,7 @@
                             @csrf
                             <div class="form-control w-full">
                                 <label class="label">
-                                    <span class="label-text">Judul Koleksi</span>
+                                    <span class="label-text">Judul Aktivitas</span>
                                 </label>
                                 <input type="text" name="title" placeholder="Masukkan judul topik"
                                     class="input input-bordered w-full" value="{{ old('title') }}" />

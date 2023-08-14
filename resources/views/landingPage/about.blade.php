@@ -46,18 +46,6 @@
                     students, ensuring that each student can learn in a way that works best for them.
                 </p>
                 <p class="my-7 text-justify indent-7">
-                    One of the key features of Smafy is the ability to provide students with immediate feedback on their
-                    progress.
-                    Our platform includes a range of practice exercises, including multiple choice and fill-in-the-blank
-                    questions,
-                    as well as the ability to score student responses. This enables teachers to monitor student progress
-                    in
-                    real-time, identify areas where students may be struggling, and provide immediate feedback to help
-                    students
-                    stay
-                    on track.
-                </p>
-                <p class="my-7 text-justify indent-7">
                     Our platform is accessible from anywhere, at any time, making it easy for students to access
                     learning
                     materials
@@ -65,18 +53,6 @@
                     in a
                     way
                     that works best for them, at a pace that suits their learning style.
-                </p>
-                <p class="my-7 text-justify indent-7">
-                    At Smafy, we are committed to providing educators with the best possible tools and resources to help
-                    them
-                    create
-                    engaging, effective classroom experiences for their students. We believe that every student deserves
-                    access
-                    to a
-                    high-quality education, and we're dedicated to making that a reality. Join us today and experience
-                    the power
-                    of
-                    Smafy for yourself.
                 </p>
                 <p class="my-7 text-justify">
                     - Ahmad Fikri Akbar, Web Engineer

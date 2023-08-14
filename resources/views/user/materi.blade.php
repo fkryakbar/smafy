@@ -12,7 +12,7 @@
         <div class="flex flex-col flex-1 w-full">
             @include('partials.header')
             <main class="h-full overflow-y-auto">
-                <div class="container px-6 mx-auto grid">
+                <div class="container px-2 mx-auto grid">
                     @if (session()->has('msg'))
                         <div class="alert alert-success shadow-sm mt-3">
                             <div>
@@ -39,8 +39,7 @@
                         </ul>
                     </div>
 
-                    <div
-                        class="bg-white p-3 rounded-md shadow mt-3 min-[500px]:w-full min-[200px]:w-[327px] flex justify-between items-center">
+                    <div class="bg-white p-3 rounded-md shadow mt-3 w-full flex justify-between items-center">
                         <h2 class="text-2xl font-semibold text-gray-700  inline m-2">
                             Topik
                         </h2>
@@ -48,7 +47,7 @@
                             <a href="/dashboard/koleksi/tambah"
                                 class="btn border-none rounded-md btn-sm  text-white font-weight-bol bg-green-400 hover:bg-green-600">+
                                 Tambah
-                                Koleksi</a>
+                                Aktivitas</a>
                             <a href="/dashboard/topik/tambah"
                                 class="btn border-none rounded-md btn-sm  text-white font-weight-bol bg-amber-400 hover:bg-amber-600">+
                                 Tambah
@@ -56,7 +55,7 @@
                         </div>
                     </div>
                     <h1 class="mt-6 font-semibold text-gray-600 text-xl">Topik</h1>
-                    <div class="bg-white p-3 rounded-md shadow mt-3 min-[500px]:w-full min-[200px]:w-[327px] ">
+                    <div class="bg-white p-3 rounded-md shadow mt-3 w-full ">
                         <div class="">
                             @forelse ($materi as $i => $item)
                                 <div class="flex w-full my-3 ml-3">
@@ -118,8 +117,8 @@
                         </div>
                     </div>
                     @if (count($koleksi) > 0)
-                        <h1 class="mt-6 font-semibold text-gray-600 text-xl">Koleksi</h1>
-                        <div class="bg-white p-3 rounded-md shadow mt-3 min-[500px]:w-full min-[200px]:w-[327px] ">
+                        <h1 class="mt-6 font-semibold text-gray-600 text-xl">Aktivitas</h1>
+                        <div class="bg-white p-3 rounded-md shadow mt-3 w-full ">
                             <div class="">
                                 @forelse ($koleksi as $i => $item)
                                     <div class="flex w-full my-3 ml-3">
@@ -152,7 +151,7 @@
                                                     <li><a href="/dashboard/koleksi/{{ $item->slug }}">Pengaturan</a>
                                                     </li>
                                                     <li><a href="/play/{{ $item->slug }}" target="_blank">Buka
-                                                            Koleksi</a>
+                                                            Aktivitas</a>
                                                     </li>
                                                     <li><button
                                                             onclick="copy_link_koleksi('{{ $item->slug }}')">Salin
