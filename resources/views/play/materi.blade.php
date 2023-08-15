@@ -471,13 +471,14 @@
                     return `${this.page} / ${App.page_total}`;
                 },
                 async get_user_saved_answer() {
-                    let responses = await fetch(`/api/get-saved-answer/${App.abstract.u_id}`, {
-                        method: 'GET',
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Content-Type": "application/json"
-                        },
-                    }).catch(e => {
+                    let responses = await fetch(
+                        `/api/collection/get-saved-answer/${App.abstract.u_id}/${App.abstract.package_id}`, {
+                            method: 'GET',
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Content-Type": "application/json"
+                            },
+                        }).catch(e => {
                         const Toast = Swal.mixin({
                             toast: true,
                             position: 'top-end',

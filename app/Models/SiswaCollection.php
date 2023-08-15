@@ -15,4 +15,9 @@ class SiswaCollection extends Model
     protected $casts = [
         'activities' => 'array'
     ];
+
+    public function collection()
+    {
+        return $this->hasOne(Collection::class, 'slug', 'collection_slug');
+    }
 }

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Collection;
+use App\Models\JawabanModel;
 use App\Models\PackageModel;
+use App\Models\SiswaCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -47,7 +49,11 @@ class CollectionController extends Controller
         $collection = Collection::where('slug', $slug)->where('user_id', Auth::user()->id)->firstOrFail();
         $collection->packages()->detach();
         $collection->delete();
-
+        $siswa = SiswaCollection::where('collection_slug', $slug)->get();
+        foreach ($siswa as $key => $s) {
+            JawabanModel::where('u_id', $s->u_id)->delete();
+        }
+        SiswaCollection::where('collection_slug', $slug)->delete();
         return redirect('/dashboard/topik')->with('msg', 'Koleksi Berhasil dihapus');
     }
 

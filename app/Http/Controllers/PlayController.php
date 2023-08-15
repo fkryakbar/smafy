@@ -28,6 +28,24 @@ class PlayController extends Controller
                 session()->forget([$slug]);
             }
         }
+        if (session()->has($slug)) {
+            foreach ($collection->packages as $key => $package) {
+                if (!Arr::has(session($slug)['activities'], $package->slug)) {
+                    $data =  session($slug)['activities'][$package->slug] = [
+                        'score' => 0,
+                        'package_id' => $package->slug,
+                        'time_left' => 0,
+                        'is_finished' => false,
+                        'expired_time' => time() + $package->timer
+                    ];
+                    session([$slug . '.activities' . '.' . $package->slug => $data]);
+                    SiswaCollection::where('u_id', session($slug)['u_id'])->where('collection_slug', $slug)->firstOrFail()->update([
+                        'activities' => session($slug)['activities']
+                    ]);
+                }
+            }
+        }
+
         // dd(session($collection->slug));
         return view('play.register', [
             'collection' => $collection
@@ -82,20 +100,6 @@ class PlayController extends Controller
         if (session()->has($collection_slug) && SiswaCollection::where('u_id', session($collection_slug)['u_id'])->first()) {
             $collection = Collection::where('slug', $collection_slug)->firstOrFail();
             $package = PackageModel::where('slug', '=', $package_slug)->firstOrFail();
-            if (!Arr::has(session($collection_slug)['activities'], $package_slug)) {
-                $data =  session($collection_slug)['activities'][$package_slug] = [
-                    'score' => 0,
-                    'package_id' => $package->slug,
-                    'time_left' => 0,
-                    'is_finished' => false,
-                    'expired_time' => time() + $package->timer
-                ];
-                session([$collection_slug . '.activities' . '.' . $package_slug => $data]);
-                SiswaCollection::where('u_id', session($collection_slug)['u_id'])->where('collection_slug', $collection_slug)->firstOrFail()->update([
-                    'activities' => session($collection_slug)['activities']
-                ]);
-            }
-
 
             $soal = DB::table('questions')->where('package_slug', $package_slug)->leftJoin('jawaban', function ($join) use ($collection_slug) {
                 $join->on('questions.id', '=', 'jawaban.soal_id')->where('jawaban.u_id', '=', session()->get($collection_slug)['u_id']);
@@ -254,5 +258,10 @@ class PlayController extends Controller
                 'message' => 'success'
             ]);
         }
+    }
+    public function get_saved_answer_api($u_id, $package_slug)
+    {
+        $data = JawabanModel::where('u_id', $u_id)->where('package_id', $package_slug)->get();
+        return response()->json(['body' => $data]);
     }
 }

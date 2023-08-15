@@ -29,4 +29,9 @@ class PackageModel extends Model
     {
         return $this->hasMany(SiswaModel::class, 'package_id', 'slug');
     }
+
+    public function answers(): HasMany
+    {
+        return $this->hasMany(JawabanModel::class, 'package_id', 'slug');
+    }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminReportController;
 use App\Http\Controllers\AdminTopicController;
 use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\CollectionResultController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LearnController;
@@ -50,6 +51,9 @@ Route::group(['middleware' => 'auth.user'], function () {
     Route::get('/dashboard/hasil/{slug}/export', [DashboardController::class, 'export']);
     Route::get('/dashboard/hasil/{u_id}/hapus', [DashboardController::class, 'hapus_jawaban']);
     Route::get('/dashboard/hasil/{slug}/{u_id}', [DashboardController::class, 'hasil_materi_detail']);
+
+    Route::get('/dashboard/result/{collection_slug}', [CollectionResultController::class, 'index']);
+    Route::get('/dashboard/result/{collection_slug}/{u_id}', [CollectionResultController::class, 'detail']);
 
 
     Route::get('/dashboard/koleksi/tambah', [CollectionController::class, 'index']);
@@ -98,3 +102,4 @@ Route::get('/api/get-saved-answer/{u_id}', [LearnController::class, 'get_saved']
 
 Route::post('/api/collection/submit-jawaban/{collection_slug}', [PlayController::class, 'submit_jawaban_api']);
 Route::post('/api/collection/submit-jawaban-kuis/{collection_slug}', [PlayController::class, 'submit_jawaban_kuis_api']);
+Route::get('/api/collection/get-saved-answer/{u_id}/{package_slug}', [PlayController::class, 'get_saved_answer_api']);

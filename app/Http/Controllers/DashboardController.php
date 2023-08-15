@@ -183,7 +183,8 @@ class DashboardController extends Controller
     public function list_hasil()
     {
         $package = PackageModel::with('get_students')->where('user_id', Auth::user()->id)->latest()->get();
-        $collection = Collection::where('user_id', Auth::user()->id)->latest()->get();
+        $collection = Collection::where('user_id', Auth::user()->id)->with('students')->latest()->get();
+        // dd($collection);
         return view('user.hasil', [
             'package' => $package,
             'collection' => $collection

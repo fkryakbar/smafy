@@ -44,7 +44,8 @@
                             Hasil
                         </h2>
                     </div>
-                    <div class="bg-white p-3 rounded-md shadow mt-6 min-[500px]:w-full min-[200px]:w-[327px] ">
+                    <h1 class="mt-6 font-semibold text-gray-600 text-xl">Topik</h1>
+                    <div class="bg-white p-3 rounded-md shadow mt-2 min-[500px]:w-full min-[200px]:w-[327px] ">
                         <div class="overflow-x-auto">
                             <table class="table w-full min-[200px]:text-xs">
                                 <tbody>
@@ -69,6 +70,31 @@
                                             <th><a href="/dashboard/hasil/{{ $item->slug }}"
                                                     class="btn btn-xs bg-green-500 border-none hover:bg-green-700">Lihat
                                                     nilai</a></th>
+                                        </tr>
+
+                                    @empty
+                                        <div class="text-center">
+                                            Belum ada Hasil
+                                        </div>
+                                    @endforelse
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                    <h1 class="mt-6 font-semibold text-gray-600 text-xl">Aktivitas</h1>
+                    <div class="bg-white p-3 rounded-md shadow mt-2 min-[500px]:w-full min-[200px]:w-[327px] ">
+                        <div class="overflow-x-auto">
+                            <table class="table w-full min-[200px]:text-xs">
+                                <tbody>
+                                    @forelse ($collection as $index => $item)
+                                        <tr>
+                                            <th>{{ $index + 1 }}</th>
+                                            <th>{{ $item->title }}</th>
+                                            <th>{{ count($item->students) }} Siswa</th>
+                                            <th><a href="/dashboard/result/{{ $item->slug }}"
+                                                    class="btn btn-xs bg-green-500 border-none hover:bg-green-700">Lihat
+                                                    Hasil</a></th>
                                         </tr>
 
                                     @empty
