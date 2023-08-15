@@ -3,7 +3,8 @@
 
 <head>
     @include('partials.head')
-    <title>Ayo Mulai!</title>
+    <title>{{ $package->title }} | Ayo Mulai!</title>
+    <meta name="description" content="{{ $package->description }}">
 </head>
 
 <body>

@@ -3,7 +3,8 @@
 
 <head>
     @include('partials.head')
-    <title>Ayo Mulai!</title>
+    <title>{{ $collection->title }} | Ayo Mulai!</title>
+    <meta name="description" content="{{ $collection->description }}">
 </head>
 
 <body>
