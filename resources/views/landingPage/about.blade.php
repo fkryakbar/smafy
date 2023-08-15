@@ -80,7 +80,7 @@
 
                 </div>
                 <p class="my-7 text-center text-green-400">
-                    App Version 3.0 Stable
+                    App Version 4.0 Stable (Collection is Alpha)
                 </p>
                 <input type="checkbox" id="my-modal-4" class="modal-toggle" />
                 <label for="my-modal-4" class="modal cursor-pointer">
