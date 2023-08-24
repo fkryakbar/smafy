@@ -202,7 +202,7 @@ class PlayController extends Controller
         if (count($result) > 0) {
             $benar = 0;
             $total_soal = count(QuestionsModel::where('package_slug', $item['package_id'])->where(function (Builder $query) {
-                return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian');
+                return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian')->orWhere('type', 'file_attachment');
             })->get());
             foreach ($result as $value) {
                 if ($value->result == 1) {
@@ -247,7 +247,7 @@ class PlayController extends Controller
 
         $benar = 0;
         $total_soal = count(QuestionsModel::where('package_slug', $request->package_id)->where(function (Builder $query) {
-            return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian');
+            return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian')->orWhere('type', 'file_attachment');
         })->get());
         foreach ($result as $value) {
             if ($value->result == 1) {
@@ -293,7 +293,7 @@ class PlayController extends Controller
         if (count($result) > 0) {
             $benar = 0;
             $total_soal = count(QuestionsModel::where('package_slug', $item['package_id'])->where(function (Builder $query) {
-                return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian');
+                return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian')->orWhere('type', 'file_attachment');
             })->get());
             foreach ($result as $value) {
                 if ($value->result == 1) {

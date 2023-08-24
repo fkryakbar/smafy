@@ -323,7 +323,7 @@ class DashboardController extends Controller
         if (count($result) > 0) {
             $benar = 0;
             $total_soal = count(QuestionsModel::where('package_slug', $jawaban->package_id)->where(function (Builder $query) {
-                return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian');
+                return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian')->orWhere('type', 'file_attachment');
             })->get());
             foreach ($result as $value) {
                 if ($value->result == 1) {

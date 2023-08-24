@@ -105,8 +105,24 @@
                                                 @if ($answer->u_id == $siswa->u_id)
                                                     <tr>
                                                         <th>{{ $answer->get_soal->title }}</th>
-                                                        <th>{{ $answer->answer }}</th>
-                                                        <th>{{ $answer->get_soal->correct_answer }}</th>
+                                                        @if ($answer->get_soal->type == 'file_attachment')
+                                                            <th>
+                                                                <a href="/{{ $answer->answer }}"
+                                                                    class="btn btn-sm bg-blue-400 hover:bg-blue-600 border-0"
+                                                                    target="_blank">Buka File</a>
+                                                            </th>
+                                                        @else
+                                                            <th>{{ $answer->answer }}</th>
+                                                        @endif
+                                                        @if ($answer->get_soal->type == 'file_attachment' && $answer->get_soal->correct_answer)
+                                                            <th>
+                                                                <a href="/{{ $answer->get_soal->correct_answer }}"
+                                                                    class="btn btn-sm bg-blue-400 hover:bg-blue-600 border-0"
+                                                                    target="_blank">Buka File</a>
+                                                            </th>
+                                                        @else
+                                                            <th>{{ $answer->get_soal->correct_answer }}</th>
+                                                        @endif
                                                         <th>
                                                             @if ($answer->result == 0)
                                                                 <span class="badge bg-red-400 border-none">Salah</span>
