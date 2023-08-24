@@ -26,6 +26,12 @@ class CollectionResultController extends Controller
             'siswa' => $siswa,
             'collection' => $collection
         ]);
-        dd($siswa->collection->packages[1]->answers);
+    }
+
+    public function hapus($collection_slug, $u_id)
+    {
+        $siswa = SiswaCollection::where('collection_slug', $collection_slug)->where('u_id', $u_id)->firstOrFail();
+        $siswa->delete();
+        return back()->with('msg', 'Jawaban berhasil dihapus');
     }
 }

@@ -66,8 +66,6 @@
                             <h2 class="text-2xl font-semibold text-gray-700  inline">
                                 Hasil Belajar, {{ $siswa->name }}
                             </h2>
-                            {{-- <a href="/dashboard/hasil/{{ $collection->slug }}/export"
-                                class="btn btn-sm bg-green-400 hover:bg-green-700 border-0">Export</a> --}}
                         </div>
                     </div>
                     @php
@@ -99,6 +97,7 @@
                                                 <th>Jawaban siswa</th>
                                                 <th>Jawaban Jawaban benar</th>
                                                 <th>Keterangan</th>
+                                                <th>Ubah Jawaban</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -115,6 +114,20 @@
                                                                 <span
                                                                     class="badge bg-green-400 border-none">Benar</span>
                                                             @endif
+                                                        </th>
+                                                        <th class="flex justify-center gap-2 items-center">
+                                                            <label for="" class="text-green-400">Benar</label>
+                                                            <div>
+                                                                <input type="radio"
+                                                                    name="jawaban-{{ $answer->id }}" class="radio"
+                                                                    @checked($answer->result == 1)
+                                                                    onclick="changeAnswer('{{ $answer->id }}', 1)" />
+                                                                <input type="radio"
+                                                                    name="jawaban-{{ $answer->id }}"class="radio"
+                                                                    @checked($answer->result == 0)
+                                                                    onclick="changeAnswer('{{ $answer->id }}', 0)" />
+                                                            </div>
+                                                            <p class="text-red-400">Salah</p>
                                                         </th>
                                                     </tr>
                                                 @endif
@@ -141,21 +154,37 @@
 
 
     <script>
-        function hapus_jawaban(u_id) {
-            Swal.fire({
-                title: 'Kamu Yakin?',
-                text: "Jawaban yang dihapus tidak dapat dikembalikan",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = `/dashboard/hasil/${u_id}/hapus`
-                }
-            })
+        async function changeAnswer(jawaban_id, value) {
+            const data = {
+                jawaban_id: jawaban_id,
+                value: value
+            }
+            const response = await fetch('/api/change-answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Something Error'
+                })
+            }
         }
     </script>
 

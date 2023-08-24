@@ -177,7 +177,6 @@
                                                 @endif
 
                                             </div>
-
                                         </div>
                                     @endif
                                     <div>
@@ -271,6 +270,30 @@
                                             </div>
                                         @endif
                                     </div>
+                                    @if ($item->type == 'file_attachment')
+                                        @if ($item->correct_answer)
+                                            <p class="mt-3 ">File Penjelasan</p>
+                                            <div
+                                                class="w-full max-w-xs bg-gray-100 rounded-lg p-2 flex justify-between items-center">
+                                                <div class="flex items-center gap-2">
+                                                    <img src="{{ asset('/image/documents.png') }}" class="w-12">
+                                                    <p class="text-sm font-semibold">Attachment file</p>
+                                                </div>
+                                                <a href="/{{ $item->correct_answer }}" target="_blank">
+                                                    <div class="p-3 rounded-lg text-white bg-amber-400 font-semibold ">
+                                                        Buka
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        @endif
+                                        <div class="form-control w-full max-w-xs mt-3">
+                                            <label class="label">
+                                                <span class="label-text">Upload Jawaban mu</span>
+                                            </label>
+                                            <input type="file" name="file_attachment" @disabled(true)
+                                                class="file-input file-input-bordered w-full max-w-xs" />
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         @empty

@@ -55,8 +55,8 @@
                             <h2 class="text-2xl font-semibold text-gray-700  inline">
                                 Daftar siswa, {{ $collection->title }}
                             </h2>
-                            <a href="/dashboard/hasil/{{ $collection->slug }}/export"
-                                class="btn btn-sm bg-green-400 hover:bg-green-700 border-0">Export</a>
+                            {{-- <a href="/dashboard/hasil/{{ $collection->slug }}/export"
+                                class="btn btn-sm bg-green-400 hover:bg-green-700 border-0">Export</a> --}}
                         </div>
                     </div>
                     <div class="bg-white p-3 rounded-md shadow mt-6 min-[500px]:w-full min-[200px]:w-[327px] mb-10 ">
@@ -138,7 +138,7 @@
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = `/dashboard/hasil/${u_id}/hapus`
+                    window.location.href = `/dashboard/result/{{ $collection->slug }}/${u_id}/hapus`
                 }
             })
         }

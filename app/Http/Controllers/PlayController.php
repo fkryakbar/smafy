@@ -18,6 +18,8 @@ class PlayController extends Controller
 {
     public function index($slug)
     {
+        // dd(session($slug));
+
         $collection = Collection::where('slug', $slug)->with(['packages' => function ($query) {
             $query->orderBy('created_at', 'asc');;
         }])->firstOrFail();
@@ -29,6 +31,7 @@ class PlayController extends Controller
             }
         }
         if (session()->has($slug)) {
+            $siswaCollection = SiswaCollection::where('u_id', session($slug)['u_id'])->where('collection_slug', $slug)->firstOrFail();
             foreach ($collection->packages as $key => $package) {
                 if (!Arr::has(session($slug)['activities'], $package->slug)) {
                     $data =  session($slug)['activities'][$package->slug] = [
@@ -39,11 +42,12 @@ class PlayController extends Controller
                         'expired_time' => time() + $package->timer
                     ];
                     session([$slug . '.activities' . '.' . $package->slug => $data]);
-                    SiswaCollection::where('u_id', session($slug)['u_id'])->where('collection_slug', $slug)->firstOrFail()->update([
+                    $siswaCollection->update([
                         'activities' => session($slug)['activities']
                     ]);
                 }
             }
+            session([$slug . '.activities'  =>  $siswaCollection->activities]);
         }
 
         // dd(session($collection->slug));
@@ -106,7 +110,7 @@ class PlayController extends Controller
             })->orderBy('order_id', 'asc')->get(['questions.id', 'user_id', 'package_slug', 'type', 'order_id', 'title', 'content', 'image_path', 'youtube_link', 'a', 'b', 'c', 'd', 'e', 'correct_answer', 'reasons', 'u_id', 'package_id', 'soal_id', 'answer', 'result']);
 
             $quiz = QuestionsModel::where('package_slug', '=', $package_slug)->Where(function ($query) {
-                $query->where('type', '=', 'pilihan_ganda')->orWhere('type', '=', 'isian');
+                $query->where('type', '=', 'pilihan_ganda')->orWhere('type', '=', 'isian')->orWhere('type', '=', 'file_attachment');
             })->get();
             if ($package->topic_type == 'materi') {
                 return view('play.materi', [
@@ -137,12 +141,16 @@ class PlayController extends Controller
 
             $benar = 0;
             $total = count(QuestionsModel::where('package_slug', $package_slug)->where(function (Builder $query) {
-                return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian');
+                return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian')->orWhere('type', 'file_attachment');
             })->get());
             foreach ($result as $value) {
                 if ($value->result == 1) {
                     $benar = $benar + 1;
                 }
+            }
+            $skor = 0;
+            if ($total > 0) {
+                $skor = round(($benar / $total) * 100, 2);
             }
             $time_left = 0;
             if ((int) session($collection_slug)['activities'][$package_slug]['expired_time'] - time() > 0) {
@@ -152,6 +160,7 @@ class PlayController extends Controller
             $siswaActivities = $siswa->activities;
             $siswaActivities[$package_slug]['time_left'] = $time_left;
             $siswaActivities[$package_slug]['is_finished'] = true;
+            $siswaActivities[$package_slug]['score'] = $skor;
             $siswa->activities = $siswaActivities;
             $siswa->save();
 
@@ -213,6 +222,53 @@ class PlayController extends Controller
                 'message' => 'success'
             ]);
         }
+    }
+
+
+    public function submit_jawaban_file_api(Request $request, $collection_slug)
+    {
+        $request->validate([
+            'user_answer' => 'mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
+        ], [
+            'user_answer.mimes' => 'File harus bertipe jpeg, png, jpg, dan pdf',
+            'user_answer.max' => 'Ukuran file maksimal 2 MB'
+        ]);
+
+        $answer_path =  $request->file('user_answer')->store('/storage/user/upload');
+
+        JawabanModel::create([
+            'u_id' => session($collection_slug)['u_id'],
+            'package_id' => $request->package_id,
+            'soal_id' => $request->soal_id,
+            'answer' => $answer_path,
+            'result' => 1
+        ]);
+        $result = JawabanModel::where('u_id', session($collection_slug)['u_id'])->where('package_id', $request->package_id)->get();
+
+        $benar = 0;
+        $total_soal = count(QuestionsModel::where('package_slug', $request->package_id)->where(function (Builder $query) {
+            return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian');
+        })->get());
+        foreach ($result as $value) {
+            if ($value->result == 1) {
+                $benar = $benar + 1;
+            }
+        }
+        $skor = 0;
+        if ($total_soal > 0) {
+            $skor = round(($benar / $total_soal) * 100, 2);
+        }
+        $siswa = SiswaCollection::where('u_id', session($collection_slug)['u_id'])->first();
+        $siswaActivities = $siswa->activities;
+        $siswaActivities[$request->package_id]['score'] = $skor;
+        $siswa->activities = $siswaActivities;
+        $siswa->save();
+        return response([
+            'message' => 'success',
+            'answer_path' => $answer_path
+        ]);
+
+        // return response($request->all());
     }
 
     public function submit_jawaban_kuis_api(Request $request, $collection_slug)

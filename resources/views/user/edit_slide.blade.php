@@ -95,12 +95,15 @@
                                 </label>
                                 <select id="type" name="type" class="select select-bordered">
                                     @if ($materi->topic_type == 'materi')
-                                        <option value="materi" @if (old('type') == 'materi') selected @endif>
+                                        <option value="materi" @if ($data->type == 'materi') selected @endif>
                                             Penjelasan
                                         </option>
-                                        <option value="youtube_video" @if (old('type') == 'youtube_video') selected @endif>
+                                        <option value="youtube_video" @if ($data->type == 'youtube_video') selected @endif>
                                             Video Youtube</option>
-                                        <option value="isian" @if (old('type') == 'isian') selected @endif>Soal
+                                        <option value="file_attachment"
+                                            @if ($data->type == 'file_attachment') selected @endif>
+                                            Upload File</option>
+                                        <option value="isian" @if ($data->type == 'isian') selected @endif>Soal
                                             Isian
                                         </option>
                                     @endif
@@ -175,13 +178,39 @@
                                 </label>
                                 <input type="text" name="correct_answer_isian"
                                     placeholder="Masukkan jawaban benar" class="input input-bordered w-full"
-                                    value="{{ $data->correct_answer }}" />
+                                    @if ($data->type == 'isian') value="{{ $data->correct_answer }}" @endif />
                             </div>
                             <div id="reasons" class="form-control w-full mt-3">
                                 <label class="label">
                                     <span class="label-text">Penjelasan : </span>
                                 </label>
                                 <textarea name="reasons" class="textarea textarea-bordered" placeholder="Masukkan Penjelasan jawaban">{{ $data->reasons }}</textarea>
+                            </div>
+                            <div id="file_attachment" class="form-control w-full mt-3">
+                                <div class="form-control w-full max-w-xs">
+                                    <label class="label">
+                                        <span class="label-text">File Penjelasan</span>
+                                    </label>
+                                    <input type="file" name="file_attachment"
+                                        class="file-input file-input-bordered w-full max-w-xs" />
+                                </div>
+                                @if ($data->type == 'file_attachment' && $data->correct_answer)
+                                    <div class="mt-3">
+                                        <p>Selected file :</p>
+                                        <div
+                                            class="mt-3 w-full max-w-xs bg-gray-100 rounded-lg p-2 flex justify-between items-center">
+                                            <div class="flex items-center gap-2">
+                                                <img src="{{ asset('/image/documents.png') }}" class="w-12">
+                                                <p class="text-sm font-semibold">Attachment file</p>
+                                            </div>
+                                            <a href="/{{ $data->correct_answer }}" target="_blank">
+                                                <div class="p-3 rounded-lg text-white bg-amber-400 font-semibold ">
+                                                    Buka
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                             <button type="submit" id="simpan"
                                 class="btn btn-sm bg-amber-400 border-none hover:bg-amber-600 mt-3">Simpan</button>
@@ -202,6 +231,8 @@
         const pilihan_ganda_box = document.getElementById('pilihan_ganda_box')
         const isian_box = document.getElementById('isian_box')
         const reasons = document.getElementById('reasons')
+        const file_attachment = document.getElementById('file_attachment')
+
         CKEDITOR.ClassicEditor.create(document.getElementById("content-editor"), {
                 toolbar: {
                     items: [
@@ -369,61 +400,41 @@
                 youtube_box.classList.add('hidden');
                 pilihan_ganda_box.classList.add('hidden');
                 isian_box.classList.add('hidden');
-                reasons.classList.add('hidden')
+                reasons.classList.add('hidden');
+                file_attachment.classList.add('hidden');
+
             }
 
             if (type.value == 'youtube_video') {
                 youtube_box.classList.remove('hidden');
                 pilihan_ganda_box.classList.add('hidden');
                 isian_box.classList.add('hidden');
-                reasons.classList.add('hidden')
+                reasons.classList.add('hidden');
+                file_attachment.classList.add('hidden');
+
             }
             if (type.value == 'pilihan_ganda') {
                 youtube_box.classList.add('hidden');
                 pilihan_ganda_box.classList.remove('hidden');
                 isian_box.classList.add('hidden');
-                reasons.classList.remove('hidden')
+                reasons.classList.remove('hidden');
+                file_attachment.classList.add('hidden');
+
             }
             if (type.value == 'isian') {
                 youtube_box.classList.add('hidden');
                 pilihan_ganda_box.classList.add('hidden');
                 isian_box.classList.remove('hidden');
-                reasons.classList.remove('hidden')
-            }
-        }
-    </script>
-    <script>
-        const type = document.getElementById('type');
-        type.addEventListener('change', () => {
-            change_type(type.value)
-        })
-        change_type(type.value)
+                reasons.classList.remove('hidden');
+                file_attachment.classList.add('hidden');
 
-        function change_type(type) {
-            if (type == 'materi') {
+            }
+            if (type.value == 'file_attachment') {
                 youtube_box.classList.add('hidden');
                 pilihan_ganda_box.classList.add('hidden');
                 isian_box.classList.add('hidden');
-                reasons.classList.add('hidden')
-            }
-
-            if (type == 'youtube_video') {
-                youtube_box.classList.remove('hidden');
-                pilihan_ganda_box.classList.add('hidden');
-                isian_box.classList.add('hidden');
-                reasons.classList.add('hidden')
-            }
-            if (type == 'pilihan_ganda') {
-                youtube_box.classList.add('hidden');
-                pilihan_ganda_box.classList.remove('hidden');
-                isian_box.classList.add('hidden');
-                reasons.classList.remove('hidden')
-            }
-            if (type == 'isian') {
-                youtube_box.classList.add('hidden');
-                pilihan_ganda_box.classList.add('hidden');
-                isian_box.classList.remove('hidden');
-                reasons.classList.remove('hidden')
+                reasons.classList.remove('hidden');
+                file_attachment.classList.remove('hidden');
             }
         }
     </script>

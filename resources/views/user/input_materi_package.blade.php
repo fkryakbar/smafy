@@ -93,6 +93,9 @@
                                         </option>
                                         <option value="youtube_video" @if (old('type') == 'youtube_video') selected @endif>
                                             Video Youtube</option>
+                                        <option value="file_attachment"
+                                            @if (old('type') == 'file_attachment') selected @endif>
+                                            Upload File</option>
                                         <option value="isian" @if (old('type') == 'isian') selected @endif>Soal
                                             Isian
                                         </option>
@@ -172,6 +175,15 @@
                                 </label>
                                 <textarea name="reasons" class="textarea textarea-bordered" placeholder="Masukkan Penjelasan jawaban">{{ old('reasons') }}</textarea>
                             </div>
+                            <div id="file_attachment" class="form-control w-full mt-3">
+                                <div class="form-control w-full max-w-xs">
+                                    <label class="label">
+                                        <span class="label-text">File Penjelasan</span>
+                                    </label>
+                                    <input type="file" name="file_attachment"
+                                        class="file-input file-input-bordered w-full max-w-xs" />
+                                </div>
+                            </div>
                             <button type="submit" id="simpan"
                                 class="btn btn-sm bg-amber-400 border-none hover:bg-amber-600 mt-3">Simpan</button>
                         </form>
@@ -192,6 +204,7 @@
         const isian_box = document.getElementById('isian_box')
         const reasons = document.getElementById('reasons')
         const simpan = document.getElementById('simpan')
+        const file_attachment = document.getElementById('file_attachment')
         CKEDITOR.ClassicEditor.create(document.getElementById("content-editor"), {
                 toolbar: {
                     items: [
@@ -360,25 +373,38 @@
                 pilihan_ganda_box.classList.add('hidden');
                 isian_box.classList.add('hidden');
                 reasons.classList.add('hidden')
+                file_attachment.classList.add('hidden');
             }
 
             if (type.value == 'youtube_video') {
                 youtube_box.classList.remove('hidden');
                 pilihan_ganda_box.classList.add('hidden');
                 isian_box.classList.add('hidden');
-                reasons.classList.add('hidden')
+                reasons.classList.add('hidden');
+                file_attachment.classList.add('hidden');
+
             }
             if (type.value == 'pilihan_ganda') {
                 youtube_box.classList.add('hidden');
                 pilihan_ganda_box.classList.remove('hidden');
                 isian_box.classList.add('hidden');
-                reasons.classList.remove('hidden')
+                reasons.classList.remove('hidden');
+                file_attachment.classList.add('hidden');
+
             }
             if (type.value == 'isian') {
                 youtube_box.classList.add('hidden');
                 pilihan_ganda_box.classList.add('hidden');
                 isian_box.classList.remove('hidden');
-                reasons.classList.remove('hidden')
+                reasons.classList.remove('hidden');
+                file_attachment.classList.add('hidden');
+            }
+            if (type.value == 'file_attachment') {
+                youtube_box.classList.add('hidden');
+                pilihan_ganda_box.classList.add('hidden');
+                isian_box.classList.add('hidden');
+                reasons.classList.remove('hidden');
+                file_attachment.classList.remove('hidden');
             }
         }
     </script>

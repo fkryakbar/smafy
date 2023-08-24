@@ -197,6 +197,11 @@
                                 this.warning = false;
                                 if (this.user_answer == '') {
                                     this.warning = true;
+                                } else if (this.key == '') {
+                                    this.answered = true;
+                                    this.answer_status = true;
+                                    this.submit_jawaban({ result: true, user_answer: this.user_answer, soal_id: this.soal_id, ...App.abstract });
+                                    play_sound(true);
                                 } else if (this.user_answer == this.key) {
                                     this.answered = true;
                                     this.answer_status = true;
@@ -229,11 +234,10 @@
                                     </div>
                                 @endif
                                 <div x-show="warning" x-transition class="mt-3">
-                                    <div id="{{ $i }}-alert" class="card w-full bg-red-400">
+                                    <div id="{{ $i }}-alert" class="card w-full bg-amber-400">
                                         <div class="card-body text-white">
                                             <h2 class="card-title">Peringatan!</h2>
                                             <p x-text="warning_text"></p>
-
                                         </div>
                                     </div>
                                 </div>
@@ -244,6 +248,108 @@
                                     class="btn bg-green-400 border-none hover:bg-green-600 mt-5">Submit
                                     Jawaban</button>
                             </div>
+                        </div>
+                    @endif
+                    @if ($item->type == 'file_attachment')
+                        <div x-data="{
+                            answered: @if ($item->answer != null) true @else false @endif,
+                            soal_id: `{{ $item->id }}`,
+                            key: '{{ $item->correct_answer }}',
+                            answer_status: @if ($item->answer != null) @if ($item->result == 1) true @else false @endif
+                            @else
+                            false @endif,
+                            user_answer: '{{ $item->answer }}',
+                            warning: false,
+                            warning_text: 'Jawaban harus diupload',
+                            file: null,
+                            setFile(event) {
+                                this.file = event.target.files[0];
+                            },
+                            async submit() {
+                                this.answered = true;
+                                this.warning = false;
+                                if (this.file == null) {
+                                    this.warning = true;
+                                    this.warning_text = 'Jawaban harus diupload'
+                                } else {
+                                    const data = await this.upload_file({ result: true, user_answer: this.file, soal_id: this.soal_id, ...App.abstract });
+                                    if (data.code == 200) {
+                                        this.answered = true;
+                                        this.answer_status = true;
+                                        this.user_answer = data.data.answer_path;
+                                    } else {
+                                        this.warning = true;
+                                        this.warning_text = data.data.message;
+                                        this.answered = false;
+                                    }
+                                }
+                            }
+                        }">
+                            <div class="mt-3">
+                                <div x-show="warning" x-transition class="mt-3">
+                                    <div id="{{ $i }}-alert" class="card w-full bg-amber-400">
+                                        <div class="card-body text-white">
+                                            <h2 class="card-title">Peringatan!</h2>
+                                            <p x-text="warning_text"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div x-show="answered" x-transition>
+                                    @if ($item->correct_answer || $item->reasons)
+                                        <div :class="answer_status ? 'bg-green-400' : 'bg-red-400'"
+                                            id="{{ $i }}-alert" class="card w-full">
+                                            <div class="card-body text-white">
+                                                <h2 class="card-title">Penjelasan</h2>
+                                                @if ($item->correct_answer)
+                                                    <div
+                                                        class="w-full max-w-xs bg-green-500 rounded-lg p-2 flex justify-between items-center">
+                                                        <div class="flex items-center gap-2">
+                                                            <img src="{{ asset('/image/documents.png') }}"
+                                                                class="w-12">
+                                                            <p class="text-sm font-semibold">Attachment file</p>
+                                                        </div>
+                                                        <a href="/{{ $item->correct_answer }}" target="_blank">
+                                                            <div
+                                                                class="p-3 rounded-lg text-white bg-amber-400 font-semibold ">
+                                                                Buka
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                @endif
+                                                <p>{{ $item->reasons }}</p>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <p class="mt-3 mb-3">Jawaban Kamu</p>
+                                    <div
+                                        class="w-full max-w-xs bg-white rounded-lg p-2 flex justify-between items-center">
+                                        <div class="flex items-center gap-2">
+                                            <img src="{{ asset('/image/documents.png') }}" class="w-12">
+                                            <p class="text-sm font-semibold">Jawaban Kamu</p>
+                                        </div>
+                                        <a :href="'/' + user_answer" target="_blank">
+                                            <div class="p-3 rounded-lg text-white bg-amber-400 font-semibold ">
+                                                Buka
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div x-show="!answered" class="form-control w-full max-w-xs mt-3">
+                                <label class="label">
+                                    <span class="label-text">Upload Jawaban mu</span>
+                                </label>
+                                <input type="file" class="file-input file-input-bordered w-full max-w-xs"
+                                    x-on:change="setFile" />
+                            </div>
+                            <div class="flex w-full justify-center">
+                                <button id="{{ $i }}-button-isian" @click="submit"
+                                    :disabled="answered ? true : false"
+                                    class="btn bg-green-400 border-none hover:bg-green-600 mt-5">Submit
+                                    Jawaban</button>
+                            </div>
+
                         </div>
                     @endif
                     <div>
@@ -501,6 +607,39 @@
                     let data = await responses.json()
                     return data.body;
                 },
+                async upload_file(data) {
+                    App.saved_answer.push(data);
+                    const formData = new FormData();
+                    formData.append('result', data.result);
+                    formData.append('package_id', data.package_id);
+                    formData.append('soal_id', data.soal_id);
+                    formData.append('u_id', data.u_id);
+                    formData.append('user_answer', data.user_answer);
+
+                    const response = await fetch(
+                        '/api/collection/submit-jawaban-file/{{ $collection->slug }}', {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                // 'Content-Type': 'multipart/form-data',
+                                'Accept': 'application/json',
+                            },
+                        })
+                    const responseData = await response.json()
+                    if (!response.ok) {
+                        return {
+                            code: 400,
+                            message: 'Gagal Upload File',
+                            data: responseData
+                        }
+                    }
+                    return {
+                        code: 200,
+                        message: 'Jawaban Berhasil tersimpan',
+                        data: responseData
+                    }
+
+                },
                 async submit_jawaban(jawaban) {
                     App.saved_answer.push(jawaban);
                     let responses = await fetch(
@@ -508,7 +647,6 @@
                             method: 'POST',
                             headers: {
                                 "Content-Type": "application/json",
-                                "Content-Type": "application/json"
                             },
                             body: JSON.stringify(jawaban)
                         }).catch(e => {

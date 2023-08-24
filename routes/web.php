@@ -54,6 +54,7 @@ Route::group(['middleware' => 'auth.user'], function () {
 
     Route::get('/dashboard/result/{collection_slug}', [CollectionResultController::class, 'index']);
     Route::get('/dashboard/result/{collection_slug}/{u_id}', [CollectionResultController::class, 'detail']);
+    Route::get('/dashboard/result/{collection_slug}/{u_id}/hapus', [CollectionResultController::class, 'hapus']);
 
 
     Route::get('/dashboard/koleksi/tambah', [CollectionController::class, 'index']);
@@ -99,7 +100,9 @@ Route::post('/api/submit-jawaban', [LearnController::class, 'submit_jawaban']);
 Route::post('/api/submit-jawaban/quiz', [LearnController::class, 'submit_jawaban_quiz']);
 Route::get('/api/get-saved-answer/{u_id}', [LearnController::class, 'get_saved']);
 
+Route::post('/api/change-answer', [DashboardController::class, 'change_answer']);
 
 Route::post('/api/collection/submit-jawaban/{collection_slug}', [PlayController::class, 'submit_jawaban_api']);
+Route::post('/api/collection/submit-jawaban-file/{collection_slug}', [PlayController::class, 'submit_jawaban_file_api']);
 Route::post('/api/collection/submit-jawaban-kuis/{collection_slug}', [PlayController::class, 'submit_jawaban_kuis_api']);
 Route::get('/api/collection/get-saved-answer/{u_id}/{package_slug}', [PlayController::class, 'get_saved_answer_api']);

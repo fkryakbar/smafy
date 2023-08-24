@@ -6,6 +6,7 @@ use App\Models\Collection;
 use App\Models\JawabanModel;
 use App\Models\PackageModel;
 use App\Models\QuestionsModel;
+use App\Models\SiswaCollection;
 use App\Models\SiswaModel;
 use Facade\Ignition\Support\Packagist\Package;
 use Illuminate\Http\Request;
@@ -111,6 +112,7 @@ class DashboardController extends Controller
             'content' => 'required',
             'title' => 'required|max:150',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'file_attachment' => 'mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
         ], [
             'content.required' => 'Konten wajib diisi',
             'title.required' => 'Judul wajib diisi',
@@ -124,6 +126,11 @@ class DashboardController extends Controller
             $request->merge(['correct_answer' => $request->correct_answer_pilihan_ganda]);
         } else if ($request->type == 'isian') {
             $request->merge(['correct_answer' => $request->correct_answer_isian]);
+        } else if ($request->type == 'file_attachment') {
+            if ($request->file('file_attachment')) {
+                $file_attachment_path = $request->file('file_attachment')->store('storage/user/attachment');
+                $request->merge(['correct_answer' => $file_attachment_path]);
+            }
         }
         $data = QuestionsModel::where('user_id', '=', Auth::user()->id)->where('package_slug', '=', $slug)->get();
         $order_id = count($data) + 1;
@@ -134,7 +141,7 @@ class DashboardController extends Controller
             'image_path' => $image_path,
             'correct_answer' => $request->correct_answer,
         ]);
-        QuestionsModel::create($request->except(['_token', 'correct_answer_pilihan_ganda', 'correct_answer_isian', 'image']));
+        QuestionsModel::create($request->except(['_token', 'correct_answer_pilihan_ganda', 'correct_answer_isian', 'image', 'file_attachment']));
         return redirect('/dashboard/topik/' . $slug)->with('msg', 'Slide berhasil ditambahkan');
     }
 
@@ -143,6 +150,9 @@ class DashboardController extends Controller
         $img = QuestionsModel::where('user_id', '=', Auth::user()->id)->where('id', '=', $id)->firstOrFail();
         if ($img->image_path != null) {
             Storage::disk('public')->delete($img->image_path);
+        }
+        if ($img->type == 'file_attachment' && $img->correct_answer) {
+            Storage::disk('public')->delete($img->correct_answer);
         }
         QuestionsModel::where('user_id', '=', Auth::user()->id)->where('id', '=', $id)->delete();
         return redirect('/dashboard/topik/' . $slug)->with('msg', 'Slide berhasil dihapus');
@@ -256,7 +266,8 @@ class DashboardController extends Controller
             'content' => 'required',
             'title' => 'required|max:150',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'order_id' => 'required|numeric|min:0'
+            'order_id' => 'required|numeric|min:0',
+            'file_attachment' => 'mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
         ], [
             'content.required' => 'Konten wajib diisi',
             'title.required' => 'Judul wajib diisi',
@@ -282,10 +293,55 @@ class DashboardController extends Controller
             $request->mergeIfMissing([
                 'correct_answer' => $request->correct_answer_isian
             ]);
+        } else if ($request->type == 'file_attachment') {
+            if ($request->file('file_attachment')) {
+                if ($data->correct_answer) {
+                    Storage::disk('public')->delete($data->correct_answer);
+                }
+                $file_attachment_path = $request->file('file_attachment')->store('storage/user/attachment');
+                $request->merge(['correct_answer' => $file_attachment_path]);
+            }
         }
 
         $update_data = QuestionsModel::where('user_id', Auth::user()->id)->where('package_slug', $slug)->where('id', $id);
-        $update_data->update($request->except(['_token', 'correct_answer_pilihan_ganda', 'correct_answer_isian', 'image']));
+        $update_data->update($request->except(['_token', 'correct_answer_pilihan_ganda', 'correct_answer_isian', 'image', 'file_attachment']));
         return redirect()->to('/dashboard/topik/' . $slug)->with('msg', 'Slide berhasil simpan');
+    }
+
+    public function change_answer(Request $request)
+    {
+        $request->validate([
+            'jawaban_id' => 'required',
+            'value' => 'required'
+        ]);
+
+        $jawaban = JawabanModel::where('id', $request->jawaban_id)->firstOrFail();
+        $jawaban->update([
+            'result' => $request->value
+        ]);
+        $result = JawabanModel::where('u_id', $jawaban->u_id)->where('package_id', $jawaban->package_id)->get();
+        if (count($result) > 0) {
+            $benar = 0;
+            $total_soal = count(QuestionsModel::where('package_slug', $jawaban->package_id)->where(function (Builder $query) {
+                return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian');
+            })->get());
+            foreach ($result as $value) {
+                if ($value->result == 1) {
+                    $benar = $benar + 1;
+                }
+            }
+            $skor = 0;
+            if ($total_soal > 0) {
+                $skor = round(($benar / $total_soal) * 100, 2);
+            }
+            $siswa = SiswaCollection::where('u_id', $jawaban->u_id)->first();
+            $siswaActivities = $siswa->activities;
+            $siswaActivities[$jawaban->package_id]['score'] = $skor;
+            $siswa->activities = $siswaActivities;
+            $siswa->save();
+        }
+        return response([
+            'message' => 'Success'
+        ]);
     }
 }
