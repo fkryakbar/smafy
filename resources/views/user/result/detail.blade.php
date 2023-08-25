@@ -73,94 +73,93 @@
                     @endphp
                     <div class="bg-white p-3 rounded-md shadow mt-6 min-[500px]:w-full min-[200px]:w-[327px] mb-10 ">
                         @foreach ($siswa->collection->packages as $package)
-                            <div class="mb-10">
-                                <p class="font-bold text-gray-700 text-lg mb-5">
-                                    {{ $package->title }}
-                                    @if ($package->topic_type == 'materi')
-                                        <span
-                                            class="bg-green-500 p-1 rounded-lg text-white text-sm">{{ $package->topic_type }}</span>
-                                    @else
-                                        <span
-                                            class="bg-amber-500 p-1 rounded-lg text-white text-sm">{{ $package->topic_type }}</span>
-                                    @endif
-                                    <span class="bg-blue-500 p-1 rounded-lg text-white text-sm">Skor :
-                                        {{ $siswa->activities[$package->slug]['score'] }}</span>
-                                    @php
-                                        $total_score = $total_score + (int) $siswa->activities[$package->slug]['score'];
-                                    @endphp
-                                </p>
-                                <div class="overflow-x-auto">
-                                    <table class="table w-full min-[200px]:text-xs">
-                                        <thead>
-                                            <tr>
-                                                <th>Nama slide</th>
-                                                <th>Jawaban siswa</th>
-                                                <th>Jawaban Jawaban benar</th>
-                                                <th>Keterangan</th>
-                                                <th>Ubah Jawaban</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($package->answers as $index => $answer)
-                                                @if ($answer->u_id == $siswa->u_id)
-                                                    <tr>
-                                                        <th>{{ $answer->get_soal->title }}</th>
-                                                        @if ($answer->get_soal->type == 'file_attachment')
-                                                            <th>
-                                                                <a href="/{{ $answer->answer }}"
-                                                                    class="btn btn-sm bg-blue-400 hover:bg-blue-600 border-0"
-                                                                    target="_blank">Buka File</a>
-                                                            </th>
-                                                        @else
-                                                            <th>{{ $answer->answer }}</th>
-                                                        @endif
-                                                        @if ($answer->get_soal->type == 'file_attachment' && $answer->get_soal->correct_answer)
-                                                            <th>
-                                                                <a href="/{{ $answer->get_soal->correct_answer }}"
-                                                                    class="btn btn-sm bg-blue-400 hover:bg-blue-600 border-0"
-                                                                    target="_blank">Buka File</a>
-                                                            </th>
-                                                        @else
-                                                            <th>{{ $answer->get_soal->correct_answer }}</th>
-                                                        @endif
-                                                        <th>
-                                                            @if ($answer->result == 0)
-                                                                <span class="badge bg-red-400 border-none">Salah</span>
+                            @isset($siswa->activities[$package->slug])
+                                <div class="mb-10">
+                                    <p class="font-bold text-gray-700 text-lg mb-5">
+                                        {{ $package->title }}
+                                        @if ($package->topic_type == 'materi')
+                                            <span
+                                                class="bg-green-500 p-1 rounded-lg text-white text-sm">{{ $package->topic_type }}</span>
+                                        @else
+                                            <span
+                                                class="bg-amber-500 p-1 rounded-lg text-white text-sm">{{ $package->topic_type }}</span>
+                                        @endif
+                                        <span class="bg-blue-500 p-1 rounded-lg text-white text-sm">Skor :
+                                            {{ $siswa->activities[$package->slug]['score'] }}</span>
+                                        @php
+                                            $total_score = $total_score + (int) $siswa->activities[$package->slug]['score'];
+                                        @endphp
+                                    </p>
+                                    <div class="overflow-x-auto">
+                                        <table class="table w-full min-[200px]:text-xs">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nama slide</th>
+                                                    <th>Jawaban siswa</th>
+                                                    <th>Jawaban Jawaban benar</th>
+                                                    <th>Keterangan</th>
+                                                    <th>Ubah Jawaban</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($package->answers as $index => $answer)
+                                                    @if ($answer->u_id == $siswa->u_id)
+                                                        <tr>
+                                                            <th>{{ $answer->get_soal->title }}</th>
+                                                            @if ($answer->get_soal->type == 'file_attachment')
+                                                                <th>
+                                                                    <a href="/{{ $answer->answer }}"
+                                                                        class="btn btn-sm bg-blue-400 hover:bg-blue-600 border-0"
+                                                                        target="_blank">Buka File</a>
+                                                                </th>
                                                             @else
-                                                                <span
-                                                                    class="badge bg-green-400 border-none">Benar</span>
+                                                                <th>{{ $answer->answer }}</th>
                                                             @endif
-                                                        </th>
-                                                        <th class="flex justify-center gap-2 items-center">
-                                                            <label for="" class="text-green-400">Benar</label>
-                                                            <div>
-                                                                <input type="radio"
-                                                                    name="jawaban-{{ $answer->id }}" class="radio"
-                                                                    @checked($answer->result == 1)
-                                                                    onclick="changeAnswer('{{ $answer->id }}', 1)" />
-                                                                <input type="radio"
-                                                                    name="jawaban-{{ $answer->id }}"class="radio"
-                                                                    @checked($answer->result == 0)
-                                                                    onclick="changeAnswer('{{ $answer->id }}', 0)" />
-                                                            </div>
-                                                            <p class="text-red-400">Salah</p>
-                                                        </th>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
+                                                            @if ($answer->get_soal->type == 'file_attachment' && $answer->get_soal->correct_answer)
+                                                                <th>
+                                                                    <a href="/{{ $answer->get_soal->correct_answer }}"
+                                                                        class="btn btn-sm bg-blue-400 hover:bg-blue-600 border-0"
+                                                                        target="_blank">Buka File</a>
+                                                                </th>
+                                                            @else
+                                                                <th>{{ $answer->get_soal->correct_answer }}</th>
+                                                            @endif
+                                                            <th>
+                                                                @if ($answer->result == 0)
+                                                                    <span class="badge bg-red-400 border-none">Salah</span>
+                                                                @else
+                                                                    <span
+                                                                        class="badge bg-green-400 border-none">Benar</span>
+                                                                @endif
+                                                            </th>
+                                                            <th class="flex justify-center gap-2 items-center">
+                                                                <label for="" class="text-green-400">Benar</label>
+                                                                <div>
+                                                                    <input type="radio"
+                                                                        name="jawaban-{{ $answer->id }}" class="radio"
+                                                                        @checked($answer->result == 1)
+                                                                        onclick="changeAnswer('{{ $answer->id }}', 1)" />
+                                                                    <input type="radio"
+                                                                        name="jawaban-{{ $answer->id }}"class="radio"
+                                                                        @checked($answer->result == 0)
+                                                                        onclick="changeAnswer('{{ $answer->id }}', 0)" />
+                                                                </div>
+                                                                <p class="text-red-400">Salah</p>
+                                                            </th>
+                                                        </tr>
+                                                    @endif
+                                                @endforeach
 
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
+                            @endisset
                         @endforeach
                         <h1 class="mt-10 font-bold text-xl text-gray-600">
                             Total Skor : {{ $total_score }}
                         </h1>
                     </div>
-
-
-
                 </div>
             </main>
 
