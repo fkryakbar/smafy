@@ -130,7 +130,7 @@
                         }
                         $progress = round(($finished / count($activities)) * 100);
                     @endphp
-                    <div class="mx-4 mt-4">
+                    <div class="mx-4 mt-4 max-w-[400px]">
                         <div class="flex flex-col items-center justify-center mb-5 p-4 rounded-lg bg-white drop-shadow">
                             <h1 class="mb-2 font-bold text-gray-700">Halo! {{ session($collection->slug)['name'] }}</h1>
                             <p class="text-gray-600 text-sm mb-2">Progress Belajar kamu</p>
