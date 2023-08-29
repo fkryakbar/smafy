@@ -328,8 +328,10 @@
                                                     class="card w-full bg-green-400 ">
                                                     <div class="card-body text-white">
                                                         <h2 class="card-title">Penjelasan</h2>
-                                                        <p>Jawaban benar : {{ $item->correct_answer }} </p>
-                                                        <p>{{ $item->reasons }}</p>
+                                                        @if ($item->correct_answer)
+                                                            <p>Jawaban benar : {{ $item->correct_answer }} </p>
+                                                        @endif
+                                                        <p>{!! $item->reasons !!}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -340,8 +342,10 @@
                                                     class="card w-full  bg-red-400  ">
                                                     <div class="card-body text-white">
                                                         <h2 class="card-title">Penjelasan</h2>
-                                                        <p>Jawaban benar : {{ $item->correct_answer }} </p>
-                                                        <p>{{ $item->reasons }}</p>
+                                                        @if ($item->correct_answer)
+                                                            <p>Jawaban benar : {{ $item->correct_answer }} </p>
+                                                        @endif
+                                                        <p>{!! $item->reasons !!}</p>
                                                     </div>
                                                 </div>
                                             </div>
