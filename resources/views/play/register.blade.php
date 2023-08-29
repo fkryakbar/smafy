@@ -73,7 +73,7 @@
                         @endif
                     </div>
                     @if (!$collection->accept_responses == 0)
-                        <div class="mx-4 mt-4">
+                        <div class="mx-4 mt-4 max-w-[400px]">
                             <h1 class="text-gray-500 font-semibold ">Kamu akan mempelajari</h1>
                             <div class="grid grid-cols-1 gap-2 mt-2 ">
                                 @foreach ($collection->packages as $package)
