@@ -273,6 +273,7 @@
                                 if (this.file == null) {
                                     this.warning = true;
                                     this.warning_text = 'Jawaban harus diupload'
+                                    this.answered = false;
                                 } else {
                                     const data = await this.upload_file({ result: true, user_answer: this.file, soal_id: this.soal_id, ...App.abstract });
                                     if (data.code == 200) {
