@@ -122,7 +122,13 @@ class PlayController extends Controller
             }
             if ($package->topic_type == 'kuis') {
                 if (session($collection_slug)['activities'][$package->slug]['expired_time'] == null) {
-                    session([$collection_slug . '.activities' . '.' . $package->slug . '.expired_time' => time() + $package->timer]);
+                    $expire_time = time() + $package->timer;
+                    session([$collection_slug . '.activities' . '.' . $package->slug . '.expired_time' => $expire_time]);
+                    $siswa = SiswaCollection::where('u_id', session($collection_slug)['u_id'])->where('collection_slug', $collection_slug)->first();
+                    $siswaActivities = $siswa->activities;
+                    $siswaActivities[$package_slug]['expired_time'] = $expire_time;
+                    $siswa->activities = $siswaActivities;
+                    $siswa->save();
                 }
                 // dd(session($collection_slug)['activities'][$package->slug]);
                 return view('play.quiz', [
