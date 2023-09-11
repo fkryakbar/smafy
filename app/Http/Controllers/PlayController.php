@@ -274,6 +274,16 @@ class PlayController extends Controller
     public function submit_jawaban_kuis_api(Request $request, $collection_slug)
     {
         $item = $request->all();
+        $isFinished = SiswaCollection::where('u_id', session($collection_slug)['u_id'])->first();
+        $isFinished = $isFinished->activities[$item['package_id']]['is_finished'];
+        if ($isFinished == true) {
+            return response([
+                'message' => 'Sudah selesai'
+            ], 419);
+        }
+
+
+
         $user_answer = JawabanModel::where('u_id', session($collection_slug)['u_id'])->where('soal_id', $item['soal_id'])->where('package_id', $item['package_id'])->first();
         if ($user_answer) {
             $user_answer->update([
