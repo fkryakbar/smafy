@@ -39,7 +39,7 @@ class PlayController extends Controller
                         'package_id' => $package->slug,
                         'time_left' => 0,
                         'is_finished' => false,
-                        'expired_time' => time() + $package->timer
+                        'expired_time' => null
                     ];
                     session([$slug . '.activities' . '.' . $package->slug => $data]);
                     $siswaCollection->update([
@@ -77,7 +77,7 @@ class PlayController extends Controller
                 'package_id' => $package->slug,
                 'time_left' => 0,
                 'is_finished' => false,
-                'expired_time' => time() + $package->timer
+                'expired_time' => null
             ];
         }
 
@@ -121,6 +121,10 @@ class PlayController extends Controller
                 ]);
             }
             if ($package->topic_type == 'kuis') {
+                if (session($collection_slug)['activities'][$package->slug]['expired_time'] == null) {
+                    session([$collection_slug . '.activities' . '.' . $package->slug . '.expired_time' => time() + $package->timer]);
+                }
+                // dd(session($collection_slug)['activities'][$package->slug]);
                 return view('play.quiz', [
                     'package' => $package,
                     'soal' => $soal,
@@ -191,6 +195,13 @@ class PlayController extends Controller
     public function submit_jawaban_api(Request $request, $collection_slug)
     {
         $item = $request->all();
+        $isFinished = SiswaCollection::where('u_id', session($collection_slug)['u_id'])->first();
+        $isFinished = $isFinished->activities[$item['package_id']]['is_finished'];
+        if ($isFinished == true) {
+            return response([
+                'message' => 'Sudah selesai'
+            ], 419);
+        }
         JawabanModel::create([
             'u_id' => session($collection_slug)['u_id'],
             'package_id' => $item['package_id'],
@@ -228,12 +239,18 @@ class PlayController extends Controller
     public function submit_jawaban_file_api(Request $request, $collection_slug)
     {
         $request->validate([
-            'user_answer' => 'mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
+            'user_answer' => 'mimes:jpeg,png,jpg,gif,svg,pdf|max:6144',
         ], [
             'user_answer.mimes' => 'File harus bertipe jpeg, png, jpg, dan pdf',
-            'user_answer.max' => 'Ukuran file maksimal 2 MB'
+            'user_answer.max' => 'Ukuran file maksimal 6 MB'
         ]);
-
+        $isFinished = SiswaCollection::where('u_id', session($collection_slug)['u_id'])->first();
+        $isFinished = $isFinished->activities[$request->package_id]['is_finished'];
+        if ($isFinished == true) {
+            return response([
+                'message' => 'Sudah selesai'
+            ], 419);
+        }
         $answer_path =  $request->file('user_answer')->store('/storage/user/upload');
 
         JawabanModel::create([

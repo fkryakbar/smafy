@@ -280,10 +280,12 @@
                                         this.answered = true;
                                         this.answer_status = true;
                                         this.user_answer = data.data.answer_path;
+                                        play_sound(true)
                                     } else {
                                         this.warning = true;
                                         this.warning_text = data.data.message;
                                         this.answered = false;
+                                        play_sound(false);
                                     }
                                 }
                             }
@@ -613,6 +615,23 @@
                     return data.body;
                 },
                 async upload_file(data) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal
+                                .stopTimer)
+                            toast.addEventListener('mouseleave', Swal
+                                .resumeTimer)
+                        }
+                    })
+                    Toast.fire({
+                        icon: 'info',
+                        title: 'Sedang Mengupload'
+                    })
                     App.saved_answer.push(data);
                     const formData = new FormData();
                     formData.append('result', data.result);
@@ -631,6 +650,19 @@
                             },
                         })
                     const responseData = await response.json()
+                    if (response.status != 200) {
+
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Kamu sudah selesai mengerjakan'
+                        })
+                    }
+                    if (response.status == 200) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'File Berhasil diupload'
+                        })
+                    }
                     if (!response.ok) {
                         return {
                             code: 400,
@@ -682,14 +714,15 @@
                             timer: 3000,
                             timerProgressBar: true,
                             didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                toast.addEventListener('mouseenter', Swal
+                                    .stopTimer)
+                                toast.addEventListener('mouseleave', Swal
+                                    .resumeTimer)
                             }
                         })
-
                         Toast.fire({
                             icon: 'error',
-                            title: 'Network Error'
+                            title: 'Kamu sudah selesai mengerjakan'
                         })
                     }
                 },
