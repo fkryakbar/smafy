@@ -18,6 +18,8 @@
             <li><a href="/register" class="btn bg-amber-400 border-none hover:bg-amber-700">Daftar</a></li>
             <li><a href="/browse" class="btn bg-amber-400 border-none hover:bg-amber-700">Smafy Library</a></li>
             <li><a href="/about" class="btn bg-amber-400 border-none hover:bg-amber-700">Tentang</a></li>
+            <li><a href="https://docs.smafy.my.id/" target="_blank"
+                    class="btn bg-amber-400 border-none hover:bg-amber-700">Bantuan</a></li>
         </ul>
     </div>
 </div>
@@ -69,13 +71,22 @@
             <p class="font-bold">Smafy Library</p>
         </a>
         <a href="/about" class="flex mt-3 gap-3 text-white w-full hover:bg-amber-600 p-3 rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                class="bi bi-question-circle" viewBox="0 0 16 16">
-                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                <path
-                    d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
             </svg>
+
             <p class="font-bold">Tentang</p>
+        </a>
+        <a href="https://docs.smafy.my.id/" target="_blank"
+            class="flex mt-3 gap-3 text-white w-full hover:bg-amber-600 p-3 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+            </svg>
+            <p class="font-bold">Bantuan</p>
         </a>
 
     </div>

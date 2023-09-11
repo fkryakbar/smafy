@@ -7,7 +7,6 @@
 </head>
 
 <body>
-
     <div class="flex h-screen bg-slate-300">
         <div class="m-auto">
             <div class="card min-[500px]:w-96 min-[200px]:w-[350px]  bg-base-100 shadow-xl m-3">

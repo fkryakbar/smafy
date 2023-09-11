@@ -21,7 +21,16 @@
                 </div>
                 <div class="navbar-center hidden lg:flex">
                 </div>
+
                 <div class="navbar-end">
+                    <a class="btn btn-ghost text-white normal-case text-lg min-[200px]:btn-sm"
+                        href="https://docs.smafy.my.id/siswa/menyelesaikan-aktivitas" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                        </svg>
+                    </a>
                     <button id="exit" class="btn btn-ghost text-white normal-case text-lg min-[200px]:btn-sm"><i
                             class="bi bi-box-arrow-right text-2xl"></i></button>
                 </div>
@@ -131,8 +140,10 @@
                         $progress = round(($finished / count($activities)) * 100);
                     @endphp
                     <div class="mx-4 mt-4 max-w-[400px]">
-                        <div class="flex flex-col items-center justify-center mb-5 p-4 rounded-lg bg-white drop-shadow">
-                            <h1 class="mb-2 font-bold text-gray-700">Halo! {{ session($collection->slug)['name'] }}</h1>
+                        <div
+                            class="flex flex-col items-center justify-center mb-5 p-4 rounded-lg bg-white drop-shadow">
+                            <h1 class="mb-2 font-bold text-gray-700">Halo! {{ session($collection->slug)['name'] }}
+                            </h1>
                             <p class="text-gray-600 text-sm mb-2">Progress Belajar kamu</p>
                             <div class="radial-progress text-green-500"
                                 style="--value:{{ $progress }}; --size:8rem">{{ $progress }}%</div>

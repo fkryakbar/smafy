@@ -22,7 +22,8 @@
                 </a>
             </div>
             <div class="px-5 py-2">
-                <a target="_blank" href="/learn/demo" class="text-base leading-6 text-gray-500 hover:text-gray-900">
+                <a target="_blank" href="https://smafy.my.id/play/rsEZ-dyh-xAx"
+                    class="text-base leading-6 text-gray-500 hover:text-gray-900">
                     Demo
                 </a>
             </div>
