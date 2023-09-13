@@ -201,7 +201,7 @@
                             countdown.innerHTML = `${minutes} : ${seconds}`;
                             if (time < 0) {
                                 clearInterval(update);
-                                // stop_quiz();
+                                stop_quiz();
                             }
                             time--
                         }
