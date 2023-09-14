@@ -531,6 +531,14 @@
 
     </div>
     </div>
+    <audio id="true_sound" preload="auto">
+        <source src="{{ asset('sound/true.mp3') }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="false_sound" preload="auto">
+        <source src="{{ asset('sound/false.mp3') }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('main_data', () => ({
@@ -743,8 +751,8 @@
                 show_sidebar: false,
                 play_sound(bool) {
                     @if ($package->show_correction_lesson == 1)
-                        let true_sound = new Audio('{{ asset('sound/true.mp3') }}');
-                        let false_sound = new Audio('{{ asset('sound/false.mp3') }}');
+                        const true_sound = document.getElementById("true_sound");
+                        const false_sound = document.getElementById("false_sound");
                         if (bool == true) {
                             true_sound.play();
                         } else if (bool == false) {
