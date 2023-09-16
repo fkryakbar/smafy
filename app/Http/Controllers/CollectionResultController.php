@@ -36,8 +36,10 @@ class CollectionResultController extends Controller
         $jawaban = JawabanModel::where('u_id', $u_id)->get();
 
         foreach ($jawaban as $j) {
-            if ($j->get_soal->type == 'file_attachment') {
-                Storage::disk('public')->delete([$j->answer]);
+            if ($j->get_soal) {
+                if ($j->get_soal->type == 'file_attachment') {
+                    Storage::disk('public')->delete([$j->answer]);
+                }
             }
         }
         JawabanModel::where('u_id', $u_id)->delete();
