@@ -341,11 +341,16 @@
                                             <img src="{{ asset('/image/documents.png') }}" class="w-12">
                                             <p class="text-sm font-semibold">Jawaban Kamu</p>
                                         </div>
-                                        <a :href="'/' + user_answer" target="_blank">
+                                        <a x-show="user_answer != ''" :href="'/' + user_answer" target="_blank">
                                             <div class="p-3 rounded-lg text-white bg-amber-400 font-semibold ">
                                                 Buka
                                             </div>
                                         </a>
+                                        <div x-show="user_answer == ''">
+                                            <div class="p-3 rounded-lg text-white bg-gray-300 font-semibold ">
+                                                Uploading...
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
