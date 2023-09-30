@@ -181,7 +181,7 @@
                                             @else
                                                 <div
                                                     class="rounded-full bg-amber-500 p-1 text-white flex justify-center items-center w-10 h-10">
-                                                    @if (session($collection->slug)['activities'][$package->slug]['is_finished'])
+                                                    @if (session($collection->slug)['activities'][$package->slug]['is_finished'] && $collection->show_score == 1)
                                                         <p class="font-bold text-sm">
                                                             {{ session($collection->slug)['activities'][$package->slug]['score'] }}
                                                         </p>
