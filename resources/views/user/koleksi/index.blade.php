@@ -95,6 +95,17 @@
                             </div>
                             <div class="form-control w-full">
                                 <label class="label">
+                                    <span class="label-text">Tampilkan skor</span>
+                                </label>
+                                <select class="select select-bordered" name="show_score">
+                                    <option value="1" @if (old('show_score') == '1') selected @endif>Ya
+                                    </option>
+                                    <option value="0" @if (old('show_score') == '0') selected @endif>Tidak
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-control w-full">
+                                <label class="label">
                                     <span class="label-text">Tampilkan di pencarian</span>
                                 </label>
                                 <select class="select select-bordered" name="show_public">

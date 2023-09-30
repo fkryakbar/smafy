@@ -37,7 +37,7 @@
             </div>
             {{-- endnavbar --}}
             <div class="mt-20 mb-20">
-                @if (!session()->has($collection->slug))
+                @if (!session()->has($collection->slug) || $collection->accept_responses == 0)
                     <div class="p-8 shadow-lg rounded-xl text-center bg-white mx-4 max-w-[400px]">
 
                         @if ($collection->accept_responses == 0)
@@ -81,7 +81,7 @@
                             </form>
                         @endif
                     </div>
-                    @if (!$collection->accept_responses == 0)
+                    @if ($collection->accept_responses == 1)
                         <div class="mx-4 mt-4 max-w-[400px]">
                             <h1 class="text-gray-500 font-semibold ">Kamu akan mempelajari</h1>
                             <div class="grid grid-cols-1 gap-2 mt-2 ">
@@ -147,11 +147,13 @@
                             <p class="text-gray-600 text-sm mb-2">Progress Belajar kamu</p>
                             <div class="radial-progress text-green-500"
                                 style="--value:{{ $progress }}; --size:8rem">{{ $progress }}%</div>
-                            <p class="mt-2 text-gray-500 text-sm">
-                                Skor Kamu saat ini
-                            </p>
-                            <p class="font-bold text-amber-500">{{ $score }}</p>
-                            <p class="mt-5">Klik Activities di bawah untuk lanjut belajar</p>
+                            @if ($collection->show_score == 1)
+                                <p class="mt-2 text-gray-500 text-sm">
+                                    Skor Kamu saat ini
+                                </p>
+                                <p class="font-bold text-amber-500">{{ $score }}</p>
+                            @endif
+                            <p class="mt-5 text-center text-sm">Klik Activities di bawah untuk lanjut belajar</p>
                         </div>
                         <h3 class="text-gray-500 font-semibold ">Activities</h3>
                         <div class="grid grid-cols-1 gap-2 mt-2 ">
@@ -163,7 +165,7 @@
                                             @if ($package->topic_type == 'materi')
                                                 <div
                                                     class="rounded-full bg-green-500 p-1 text-white flex justify-center items-center w-10 h-10">
-                                                    @if (session($collection->slug)['activities'][$package->slug]['is_finished'])
+                                                    @if (session($collection->slug)['activities'][$package->slug]['is_finished'] && $collection->show_score == 1)
                                                         <p class="font-bold text-sm">
                                                             {{ session($collection->slug)['activities'][$package->slug]['score'] }}
                                                         </p>

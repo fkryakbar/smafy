@@ -14,7 +14,7 @@
                 <div class="card-body items-center text-center">
                     <p class="text-center card-title">Yeey! Sudah selesai </p>
                     <img src="{{ asset('image/Finish line-amico.svg') }}" alt="">
-                    @if ($package->show_result == 1 && $total > 0)
+                    @if ($collection->show_score == 1 && $total > 0)
                         <h2 class="card-title">Skor kamu</h2>
                         <div class="radial-progress text-green-400" style="--value:{{ $skor }};">
                             {{ $skor }}

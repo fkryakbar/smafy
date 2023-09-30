@@ -147,6 +147,7 @@ class PlayController extends Controller
     {
         if (session()->has($collection_slug)) {
             // dd(session($collection_slug));
+            $collection = Collection::where('slug', $collection_slug)->firstOrFail();
             $result = JawabanModel::where('u_id', session($collection_slug)['u_id'])->where('package_id', $package_slug)->get();
 
             $benar = 0;
@@ -181,7 +182,8 @@ class PlayController extends Controller
                 'total' => $total,
                 'benar' => $benar,
                 'package' => PackageModel::where('slug', $package_slug)->first(),
-                'collection_slug' => $collection_slug
+                'collection_slug' => $collection_slug,
+                'collection' => $collection
             ]);
         }
     }
