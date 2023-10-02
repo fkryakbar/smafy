@@ -27,9 +27,11 @@
                         pembelajaran yang Interaktif, Menarik, dan Efektif berbasis web yang dapat digunakan kapan saja
                         dan dimana saja.</p>
                     <div class="mt-4 lg:block flex justify-center gap-2">
-                        <a href="/register" class="btn bg-amber-400 hover:bg-amber-600 border-0 px-10">Daftar</a>
+                        <a href="https://smafy.my.id/play/4XaP-pX0-hws"
+                            class="btn bg-green-400 hover:bg-green-600 border-0 px-10">Pre-Test</a>
                         <a href="https://smafy.my.id/play/rsEZ-dyh-xAx"
                             class="btn bg-cyan-500 hover:bg-cyan-800 border-0 px-10">SPLDV</a>
+                        {{-- <a href="/register" class="btn bg-amber-400 hover:bg-amber-600 border-0 px-10">Daftar</a> --}}
                         {{-- <a href="https://smafy.my.id/play/rsEZ-dyh-xAx" target="_blank"
                             class="btn bg-slate-600 hover:bg-slate-800 border-0 px-10">Demo</a> --}}
                     </div>
