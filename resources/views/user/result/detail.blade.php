@@ -96,9 +96,9 @@
                                                 <tr>
                                                     <th>Nama slide</th>
                                                     <th>Jawaban siswa</th>
-                                                    <th>Jawaban Jawaban benar</th>
+                                                    {{-- <th>Jawaban Jawaban benar</th> --}}
                                                     <th>Keterangan</th>
-                                                    <th>Ubah Jawaban</th>
+                                                    {{-- <th>Ubah Jawaban</th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -115,7 +115,7 @@
                                                             @else
                                                                 <th>{{ $answer->answer }}</th>
                                                             @endif
-                                                            @if ($answer->get_soal->type == 'file_attachment' && $answer->get_soal->correct_answer)
+                                                            {{-- @if ($answer->get_soal->type == 'file_attachment' && $answer->get_soal->correct_answer)
                                                                 <th>
                                                                     <a href="/{{ $answer->get_soal->correct_answer }}"
                                                                         class="btn btn-sm bg-blue-400 hover:bg-blue-600 border-0"
@@ -123,7 +123,7 @@
                                                                 </th>
                                                             @else
                                                                 <th>{{ $answer->get_soal->correct_answer }}</th>
-                                                            @endif
+                                                            @endif --}}
                                                             <th>
                                                                 @if ($answer->result == 0)
                                                                     <span class="badge bg-red-400 border-none">Salah</span>
@@ -132,7 +132,7 @@
                                                                         class="badge bg-green-400 border-none">Benar</span>
                                                                 @endif
                                                             </th>
-                                                            <th class="flex justify-center gap-2 items-center">
+                                                            {{-- <th class="flex justify-center gap-2 items-center">
                                                                 <label for="" class="text-green-400">Benar</label>
                                                                 <div>
                                                                     <input type="radio"
@@ -145,7 +145,7 @@
                                                                         onclick="changeAnswer('{{ $answer->id }}', 0)" />
                                                                 </div>
                                                                 <p class="text-red-400">Salah</p>
-                                                            </th>
+                                                            </th> --}}
                                                         </tr>
                                                     @endif
                                                 @endforeach
