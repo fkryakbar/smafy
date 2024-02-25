@@ -10,11 +10,14 @@ use App\Http\Controllers\CollectionResultController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LearnController;
+use App\Http\Controllers\LessonController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PlayController;
 use App\Http\Controllers\PreviewController;
 use App\Http\Controllers\RegisterController;
-use App\Models\Collection;
+use App\Http\Controllers\SlideController;
+use App\Http\Controllers\SublessonController;
+use App\Models\Sublesson;
 use Illuminate\Support\Facades\Route;
 
 
@@ -28,40 +31,45 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::get('/browse', [BrowseController::class, 'index'])->name('browse');
 Route::get('/about', [AboutController::class, 'index']);
 Route::post('/about', [AboutController::class, 'store']);
-Route::group(['middleware' => 'auth.user'], function () {
-    Route::get('/preview/{slug}', [PreviewController::class, 'index']);
-    Route::get('/preview/{slug}/copy', [PreviewController::class, 'copy']);
+Route::group(['middleware' => 'auth.user', 'prefix' => 'dashboard'], function () {
+
+    Route::get('', [DashboardController::class, 'index']);
+    Route::get('/lessons', [LessonController::class, 'index']);
+    Route::post('/lessons', [LessonController::class, 'create']);
+    Route::get('/lessons/{slug}/hapus', [LessonController::class, 'delete']);
+    Route::get('/lessons/{slug}', [SublessonController::class, 'index']);
+    Route::post('/lessons/{slug}', [SublessonController::class, 'create']);
+    Route::get('/lessons/{slug}/{sublesson_slug}', [SlideController::class, 'index']);
+    Route::get('/lessons/{slug}/{sublesson_slug}/insert', [SlideController::class, 'insert']);
+    Route::post('/lessons/{slug}/{sublesson_slug}/insert', [SlideController::class, 'create']);
+    Route::get('/lessons/{slug}/{sublesson_slug}/{slide_id}/hapus', [SlideController::class, 'delete']);
+    Route::get('/lessons/{slug}/{sublesson_slug}/hapus', [SublessonController::class, 'delete']);
+    Route::post('/lessons/{slug}/settings', [LessonController::class, 'update']);
+
+    Route::get('/lessons/add', [LessonController::class, 'tambah_materi']);
+    Route::post('/lessons/add', [LessonController::class, 'post_tambah_materi']);
+
+    Route::get('/lesson/{slug}/input', [LessonController::class, 'input_materi_package']);
+    Route::post('/lesson/{slug}/input', [LessonController::class, 'post_input_materi_package']);
+    Route::get('/lesson/{slug}/{id}/hapus', [LessonController::class, 'slide_hapus']);
+    Route::get('/lesson/{slug}/{id}/edit', [LessonController::class, 'slide_edit']);
+    Route::post('/lesson/{slug}/{id}/edit', [LessonController::class, 'slide_edit_simpan']);
+    Route::get('/hasil', [DashboardController::class, 'list_hasil']);
+    Route::get('/hasil/{slug}', [DashboardController::class, 'hasil_materi']);
+    Route::get('/hasil/{slug}/export', [DashboardController::class, 'export']);
+    Route::get('/hasil/{u_id}/hapus', [DashboardController::class, 'hapus_jawaban']);
+    Route::get('/hasil/{slug}/{u_id}', [DashboardController::class, 'hasil_materi_detail']);
+
+    Route::get('/result/{collection_slug}', [CollectionResultController::class, 'index']);
+    Route::get('/result/{collection_slug}/{u_id}', [CollectionResultController::class, 'detail']);
+    Route::get('/result/{collection_slug}/{u_id}/hapus', [CollectionResultController::class, 'hapus']);
 
 
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/dashboard/topik', [DashboardController::class, 'materi']);
-    Route::get('/dashboard/topik/{slug}/hapus', [DashboardController::class, 'materi_hapus']);
-    Route::get('/dashboard/topik/tambah', [DashboardController::class, 'tambah_materi']);
-    Route::post('/dashboard/topik/tambah', [DashboardController::class, 'post_tambah_materi']);
-    Route::get('/dashboard/topik/{slug}/edit', [DashboardController::class, 'materi_edit']);
-    Route::post('/dashboard/topik/{slug}/edit', [DashboardController::class, 'post_materi_edit']);
-    Route::get('/dashboard/topik/{slug}', [DashboardController::class, 'materi_package']);
-    Route::get('/dashboard/topik/{slug}/input', [DashboardController::class, 'input_materi_package']);
-    Route::post('/dashboard/topik/{slug}/input', [DashboardController::class, 'post_input_materi_package']);
-    Route::get('/dashboard/topik/{slug}/{id}/hapus', [DashboardController::class, 'slide_hapus']);
-    Route::get('/dashboard/topik/{slug}/{id}/edit', [DashboardController::class, 'slide_edit']);
-    Route::post('/dashboard/topik/{slug}/{id}/edit', [DashboardController::class, 'slide_edit_simpan']);
-    Route::get('/dashboard/hasil', [DashboardController::class, 'list_hasil']);
-    Route::get('/dashboard/hasil/{slug}', [DashboardController::class, 'hasil_materi']);
-    Route::get('/dashboard/hasil/{slug}/export', [DashboardController::class, 'export']);
-    Route::get('/dashboard/hasil/{u_id}/hapus', [DashboardController::class, 'hapus_jawaban']);
-    Route::get('/dashboard/hasil/{slug}/{u_id}', [DashboardController::class, 'hasil_materi_detail']);
-
-    Route::get('/dashboard/result/{collection_slug}', [CollectionResultController::class, 'index']);
-    Route::get('/dashboard/result/{collection_slug}/{u_id}', [CollectionResultController::class, 'detail']);
-    Route::get('/dashboard/result/{collection_slug}/{u_id}/hapus', [CollectionResultController::class, 'hapus']);
-
-
-    Route::get('/dashboard/koleksi/tambah', [CollectionController::class, 'index']);
-    Route::post('/dashboard/koleksi/tambah', [CollectionController::class, 'store']);
-    Route::get('/dashboard/koleksi/{slug}/hapus', [CollectionController::class, 'delete']);
-    Route::get('/dashboard/koleksi/{slug}', [CollectionController::class, 'detail']);
-    Route::post('/dashboard/koleksi/{slug}', [CollectionController::class, 'update']);
+    Route::get('/koleksi/tambah', [CollectionController::class, 'index']);
+    Route::post('/koleksi/tambah', [CollectionController::class, 'store']);
+    Route::get('/koleksi/{slug}/hapus', [CollectionController::class, 'delete']);
+    Route::get('/koleksi/{slug}', [CollectionController::class, 'detail']);
+    Route::post('/koleksi/{slug}', [CollectionController::class, 'update']);
 });
 
 Route::get('/learn/{code}', [LearnController::class, 'index'])->name('learn');
@@ -77,21 +85,6 @@ Route::post('/play/{slug}', [PlayController::class, 'create_session']);
 Route::get('/play/{collection_slug}/restart', [PlayController::class, 'restart']);
 Route::get('/play/{collection_slug}/{package_slug}', [PlayController::class, 'play']);
 Route::get('/play/{collection_slug}/{package_slug}/save', [PlayController::class, 'save']);
-
-
-
-Route::group(['middleware' => 'auth.admin', 'prefix' => 'admin'], function () {
-    Route::get('/', [AdminDashboardController::class, 'users']);
-    Route::get('/user/{id}', [AdminDashboardController::class, 'edit_page']);
-    Route::post('/user/{id}', [AdminDashboardController::class, 'save']);
-    Route::get('/user/{id}/delete', [AdminDashboardController::class, 'delete']);
-    Route::get('/topic', [AdminTopicController::class, 'index']);
-    Route::get('/topic/{slug}', [AdminTopicController::class, 'edit_page']);
-    Route::post('/topic/{slug}', [AdminTopicController::class, 'save']);
-    Route::get('/topic/{slug}/delete', [AdminTopicController::class, 'delete']);
-    Route::get('/report', [AdminReportController::class, 'index']);
-    Route::get('/report/{id}/delete', [AdminReportController::class, 'delete']);
-});
 
 
 // api

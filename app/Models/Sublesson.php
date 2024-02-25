@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class PackageModel extends Model
+class Sublesson extends Model
 {
     use HasFactory;
 
-    protected $table = 'package';
+    protected $table = 'sublessons';
 
     protected $guarded = [];
 

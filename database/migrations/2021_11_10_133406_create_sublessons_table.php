@@ -8,27 +8,31 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('collection', function (Blueprint $table) {
+        Schema::create('sublessons', function (Blueprint $table) {
             $table->id();
             $table->string('slug')->unique();
+            $table->string('lesson_slug');
+            $table->foreign('lesson_slug')->references('slug')->on('lessons')->onDelete('cascade');
             $table->string('user_id');
             $table->string('title');
-            $table->string('description');
-            $table->string('show_public');
-            $table->string('allow_to_restart_activity');
-            $table->string('accept_responses');
+            $table->string('sublesson_type');
+            $table->integer('timer');
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('collection');
+        Schema::dropIfExists('sublessons');
     }
 };

@@ -4,20 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-class Collection extends Model
+class Lesson extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
-    protected $table = 'collection';
+    protected $table = 'lessons';
 
-    public function packages(): BelongsToMany
+    public function sublessons(): HasMany
     {
-        return $this->belongsToMany(PackageModel::class, 'collection_package', 'collection_slug', 'package_slug', 'slug', 'slug');
+        return $this->hasMany(Sublesson::class, 'lesson_slug', 'slug');
     }
 
     public function students(): HasMany

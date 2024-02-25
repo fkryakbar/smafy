@@ -20,12 +20,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $total_materi = count(PackageModel::where('user_id', Auth::user()->id)->get());
-        $total_siswa = DB::table('siswa')->join('package', 'siswa.package_id', '=', 'package.slug')->join('users', 'users.id', '=', 'package.user_id')->where('users.id', '=', Auth::user()->id)->get();
-        return view('user.dashboard', [
-            'total_materi' => $total_materi,
-            'total_siswa' => count($total_siswa)
-        ]);
+        return view('user.dashboard.index');
     }
 
     public function materi()

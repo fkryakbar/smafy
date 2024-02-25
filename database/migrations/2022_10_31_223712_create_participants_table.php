@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class MakeSiswaTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class MakeSiswaTable extends Migration
      */
     public function up()
     {
-        Schema::create('siswa', function (Blueprint $table) {
+        Schema::create('participants', function (Blueprint $table) {
             $table->id();
-            $table->string('u_id')->unique();
+            $table->string('lesson_slug');
+            $table->foreign('lesson_slug')->references('slug')->on('lessons')->onDelete('cascade');;
             $table->string('name');
             $table->string('kelas');
-            $table->string('score');
-            $table->integer('time_left')->default(0);
-            $table->string('package_id');
+            $table->string('score_total');
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ class MakeSiswaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('siswa');
+        Schema::dropIfExists('participants');
     }
-}
+};

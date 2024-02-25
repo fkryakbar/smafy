@@ -14,12 +14,17 @@
     </div>
     <div class="flex-none text-white lg:block min-[200px]:hidden">
         <ul class="menu menu-horizontal p-0">
-            <li><a href="/login" class="btn bg-amber-400 border-none hover:bg-amber-700">Masuk</a></li>
-            <li><a href="/register" class="btn bg-amber-400 border-none hover:bg-amber-700">Daftar</a></li>
-            <li><a href="/browse" class="btn bg-amber-400 border-none hover:bg-amber-700">Smafy Library</a></li>
-            <li><a href="/about" class="btn bg-amber-400 border-none hover:bg-amber-700">Tentang</a></li>
+            <li><a href="/login"
+                    class="btn text-white shadow-none bg-amber-400 border-none hover:bg-amber-700">Masuk</a>
+            </li>
+            <li><a href="/register"
+                    class="btn text-white shadow-none bg-amber-400 border-none hover:bg-amber-700">Daftar</a></li>
+            <li><a href="/browse" class="btn text-white shadow-none bg-amber-400 border-none hover:bg-amber-700">Smafy
+                    Library</a></li>
+            <li><a href="/about"
+                    class="btn text-white shadow-none bg-amber-400 border-none hover:bg-amber-700">Tentang</a></li>
             <li><a href="https://docs.smafy.my.id/" target="_blank"
-                    class="btn bg-amber-400 border-none hover:bg-amber-700">Bantuan</a></li>
+                    class="btn text-white shadow-none bg-amber-400 border-none hover:bg-amber-700">Bantuan</a></li>
         </ul>
     </div>
 </div>

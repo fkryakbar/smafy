@@ -14,7 +14,6 @@
 <body class="relative" x-data="{ sidebar_open: false }">
     @include('partials.navbar')
     <div x-show="sidebar_open" x-cloak class="absolute w-full h-screen bg-black opacity-50">
-
     </div>
     <section class=" mt-20 w-[90%] lg:w-[70%] mx-auto">
         <div class="lg:flex gap-4">
@@ -31,9 +30,10 @@
                             class="btn bg-green-400 hover:bg-green-600 border-0 px-10">Pre-Test</a>
                         <a href="https://smafy.my.id/play/rsEZ-dyh-xAx"
                             class="btn bg-cyan-500 hover:bg-cyan-800 border-0 px-10">SPLDV</a> --}}
-                        <a href="/register" class="btn bg-amber-400 hover:bg-amber-600 border-0 px-10">Daftar</a>
+                        <a href="/register"
+                            class="btn bg-amber-400 hover:bg-amber-600 border-0 px-10 text-white">Daftar</a>
                         <a href="https://smafy.my.id/play/rsEZ-dyh-xAx" target="_blank"
-                            class="btn bg-slate-600 hover:bg-slate-800 border-0 px-10">Demo</a>
+                            class="btn bg-slate-600 hover:bg-slate-800 border-0 px-10 text-white">Demo</a>
                     </div>
                 </div>
             </div>

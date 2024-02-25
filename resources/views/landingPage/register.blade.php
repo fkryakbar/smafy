@@ -28,26 +28,22 @@
                     </div>
                     @if (session()->has('msg'))
                         <div class="alert alert-success my-3 ">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6"
-                                    fill="none" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <span>{{ session('msg') }}!</span>
-                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6"
+                                fill="none" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>{{ session('msg') }}!</span>
                         </div>
                     @endif
                     @foreach ($errors->all() as $item)
                         <div class="alert alert-error mb-5">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6"
-                                    fill="none" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <span>{{ $item }}</span>
-                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6"
+                                fill="none" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>{{ $item }}</span>
                         </div>
                     @endforeach
                     <form action="" autocomplete="off" method="POST">
@@ -81,7 +77,7 @@
                                 class="input input-bordered w-full" />
                         </div>
                         <button type="submit"
-                            class="btn bg-amber-400 hover:bg-amber-600 border-0 mt-5 w-full lg:w-fit">Daftar</button>
+                            class="btn text-white bg-amber-400 hover:bg-amber-600 border-0 mt-5 w-full lg:w-fit">Daftar</button>
                         <h1 class="mt-3 text-center">Sudah Daftar? <a href="/login" class="text-amber-500">
                                 Klik </a> disini untuk login </h1>
                     </form>

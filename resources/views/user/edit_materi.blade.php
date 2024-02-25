@@ -61,7 +61,6 @@
                                 @endforeach
                             </ul>
                         @endif
-
                         <form action="" method="POST" autocomplete="off">
                             @csrf
                             <div class="form-control w-full">
