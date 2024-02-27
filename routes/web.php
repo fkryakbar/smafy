@@ -42,7 +42,10 @@ Route::group(['middleware' => 'auth.user', 'prefix' => 'dashboard'], function ()
     Route::get('/lessons/{slug}/{sublesson_slug}', [SlideController::class, 'index']);
     Route::get('/lessons/{slug}/{sublesson_slug}/insert', [SlideController::class, 'insert']);
     Route::post('/lessons/{slug}/{sublesson_slug}/insert', [SlideController::class, 'create']);
+    Route::post('/lessons/{slug}/{sublesson_slug}/settings', [SublessonController::class, 'update']);
     Route::get('/lessons/{slug}/{sublesson_slug}/{slide_id}/hapus', [SlideController::class, 'delete']);
+    Route::get('/lessons/{slug}/{sublesson_slug}/{slide_id}/edit', [SlideController::class, 'edit']);
+    Route::post('/lessons/{slug}/{sublesson_slug}/{slide_id}/edit', [SlideController::class, 'update']);
     Route::get('/lessons/{slug}/{sublesson_slug}/hapus', [SublessonController::class, 'delete']);
     Route::post('/lessons/{slug}/settings', [LessonController::class, 'update']);
 

@@ -10,6 +10,12 @@ use Illuminate\Support\Str;
 
 class SublessonController extends Controller
 {
+
+    private $validationRules = [
+        'title' => 'required|max:200',
+        'sublesson_type' => 'required'
+    ];
+
     public function index($slug)
     {
         $topic = Lesson::where('slug', $slug)->where('user_id', Auth::user()->id)->with('sublessons')->firstOrFail();
@@ -20,10 +26,7 @@ class SublessonController extends Controller
 
     public function create(Request $request, $slug)
     {
-        $request->validate([
-            'title' => 'required|max:200',
-            'sublesson_type' => 'required'
-        ]);
+        $request->validate($this->validationRules);
 
         $request->mergeIfMissing([
             'slug' => Str::random(4) . '-' . Str::random(3) . '-' . Str::random(3),
@@ -41,5 +44,19 @@ class SublessonController extends Controller
     {
         Sublesson::where('slug', $sublesson_slug)->where('user_id', Auth::user()->id)->firstOrFail()->delete();
         return back()->with('success', 'Sub topik berhasil dihapus');
+    }
+    public function update($slug, $sublesson_slug,  Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'timer' => 'integer|min:0|max:120',
+        ]);
+        $lesson = Lesson::where('slug', $slug)->where('user_id', Auth::user()->id)->with(['sublessons' => function ($query) use ($sublesson_slug) {
+            $query->where('slug', $sublesson_slug);
+        }])->firstOrFail();
+
+        $lesson->sublessons[0]->update($request->all());
+
+        return back()->with('success', 'Pengaturan berhasil disimpan');
     }
 }

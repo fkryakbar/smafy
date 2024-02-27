@@ -12,7 +12,7 @@ class MainUser extends Command
      *
      * @var string
      */
-    protected $signature = 'app:main-user';
+    protected $signature = 'user:main-user';
 
     /**
      * The console command description.

@@ -3,7 +3,7 @@
 
 <head>
     @include('partials.dashboard_head')
-    <title>Create Slide</title>
+    <title>Update Slide</title>
 </head>
 
 <body>
@@ -55,14 +55,14 @@
                                         d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z">
                                     </path>
                                 </svg>
-                                Buat slide
+                                Update slide
                             </li>
                         </ul>
                     </div>
 
                     <div class="bg-white p-3 rounded-md shadow mt-3">
                         <h2 class="text-2xl font-semibold text-gray-700  inline">
-                            Tambah Slide : {{ $lesson->sublessons[0]->title }}
+                            Update Slide : {{ $lesson->sublessons[0]->title }}
                         </h2>
                     </div>
                     <div class="bg-white p-3 rounded-md shadow mt-6">
@@ -88,99 +88,91 @@
                                     <span class="label-text">Judul Slide</span>
                                 </label>
                                 <input type="text" name="title" placeholder="Judul Slide"
-                                    class="input input-bordered w-full" value="{{ old('title') }}" />
+                                    class="input input-bordered w-full" value="{{ $slide->title }}" />
                             </div>
                             <div class="form-control w-full my-3">
-                                <label class="label">
-                                    <span class="label-text">Jenis Slide </span>
-                                </label>
+                                {{-- <label class="label">
+                                    <span class="label-text">Tipe Slide : </span>
+                                </label> --}}
                                 <ul class="grid w-full gap-6 lg:grid-cols-6">
-                                    @if ($lesson->sublessons[0]->sublesson_type == 'materi')
-                                        <li class="flex justify-center items-center h-full">
-                                            <input type="radio" id="penjelasan" name="type" value="penjelasan"
-                                                @checked(old('type') == 'penjelasan' || !old('type')) class="hidden peer" />
-                                            <label for="penjelasan"
-                                                class="items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:border-green-500 peer-checked:text-green-500 hover:text-gray-600 hover:bg-green-100 ">
-                                                <div class="flex flex-col items-center justify-center">
-                                                    <img src="/image/slideType/penjelasan.png" alt="penjelasan"
-                                                        width="50px">
-                                                    <div class="text-sm font-bold  py-1 px-2 rounded-full">
-                                                        Penjelasan
-                                                    </div>
-                                                    <div class="text-center text-xs">Slide berupa text dan gambar</div>
+                                    <li class="flex justify-center items-center h-full">
+                                        <input type="radio" id="penjelasan" name="type" value="penjelasan"
+                                            @checked($slide->type == 'penjelasan' || !$slide->type) class="hidden peer" />
+                                        <label for="penjelasan"
+                                            class="items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:border-green-500 peer-checked:text-green-500 hover:text-gray-600 hover:bg-green-100 ">
+                                            <div class="flex flex-col items-center justify-center">
+                                                <img src="/image/slideType/penjelasan.png" alt="penjelasan"
+                                                    width="50px">
+                                                <div class="text-sm font-bold  py-1 px-2 rounded-full">
+                                                    Penjelasan
                                                 </div>
-                                            </label>
-                                        </li>
-                                        <li class="flex justify-center items-center">
-                                            <input type="radio" id="youtube" name="type" value="youtube_video"
-                                                @checked(old('type') == 'youtube_video') class="hidden peer" />
-                                            <label for="youtube"
-                                                class="items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:border-green-500 peer-checked:text-green-500 hover:text-gray-600 hover:bg-green-100 ">
-                                                <div class="flex flex-col items-center justify-center">
-                                                    <img src="/image/slideType/youtube.png" alt="penjelasan"
-                                                        width="50px">
-                                                    <div class="text-sm font-bold  py-1 px-2 rounded-full">
-                                                        Video Youtube
-                                                    </div>
-                                                    <div class="text-center text-xs">Slide yang berisi video youtube
-                                                    </div>
+                                                <div class="text-center text-xs">Slide berupa text dan gambar</div>
+                                            </div>
+                                        </label>
+                                    </li>
+                                    <li class="flex justify-center items-center">
+                                        <input type="radio" id="youtube" name="type" value="youtube_video"
+                                            @checked($slide->type == 'youtube_video') class="hidden peer" />
+                                        <label for="youtube"
+                                            class="items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:border-green-500 peer-checked:text-green-500 hover:text-gray-600 hover:bg-green-100 ">
+                                            <div class="flex flex-col items-center justify-center">
+                                                <img src="/image/slideType/youtube.png" alt="penjelasan" width="50px">
+                                                <div class="text-sm font-bold  py-1 px-2 rounded-full">
+                                                    Video Youtube
                                                 </div>
-                                            </label>
-                                        </li>
-                                        <li class="flex justify-center items-center">
-                                            <input type="radio" id="file_attachment" name="type"
-                                                @checked(old('type') == 'file_attachment') value="file_attachment"
-                                                class="hidden peer" />
-                                            <label for="file_attachment"
-                                                class="items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:border-green-500 peer-checked:text-green-500 hover:text-gray-600 hover:bg-green-100 ">
-                                                <div class="flex flex-col items-center justify-center">
-                                                    <img src="/image/slideType/file_upload.png" alt="penjelasan"
-                                                        width="50px">
-                                                    <div class="text-sm font-bold  py-1 px-2 rounded-full">
-                                                        Upload File
-                                                    </div>
-                                                    <div class="text-center text-xs">Siswa dapat melampirkan hasil
-                                                        kerja
-                                                        mereka</div>
+                                                <div class="text-center text-xs">Slide yang berisi video youtube</div>
+                                            </div>
+                                        </label>
+                                    </li>
+                                    <li class="flex justify-center items-center">
+                                        <input type="radio" id="file_attachment" name="type"
+                                            @checked($slide->type == 'file_attachment') value="file_attachment" class="hidden peer" />
+                                        <label for="file_attachment"
+                                            class="items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:border-green-500 peer-checked:text-green-500 hover:text-gray-600 hover:bg-green-100 ">
+                                            <div class="flex flex-col items-center justify-center">
+                                                <img src="/image/slideType/file_upload.png" alt="penjelasan"
+                                                    width="50px">
+                                                <div class="text-sm font-bold  py-1 px-2 rounded-full">
+                                                    Upload File
                                                 </div>
-                                            </label>
-                                        </li>
-                                        <li class="flex justify-center items-center">
-                                            <input type="radio" id="short_answer" name="type"
-                                                value="short_answer" @checked(old('type') == 'short_answer')
-                                                class="hidden peer" />
-                                            <label for="short_answer"
-                                                class="items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:border-green-500 peer-checked:text-green-500 hover:text-gray-600 hover:bg-green-100 ">
-                                                <div class="flex flex-col items-center justify-center">
-                                                    <img src="/image/slideType/short_answer.png" alt="penjelasan"
-                                                        width="50px">
-                                                    <div class="text-sm font-bold  py-1 px-2 rounded-full">
-                                                        Jawaban Singkat
-                                                    </div>
-                                                    <div class="text-center text-xs">Soal dengan Jawaban singkat</div>
+                                                <div class="text-center text-xs">Siswa dapat melampirkan hasil kerja
+                                                    mereka</div>
+                                            </div>
+                                        </label>
+                                    </li>
+                                    <li class="flex justify-center items-center">
+                                        <input type="radio" id="short_answer" name="type" value="short_answer"
+                                            @checked($slide->type == 'short_answer') class="hidden peer" />
+                                        <label for="short_answer"
+                                            class="items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:border-green-500 peer-checked:text-green-500 hover:text-gray-600 hover:bg-green-100 ">
+                                            <div class="flex flex-col items-center justify-center">
+                                                <img src="/image/slideType/short_answer.png" alt="penjelasan"
+                                                    width="50px">
+                                                <div class="text-sm font-bold  py-1 px-2 rounded-full">
+                                                    Jawaban Singkat
                                                 </div>
-                                            </label>
-                                        </li>
-                                        <li class="flex justify-center items-center">
-                                            <input type="radio" id="long_answer" name="type"
-                                                value="long_answer" @checked(old('type') == 'long_answer')
-                                                class="hidden peer" />
-                                            <label for="long_answer"
-                                                class="items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:border-green-500 peer-checked:text-green-500 hover:text-gray-600 hover:bg-green-100 ">
-                                                <div class="flex flex-col items-center justify-center">
-                                                    <img src="/image/slideType/long_answer.png" alt="penjelasan"
-                                                        width="50px">
-                                                    <div class="text-sm font-bold  py-1 px-2 rounded-full">
-                                                        Paragraf
-                                                    </div>
-                                                    <div class="text-center text-xs">Soal dengan jawaban panjang</div>
+                                                <div class="text-center text-xs">Soal dengan Jawaban singkat</div>
+                                            </div>
+                                        </label>
+                                    </li>
+                                    <li class="flex justify-center items-center">
+                                        <input type="radio" id="long_answer" name="type" value="long_answer"
+                                            @checked($slide->type == 'long_answer') class="hidden peer" />
+                                        <label for="long_answer"
+                                            class="items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:border-green-500 peer-checked:text-green-500 hover:text-gray-600 hover:bg-green-100 ">
+                                            <div class="flex flex-col items-center justify-center">
+                                                <img src="/image/slideType/long_answer.png" alt="penjelasan"
+                                                    width="50px">
+                                                <div class="text-sm font-bold  py-1 px-2 rounded-full">
+                                                    Paragraf
                                                 </div>
-                                            </label>
-                                        </li>
-                                    @endif
+                                                <div class="text-center text-xs">Soal dengan jawaban panjang</div>
+                                            </div>
+                                        </label>
+                                    </li>
                                     <li class="flex justify-center items-center">
                                         <input type="radio" id="multiple_choice" name="type"
-                                            @checked(old('type') == 'multiple_choice') value="multiple_choice"
+                                            @checked($slide->type == 'multiple_choice') value="multiple_choice"
                                             class="hidden peer" />
                                         <label for="multiple_choice"
                                             class="items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:border-green-500 peer-checked:text-green-500 hover:text-gray-600 hover:bg-green-100 ">
@@ -195,11 +187,45 @@
                                         </label>
                                     </li>
                                 </ul>
+                                {{-- <select id="type" name="type" class="select select-bordered">
+                                    @if ($lesson->sublessons[0]->sublesson_type == 'materi')
+                                        <option value="penjelasan" @if ($slide->type == 'penjelasan') selected @endif>
+                                            Penjelasan
+                                        </option>
+                                        <option value="youtube_video"
+                                            @if ($slide->type == 'youtube_video') selected @endif>
+                                            Video Youtube</option>
+                                        <option value="file_attachment"
+                                            @if (old('type') == 'file_attachment') selected @endif>
+                                            Upload File</option>
+                                        <option value="short_answer" @if (old('type') == 'short_answer') selected @endif>
+                                            Soal
+                                            Isian Pendek
+                                        </option>
+                                        <option value="long_answer" @if (old('type') == 'long_answer') selected @endif>
+                                            Soal
+                                            Isian Panjang
+                                        </option>
+                                    @endif
+                                    <option value="multiple_choice" @if (old('type') == 'multiple_choice') selected @endif>
+                                        Soal
+                                        Pilihan Ganda</option>
+                                </select> --}}
                             </div>
                             <div class="form-control w-full max-w-xs">
                                 <label class="label">
                                     <span class="label-text">Cover</span>
                                 </label>
+                                @if ($slide->image_path)
+                                    <img src="/{{ $slide->image_path }}" class="lg:w-[300px] mx-auto mb-4">
+                                    <div class="form-control w-full mt-3">
+                                        <label class="label">
+                                            <span class="label-text">Hapus Gambar</span>
+                                            <input type="checkbox" value="1" name="delete_image"
+                                                class="toggle toggle-warning" />
+                                        </label>
+                                    </div>
+                                @endif
                                 <input type="file" name="image"
                                     class="file-input file-input-bordered w-full max-w-xs" />
                             </div>
@@ -216,7 +242,7 @@
                                 <div id="toolbar-content" class="mt-3"></div>
                                 <div class="border-2">
                                     <div id="content-editor">
-                                        {!! old('content') !!}
+                                        {!! $slide->content !!}
                                     </div>
                                 </div>
                             </div>
@@ -226,7 +252,8 @@
                                     <span class="label-text">Link Video Youtube</span>
                                 </label>
                                 <input type="text" name="youtube_link" placeholder="Masukkan Link"
-                                    class="input input-bordered w-full" value="{{ old('youtube_link') }}" />
+                                    class="input input-bordered w-full"
+                                    value="{{ $slide->type == 'youtube_video' ? $slide->format['youtube_link'] : '' }}" />
                             </div>
                             <div id="multiple_choice_box"
                                 class="form-control w-full mt-3 p-3 border-solid border-grey-500 border-2 rounded-md">
@@ -234,27 +261,32 @@
                                     <span class="label-text">Opsi</span>
                                 </label>
                                 <input type="text" placeholder="Opsi a" name="a"
-                                    class="input input-bordered w-full" value="{{ old('a') }}" />
+                                    class="input input-bordered w-full"
+                                    value="{{ $slide->type == 'multiple_choice' ? $slide->format['choices']['a'] : '' }}" />
                                 <input type="text" placeholder="Opsi b" name="b"
-                                    class="input input-bordered w-full mt-3" value="{{ old('b') }}" />
+                                    class="input input-bordered w-full mt-3"
+                                    value="{{ $slide->type == 'multiple_choice' ? $slide->format['choices']['b'] : '' }}" />
                                 <input type="text" placeholder="Opsi c" name="c"
-                                    class="input input-bordered w-full mt-3" value="{{ old('c') }}" />
+                                    class="input input-bordered w-full mt-3"
+                                    value="{{ $slide->type == 'multiple_choice' ? $slide->format['choices']['c'] : '' }}" />
                                 <input type="text" placeholder="Opsi d" name="d"
-                                    class="input input-bordered w-full mt-3" value="{{ old('d') }}" />
+                                    class="input input-bordered w-full mt-3"
+                                    value="{{ $slide->type == 'multiple_choice' ? $slide->format['choices']['d'] : '' }}" />
                                 <input type="text" placeholder="Opsi e" name="e"
-                                    class="input input-bordered w-full mt-3" value="{{ old('e') }}" />
+                                    class="input input-bordered w-full mt-3"
+                                    value="{{ $slide->type == 'multiple_choice' ? $slide->format['choices']['e'] : '' }}" />
                                 <label class="label">
                                     <span class="label-text">Jawaban Benar : </span>
                                 </label>
                                 <select id="type" name="correct_answer_multiple_choice"
                                     class="select select-bordered">
-                                    <option value="a" @if (old('correct_answer_multiple_choice') == 'a') selected @endif>a</option>
-                                    <option value="b" @if (old('correct_answer_multiple_choice') == 'b') selected @endif>b</option>
-                                    <option value="c" @if (old('correct_answer_multiple_choice') == 'c') selected @endif>c
+                                    <option value="a" @if (($slide->type == 'multiple_choice' ? $slide->format['correct_answer'] : '') == 'a') selected @endif>a</option>
+                                    <option value="b" @if (($slide->type == 'multiple_choice' ? $slide->format['correct_answer'] : '') == 'b') selected @endif>b</option>
+                                    <option value="c" @if (($slide->type == 'multiple_choice' ? $slide->format['correct_answer'] : '') == 'c') selected @endif>c
                                     </option>
-                                    <option value="d" @if (old('correct_answer_multiple_choice') == 'd') selected @endif>d
+                                    <option value="d" @if (($slide->type == 'multiple_choice' ? $slide->format['correct_answer'] : '') == 'd') selected @endif>d
                                     </option>
-                                    <option value="e" @if (old('correct_answer_multiple_choice') == 'e') selected @endif>e
+                                    <option value="e" @if (($slide->type == 'multiple_choice' ? $slide->format['correct_answer'] : '') == 'e') selected @endif>e
                                     </option>
                                 </select>
                             </div>
@@ -265,7 +297,7 @@
                                 </label>
                                 <input type="text" name="correct_answer_short_answer"
                                     placeholder="Masukkan jawaban benar" class="input input-bordered w-full"
-                                    value="{{ old('correct_answer_short_answer') }}" />
+                                    value="{{ $slide->type == 'short_answer' ? $slide->format['correct_answer'] : '' }}" />
                             </div>
                             <div id="correct_answer_long_answer"
                                 class="form-control w-full mt-3 p-3 border-solid border-grey-500 border-2 rounded-md">
@@ -273,23 +305,25 @@
                                     <span class="label-text">Jawaban Benar : </span>
                                 </label>
                                 <textarea name="correct_answer_long_answer" class="textarea textarea-bordered"
-                                    placeholder="Masukkan Penjelasan jawaban">{{ old('correct_answer_long_answer') }}</textarea>
+                                    placeholder="Masukkan Penjelasan jawaban">{{ $slide->type == 'long_answer' ? $slide->format['correct_answer'] : '' }}</textarea>
                             </div>
                             <div id="reasons" class="form-control w-full mt-3">
                                 <label class="label">
                                     <span class="label-text">Penjelasan</span>
                                 </label>
-                                <textarea name="reasons" class="textarea textarea-bordered" placeholder="Masukkan Penjelasan jawaban">{{ old('reasons') }}</textarea>
+                                <textarea name="reasons" class="textarea textarea-bordered" placeholder="Masukkan Penjelasan jawaban">{{ in_array($slide->type, ['file_attachment', 'short_answer', 'long_answer', 'multiple_choice']) ? $slide->format['explanation'] : '' }}</textarea>
                             </div>
                             <div id="manual_correction_box" class="form-control lg:w-[30%] w-full mt-3">
                                 <label class="label">
                                     <span class="label-text">Periksa Jawaban Secara Manual</span>
                                     <input type="checkbox" value="1" name="manual_correction_toggle"
-                                        class="toggle toggle-warning" />
+                                        class="toggle toggle-warning" @checked(in_array($slide->type, ['file_attachment', 'short_answer', 'long_answer'])
+                                                ? $slide->format['manual_correction']
+                                                : false) />
                                 </label>
                             </div>
                             <button type="submit" id="simpan"
-                                class="btn btn-sm bg-amber-400 border-none hover:bg-amber-600 mt-3 text-white">Buat
+                                class="btn btn-sm bg-amber-400 border-none hover:bg-amber-600 mt-3 text-white">Perbarui
                                 Slide</button>
                         </form>
                     </div>

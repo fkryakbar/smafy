@@ -108,6 +108,17 @@
                                         {{ $lesson->sublessons[0]->created_at->diffForHumans() }}
                                     </p>
                                     <div class="flex gap-2 flex-wrap justify-end">
+                                        <button onclick="pengaturan.showModal()"
+                                            class="btn rounded-md btn-sm text-slate-600 font-weight-bol "><svg
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                fill="currentColor" class="w-6 h-6">
+                                                <path fill-rule="evenodd"
+                                                    d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            Pengaturan
+                                        </button>
+                                        @include('user.slides.components.slidesettings')
                                         <a href="/dashboard/lessons/{{ $lesson->slug }}/{{ $lesson->sublessons[0]->slug }}/insert"
                                             class="btn rounded-md btn-sm  text-white font-weight-bol bg-green-400 hover:bg-green-600">+
                                             Buat Slide</a>
@@ -122,6 +133,20 @@
                                 <div id="content">
                                     <div class="flex justify-between items-center">
                                         <div>
+                                            @if (in_array($slide->type, ['file_attachment', 'short_answer', 'long_answer']))
+                                                @if ($slide->format['manual_correction'])
+                                                    <p
+                                                        class="text-xs text-white bg-blue-500 rounded-full font-semibold w-fit px-2 py-1 mb-2 flex gap-1 items-center">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                            fill="currentColor" class="w-4 h-4">
+                                                            <path fill-rule="evenodd"
+                                                                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                                                                clip-rule="evenodd" />
+                                                        </svg>
+                                                        Periksa Manual
+                                                    </p>
+                                                @endif
+                                            @endif
                                             <p class="text-xs text-gray-500">{{ $slide->created_at->diffForHumans() }}
                                             </p>
                                         </div>
@@ -139,7 +164,7 @@
                                                 <ul tabindex="0"
                                                     class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
                                                     <li><a
-                                                            href="/dashboard/topik/{{ $lesson->slug }}/{{ $slide->id }}/edit">Ubah
+                                                            href="/dashboard/lessons/{{ $lesson->slug }}/{{ $lesson->sublessons[0]->slug }}/{{ $slide->id }}/edit">Ubah
                                                             Slide</a></li>
                                                     <li><button
                                                             onclick="hapus_slide('{{ $lesson->slug }}','{{ $lesson->sublessons[0]->slug }}','{{ $slide->id }}')">Hapus
@@ -158,11 +183,10 @@
                                     @endif
                                     @if ($slide->type == 'youtube_video')
                                         @php
-                                            $code = $slide->youtube_link;
+                                            $code = $slide->format['youtube_link'];
                                             preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user|shorts)\/))([^\?&\"'>]+)/", $code, $matches);
                                         @endphp
-                                        <div class="min-[500px]:w-[500px] mx-auto mb-5"><iframe
-                                                class="w-full aspect-video"
+                                        <div class="w-full mx-auto mb-5"><iframe class="w-full aspect-video"
                                                 src="https://www.youtube.com/embed/{{ $matches[1] }}" frameborder="0"
                                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                                 allowfullscreen></iframe></div>
@@ -170,21 +194,47 @@
                                     <div class="p-4 bg-white rounded-lg mt-3 border border-slate-200">
                                         {!! $slide->content !!}
                                     </div>
-                                    @if ($slide->type == 'isian')
+                                    @if ($slide->type == 'short_answer')
                                         <div>
-                                            <textarea name="answer" id="{{ $i }}-isian" disabled="true" class="textarea textarea-bordered w-full mt-3"
-                                                placeholder="Masukkan jawaban">{{ $slide->correct_answer }}</textarea>
+                                            <input type="text" disabled placeholder="Masukkan jawaban benar"
+                                                class="input input-bordered w-full mt-3"
+                                                value="{{ $slide->format['correct_answer'] }}" />
                                             <div class="mt-3">
-                                                @if ($slide->reasons)
+                                                @if ($slide->format['explanation'])
                                                     <div x-transition>
                                                         <div class="card w-full bg-green-400">
                                                             <div class="card-body text-white">
                                                                 <h2 class="card-title">Penjelasan</h2>
-                                                                @if ($slide->correct_answer)
-                                                                    <p>Jawaban benar : {{ $slide->correct_answer }}
+                                                                @if ($slide->format['correct_answer'])
+                                                                    <p>Jawaban benar :
+                                                                        {{ $slide->format['correct_answer'] }}
                                                                     </p>
                                                                 @endif
-                                                                <p>{!! $slide->reasons !!}</p>
+                                                                <p>{!! $slide->format['explanation'] !!}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if ($slide->type == 'long_answer')
+                                        <div>
+                                            <textarea name="answer" id="{{ $i }}-isian" disabled="true"
+                                                class="textarea textarea-bordered w-full mt-3" placeholder="Masukkan jawaban">{{ $slide->format['correct_answer'] }}</textarea>
+                                            <div class="mt-3">
+                                                @if ($slide->format['explanation'])
+                                                    <div x-transition>
+                                                        <div class="card w-full bg-green-400">
+                                                            <div class="card-body text-white">
+                                                                <h2 class="card-title">Penjelasan</h2>
+                                                                @if ($slide->format['correct_answer'])
+                                                                    <p>Jawaban benar :
+                                                                        {{ $slide->format['correct_answer'] }}
+                                                                    </p>
+                                                                @endif
+                                                                <p>{!! $slide->format['explanation'] !!}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -194,91 +244,92 @@
                                         </div>
                                     @endif
                                     <div>
-                                        @if ($slide->type == 'pilihan_ganda')
+                                        @if ($slide->type == 'multiple_choice')
                                             <div>
                                                 <br>
-                                                @if ($slide->a)
+                                                @if ($slide->format['choices']['a'])
                                                     <div class="flex slides-center mb-4">
                                                         <input type="radio" id="a"
                                                             name="answer-{{ $slide->id }}"
-                                                            @if ($slide->correct_answer == 'a') checked @endif
+                                                            @if ($slide->format['correct_answer'] == 'a') checked @endif
                                                             class="peer/answer hidden h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
                                                             x-on:click="user_answer=this.event.target.value"
                                                             value="a" disabled="true">
                                                         <label
                                                             class="text-sm font-medium text-gray-900 ml-2 block w-full py-3 px-2 rounded-md border-[1px] peer-checked/answer:bg-green-200"
                                                             for="a">a.
-                                                            {{ $slide->a }}</label><br>
+                                                            {{ $slide->format['choices']['a'] }}</label><br>
                                                     </div>
                                                 @endif
-                                                @if ($slide->b)
+                                                @if ($slide->format['choices']['b'])
                                                     <div class="flex slides-center mb-4">
                                                         <input type="radio" id="b"
                                                             name="answer-{{ $slide->id }}"
-                                                            @if ($slide->correct_answer == 'b') checked @endif
+                                                            @if ($slide->format['correct_answer'] == 'b') checked @endif
                                                             class="peer/answer hidden h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
                                                             x-on:click="user_answer=this.event.target.value"
                                                             value="b" disabled="true">
                                                         <label
                                                             class="text-sm font-medium text-gray-900 ml-2 block w-full py-3 px-2 rounded-md border-[1px] peer-checked/answer:bg-green-200"
                                                             for="b">b.
-                                                            {{ $slide->b }}</label><br>
+                                                            {{ $slide->format['choices']['b'] }}</label><br>
                                                     </div>
                                                 @endif
-                                                @if ($slide->c)
+                                                @if ($slide->format['choices']['c'])
                                                     <div class="flex slides-center mb-4">
                                                         <input type="radio" id="c"
                                                             name="answer-{{ $slide->id }}"
-                                                            @if ($slide->correct_answer == 'c') checked @endif
+                                                            @if ($slide->format['correct_answer'] == 'c') checked @endif
                                                             class="peer/answer hidden h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
                                                             x-on:click="user_answer=this.event.target.value"
                                                             value="c" disabled="true">
                                                         <label
                                                             class="text-sm font-medium text-gray-900 ml-2 block w-full py-3 px-2 rounded-md border-[1px] peer-checked/answer:bg-green-200"
                                                             for="c">c.
-                                                            {{ $slide->c }}</label><br>
+                                                            {{ $slide->format['choices']['c'] }}</label><br>
                                                     </div>
                                                 @endif
-                                                @if ($slide->d)
+                                                @if ($slide->format['choices']['d'])
                                                     <div class="flex slides-center mb-4">
                                                         <input type="radio" id="d"
                                                             name="answer-{{ $slide->id }}"
-                                                            @if ($slide->correct_answer == 'd') checked @endif
+                                                            @if ($slide->format['correct_answer'] == 'd') checked @endif
                                                             class="peer/answer hidden h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
                                                             x-on:click="user_answer=this.event.target.value"
                                                             value="d" disabled="true">
                                                         <label
                                                             class="text-sm font-medium text-gray-900 ml-2 block w-full py-3 px-2 rounded-md border-[1px] peer-checked/answer:bg-green-200"
                                                             for="d">d.
-                                                            {{ $slide->d }}</label><br>
+                                                            {{ $slide->format['choices']['d'] }}</label><br>
                                                     </div>
                                                 @endif
-                                                @if ($slide->e)
+                                                @if ($slide->format['choices']['e'])
                                                     <div class="flex slides-center mb-4">
                                                         <input type="radio" id="e"
                                                             name="answer-{{ $slide->id }}"
-                                                            @if ($slide->correct_answer == 'e') checked @endif
+                                                            @if ($slide->format['correct_answer'] == 'e') checked @endif
                                                             class="peer/answer hidden h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
                                                             x-on:click="user_answer=this.event.target.value"
                                                             value="e" disabled="true">
                                                         <label
                                                             class="text-sm font-medium text-gray-900 ml-2 block w-full py-3 px-2 rounded-md border-[1px] peer-checked/answer:bg-green-200"
                                                             for="e">e.
-                                                            {{ $slide->e }}</label>
+                                                            {{ $slide->format['choices']['e'] }}</label>
                                                     </div>
                                                 @endif
                                                 <div class="mt-3">
-                                                    @if ($slide->reasons)
+                                                    @if ($slide->format['explanation'])
                                                         <div x-transition>
                                                             <div id="{{ $i }}-alert"
                                                                 class="card w-full bg-green-400">
                                                                 <div class="card-body text-white">
                                                                     <h2 class="card-title">Penjelasan</h2>
-                                                                    @if ($slide->correct_answer)
-                                                                        <p>Jawaban benar : {{ $slide->correct_answer }}
+                                                                    @if ($slide->format['correct_answer'])
+                                                                        <p>Jawaban benar :
+                                                                            {{ $slide->format['correct_answer'] }}
                                                                         </p>
                                                                     @endif
-                                                                    <p>{!! $slide->reasons !!}</p>
+                                                                    <p>{!! $slide->format['explanation'] !!}</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -288,21 +339,6 @@
                                         @endif
                                     </div>
                                     @if ($slide->type == 'file_attachment')
-                                        @if ($slide->correct_answer)
-                                            <p class="mt-3 ">File Penjelasan</p>
-                                            <div
-                                                class="w-full max-w-xs bg-gray-100 rounded-lg p-2 flex justify-between items-center">
-                                                <div class="flex items-center gap-2">
-                                                    <img src="{{ asset('/image/documents.png') }}" class="w-12">
-                                                    <p class="text-sm font-semibold">Attachment file</p>
-                                                </div>
-                                                <a href="/{{ $item->correct_answer }}" target="_blank">
-                                                    <div class="p-3 rounded-lg text-white bg-amber-400 font-semibold ">
-                                                        Buka
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        @endif
                                         <div class="form-control w-full max-w-xs mt-3">
                                             <label class="label">
                                                 <span class="label-text">Upload Jawaban mu</span>
