@@ -14,22 +14,22 @@
                 <div class="card-body items-center text-center">
                     <p class="text-center card-title">Yeey! Sudah selesai </p>
                     <img src="{{ asset('image/Finish line-amico.svg') }}" alt="">
-                    @if ($collection->show_score == 1 && $total > 0)
+                    @if ($lesson->show_final_score == 1 && count($questions) > 0)
                         <h2 class="card-title">Skor kamu</h2>
-                        <div class="radial-progress text-green-400" style="--value:{{ $skor }};">
-                            {{ $skor }}
+                        <div class="radial-progress text-green-400" style="--value:{{ $score_total }};">
+                            {{ $score_total }}
                         </div>
-                        <p>Soal Benar : {{ $benar }} dari {{ $total }} Soal</p>
+                        <p>Soal Benar : {{ count($trueAnswer) }} dari {{ count($questions) }} Soal</p>
                     @endif
                     <div class="flex gap-2 flex-wrap justify-center">
                         <div class="card-actions">
-                            <a href="/play/{{ $collection_slug }}/{{ $package->slug }}"
-                                class="btn btn-sm bg-blue-400 border-none hover:bg-blue-600">Lihat Kembali
+                            <a href="/play/{{ $lesson->slug }}/{{ $lesson->sublessons[0]->slug }}"
+                                class="btn btn-sm bg-blue-400 border-none hover:bg-blue-600 text-white">Lihat Kembali
                                 Pengerjaan</a>
                         </div>
                         <div class="card-actions">
-                            <a href="/play/{{ $collection_slug }}"
-                                class="btn btn-sm bg-green-400 border-none hover:bg-green-600">Kembali</a>
+                            <a href="/play/{{ $lesson->slug }}"
+                                class="btn btn-sm bg-green-400 border-none hover:bg-green-600 text-white">Kembali</a>
                         </div>
                     </div>
                 </div>

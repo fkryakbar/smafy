@@ -15,23 +15,14 @@ class Sublesson extends Model
 
     protected $guarded = [];
 
-    public function get_user(): HasOne
+    public function questions(): HasMany
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
-    }
-
-    public function get_slides(): HasMany
-    {
-        return $this->hasMany(QuestionsModel::class, 'package_slug', 'slug');
-    }
-
-    public function get_students(): HasMany
-    {
-        return $this->hasMany(SiswaModel::class, 'package_id', 'slug');
-    }
-
-    public function answers(): HasMany
-    {
-        return $this->hasMany(JawabanModel::class, 'package_id', 'slug');
+        return $this->hasMany(Slide::class, 'sublesson_slug', 'slug')
+            ->where(function ($query) {
+                $query->where('type', '=', 'file_attachment')
+                    ->orWhere('type', '=', 'multiple_choice')
+                    ->orWhere('type', '=', 'short_answer')
+                    ->orWhere('type', '=', 'long_answer');
+            });
     }
 }

@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class JawabanModel extends Model
+class Participant extends Model
 {
     use HasFactory;
 
-    protected $table = 'jawaban';
+    protected $table = 'participants';
+
     protected $guarded = [];
 
-    public function get_soal()
+    public function lesson()
     {
-        return $this->hasOne(QuestionsModel::class, 'id', 'soal_id');
+        return $this->belongsTo(Lesson::class, 'slug', 'lesson_slug');
     }
 }

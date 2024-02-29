@@ -49,6 +49,8 @@ Route::group(['middleware' => 'auth.user', 'prefix' => 'dashboard'], function ()
     Route::get('/lessons/{slug}/{sublesson_slug}/hapus', [SublessonController::class, 'delete']);
     Route::post('/lessons/{slug}/settings', [LessonController::class, 'update']);
 
+
+
     Route::get('/lessons/add', [LessonController::class, 'tambah_materi']);
     Route::post('/lessons/add', [LessonController::class, 'post_tambah_materi']);
 
@@ -75,30 +77,34 @@ Route::group(['middleware' => 'auth.user', 'prefix' => 'dashboard'], function ()
     Route::post('/koleksi/{slug}', [CollectionController::class, 'update']);
 });
 
-Route::get('/learn/{code}', [LearnController::class, 'index'])->name('learn');
-Route::post('/learn/{code}', [LearnController::class, 'create_session']);
-Route::get('/learn/{code}/result', [LearnController::class, 'show_result']);
-Route::get('/flush', [LearnController::class, 'flush_session']);
-Route::get('/clear_session', [LearnController::class, 'clear_session']);
-Route::get('/clear_history/{slug}', [LearnController::class, 'clear_history']);
+// Route::get('/learn/{code}', [LearnController::class, 'index'])->name('learn');
+// Route::post('/learn/{code}', [LearnController::class, 'create_session']);
+// Route::get('/learn/{code}/result', [LearnController::class, 'show_result']);
+// Route::get('/flush', [LearnController::class, 'flush_session']);
+// Route::get('/clear_session', [LearnController::class, 'clear_session']);
+// Route::get('/clear_history/{slug}', [LearnController::class, 'clear_history']);
 
 
 Route::get('/play/{slug}', [PlayController::class, 'index']);
 Route::post('/play/{slug}', [PlayController::class, 'create_session']);
 Route::get('/play/{collection_slug}/restart', [PlayController::class, 'restart']);
-Route::get('/play/{collection_slug}/{package_slug}', [PlayController::class, 'play']);
-Route::get('/play/{collection_slug}/{package_slug}/save', [PlayController::class, 'save']);
+Route::get('/play/{slug}/{sublesson_slug}', [PlayController::class, 'play']);
+Route::get('/play/{slug}/{sublesson_slug}/save', [PlayController::class, 'save']);
 
 
 // api
 Route::get('/api/get_soal/{package_id}', [LearnController::class, 'get_soal']);
-Route::post('/api/submit-jawaban', [LearnController::class, 'submit_jawaban']);
+Route::post('/api/submit-jawaban', [PlayController::class, 'api_save_answer']);
+Route::post('/api/submit-jawaban-kuis', [PlayController::class, 'api_save_answer_kuis']);
+Route::post('/api/submit-file', [PlayController::class, 'api_save_file']);
+Route::get('/api/get-saved-answer/{participant_id}/{sublesson_slug}', [PlayController::class, 'api_get_saved_answer']);
+
+
 Route::post('/api/submit-jawaban/quiz', [LearnController::class, 'submit_jawaban_quiz']);
-Route::get('/api/get-saved-answer/{u_id}', [LearnController::class, 'get_saved']);
+// Route::get('/api/get-saved-answer/{u_id}', [LearnController::class, 'get_saved']);
 
 Route::post('/api/change-answer', [DashboardController::class, 'change_answer']);
 
 Route::post('/api/collection/submit-jawaban/{collection_slug}', [PlayController::class, 'submit_jawaban_api']);
-Route::post('/api/collection/submit-jawaban-file/{collection_slug}', [PlayController::class, 'submit_jawaban_file_api']);
 Route::post('/api/collection/submit-jawaban-kuis/{collection_slug}', [PlayController::class, 'submit_jawaban_kuis_api']);
-Route::get('/api/collection/get-saved-answer/{u_id}/{package_slug}', [PlayController::class, 'get_saved_answer_api']);
+Route::post('/api/collection/submit-jawaban-file/{collection_slug}', [PlayController::class, 'submit_jawaban_file_api']);

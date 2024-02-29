@@ -3,7 +3,7 @@
 
 <head>
     @include('partials.head')
-    <title>{{ $package->title }} | Learn</title>
+    <title>{{ $lesson->title }} | Learn</title>
 </head>
 
 <body x-data="main_data" class="relative">
@@ -43,11 +43,11 @@
     </style>
     <script>
         const App = {
-            page_total: {{ count($soal) }},
-            quiz_total: {{ count($quiz) }},
+            page_total: {{ count($slides) }},
+            quiz_total: {{ count($lesson->sublessons[0]->questions) }},
             abstract: {
-                u_id: '{{ session($collection->slug)['u_id'] }}',
-                package_id: '{{ $package->slug }}',
+                u_id: '{{ session($lesson->slug)['participant_id'] }}',
+                package_id: '{{ $lesson->sublessons[0]->slug }}',
             },
             saved_answer: []
 
@@ -59,9 +59,9 @@
         <div class="fixed  flex flex-col top-0  w-64 bg-white h-full border-r transition-all shadow-xl"
             :class="show_sidebar ? 'left-0' : '-left-[300px]'">
             <div class="flex justify-between py-5 pl-3 items-center pr-5 h-14 border-b text-amber-400">
-                <div class="tooltip tooltip-bottom" data-tip="{{ $package->title }}">
+                <div class="tooltip tooltip-bottom" data-tip="{{ $lesson->title }}">
                     <p class="font-bold text-amber-400 normal-case max-w-[170px]  truncate text-left transition-all ">
-                        {{ $package->title }}</p>
+                        {{ $lesson->title }}</p>
                 </div>
                 <div x-on:click="show_sidebar=false" class="btn bg-white hover:bg-slate-200 border-none text-amber-400">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -77,22 +77,26 @@
                             <div class="text-sm font-light tracking-wide text-gray-500">Daftar Isi</div>
                         </div>
                     </li>
-                    @foreach ($soal as $i => $item)
+                    @foreach ($slides as $i => $slide)
                         <li>
                             <button x-on:click="page={{ $i + 1 }}"
-                                @if ($item->result == 0 && ($item->type == 'isian' || $item->type == 'pilihan_ganda')) class="relative flex flex-row items-center h-11 w-60 focus:outline-none border-l-4 border-transparent  pr-6 @if (
-                                    $item->result == 0 &&
-                                        session($collection->slug)['activities'][$package->slug]['is_finished'] == true &&
-                                        $package->show_correction_lesson == 1) bg-red-400 text-white @else hover:bg-gray-50  hover:text-gray-800 hover:border-amber-500 @endif
+                                @if (
+                                    $slide->type == 'file_attachment' ||
+                                        $slide->type == 'multiple_choice' ||
+                                        $slide->type == 'short_answer' ||
+                                        $slide->type == 'long_answer') class="relative flex flex-row items-center h-11 w-60 focus:outline-none border-l-4 border-transparent  pr-6 @if (in_array($lesson->sublessons[0]->slug, session($lesson->slug)['finished_sublessons']) &&
+                                        $lesson->sublessons[0]->show_correct_answer == 1) bg-red-400 text-white @else hover:bg-gray-50  hover:text-gray-800 hover:border-amber-500 @endif
                             rounded-r-md" @else
-                                class="relative flex flex-row items-center h-11 w-60 focus:outline-none border-l-4 border-transparent  pr-6 @if (
-                                    $item->result == 1 &&
-                                        session($collection->slug)['activities'][$package->slug]['is_finished'] == true &&
-                                        $package->show_correction_lesson == 1) bg-green-400 text-white @else hover:bg-gray-50  hover:text-gray-800 hover:border-amber-500 @endif rounded-r-md "
+                                class="relative flex flex-row items-center h-11 w-60 focus:outline-none border-l-4 border-transparent  pr-6 @if (in_array($lesson->sublessons[0]->slug, session($lesson->slug)['finished_sublessons']) &&
+                                        $lesson->sublessons[0]->show_correct_answer == 1) bg-green-400 text-white @else hover:bg-gray-50  hover:text-gray-800 hover:border-amber-500 @endif rounded-r-md "
                                 @endif
                                 :class="page == {{ $i + 1 }} ? 'bg-gray-100 text-gray-800 border-amber-500' : ''">
                                 <span class="inline-flex justify-center items-center ml-4">
-                                    @if ($item->type == 'isian' || $item->type == 'pilihan_ganda')
+                                    @if (
+                                        $slide->type == 'file_attachment' ||
+                                            $slide->type == 'multiple_choice' ||
+                                            $slide->type == 'short_answer' ||
+                                            $slide->type == 'long_answer')
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -107,7 +111,7 @@
                                     @endif
 
                                 </span>
-                                <span class="ml-2 text-sm tracking-wide truncate">{{ $item->title }}</span>
+                                <span class="ml-2 text-sm tracking-wide truncate">{{ $slide->title }}</span>
                             </button>
                         </li>
                     @endforeach
@@ -129,11 +133,11 @@
                     </svg>
                 </div>
 
-                <div class="tooltip tooltip-bottom " data-tip="{{ $package->title }}">
+                <div class="tooltip tooltip-bottom " data-tip="{{ $lesson->title }}">
                     <div class="">
                         <p
                             class="font-bold text-white normal-case lg:text-xl lg:max-w-[300px] max-w-[120px] truncate text-left ">
-                            {{ $package->title }}</p>
+                            {{ $lesson->title }}</p>
                     </div>
                 </div>
             </div>
@@ -168,18 +172,18 @@
         <div class="h-[70px]">
 
         </div>
-        @foreach ($soal as $i => $item)
+        @foreach ($slides as $i => $slide)
             <div class="main" x-show="page=={{ $i + 1 }}" x-transition.duration.150ms>
                 <div id="content">
                     <div class="bg-white mb-8 mt-5 p-5 border-l-8 border-amber-400 rounded-r-lg ">
-                        <h1 class="text-2xl lg:text-5xl font-bold text-slate-600">{{ $item->title }}</h1>
+                        <h1 class="text-2xl lg:text-5xl font-bold text-slate-600">{{ $slide->title }}</h1>
                     </div>
-                    @if ($item->image_path != null)
-                        <img src="/{{ $item->image_path }}" class="lg:w-[500px] mx-auto mb-4">
+                    @if ($slide->image_path != null)
+                        <img src="/{{ $slide->image_path }}" class="lg:w-[500px] mx-auto mb-4">
                     @endif
-                    @if ($item->type == 'youtube_video')
+                    @if ($slide->type == 'youtube_video')
                         @php
-                            $code = $item->youtube_link;
+                            $code = $slide->format['youtube_link'];
                             preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user|shorts)\/))([^\?&\"'>]+)/", $code, $matches);
                         @endphp
                         <div class="min-[500px]:w-[500px] mx-auto mb-5"><iframe class="w-full aspect-video"
@@ -188,17 +192,17 @@
                                 allowfullscreen></iframe></div>
                     @endif
                     <div class="p-4 bg-white rounded-lg mt-3 border border-slate-200">
-                        {!! $item->content !!}
+                        {!! $slide->content !!}
                     </div>
-                    @if ($item->type == 'isian')
+                    @if ($slide->type == 'long_answer')
                         <div x-data="{
-                            answered: @if ($item->answer != null) true @else false @endif,
-                            soal_id: `{{ $item->id }}`,
-                            key: '{{ $item->correct_answer }}',
-                            answer_status: @if ($item->answer != null) @if ($item->result == 1) true @else false @endif
+                            answered: @if ($slide->answers[0]) true @else false @endif,
+                            soal_id: `{{ $slide->id }}`,
+                            key: '{{ $slide->format['correct_answer'] }}',
+                            answer_status: @if ($slide->answers[0]) @if ($slide->answers[0]->result == 1) true @else false @endif
                             @else
                             false @endif,
-                            user_answer: '{{ $item->answer }}',
+                            user_answer: '{{ $slide->answers[0]->answer }}',
                             warning: false,
                             warning_text: 'Jawaban tidak boleh kosong',
                             submit() {
@@ -229,16 +233,16 @@
                             <textarea name="answer" id="{{ $i }}-isian" x-model="user_answer" :disabled="answered ? true : false"
                                 class="textarea textarea-bordered w-full mt-3" placeholder="Masukkan jawaban"></textarea>
                             <div class="mt-3">
-                                @if ($package->show_correction_lesson == 1)
+                                @if ($lesson->show_correct_answer == 1)
                                     <div x-show="answered" x-transition>
                                         <div :class="answer_status ? 'bg-green-400' : 'bg-red-400'"
                                             id="{{ $i }}-alert" class="card w-full">
                                             <div class="card-body text-white">
                                                 <h2 class="card-title">Penjelasan</h2>
-                                                @if ($item->correct_answer)
-                                                    <p>Jawaban benar : {{ $item->correct_answer }} </p>
+                                                @if ($slide->format['correct_answer'])
+                                                    <p>Jawaban benar : {{ $slide->format['correct_answer'] }} </p>
                                                 @endif
-                                                <p>{!! $item->reasons !!}</p>
+                                                <p>{!! $slide->format['explanation'] !!}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -260,15 +264,16 @@
                             </div>
                         </div>
                     @endif
-                    @if ($item->type == 'file_attachment')
+                    @if ($slide->type == 'file_attachment')
+                        @dd($slide->answers)
                         <div x-data="{
-                            answered: @if ($item->answer != null) true @else false @endif,
-                            soal_id: `{{ $item->id }}`,
-                            key: '{{ $item->correct_answer }}',
-                            answer_status: @if ($item->answer != null) @if ($item->result == 1) true @else false @endif
+                            answered: @if ($slide->answers[0]) true @else false @endif,
+                            soal_id: `{{ $slide->id }}`,
+                            key: '{{ $slide->format['correct_answer'] }}',
+                            answer_status: @if ($slide->answers[0]) @if ($slide->answers[0]->result == 1) true @else false @endif
                             @else
                             false @endif,
-                            user_answer: '{{ $item->answer }}',
+                            user_answer: '{{ $slide->answers[0]->answer }}',
                             warning: false,
                             warning_text: 'Jawaban harus diupload',
                             file: null,
@@ -371,15 +376,15 @@
                         </div>
                     @endif
                     <div>
-                        @if ($item->type == 'pilihan_ganda')
+                        @if ($slide->type == 'multiple_choice')
                             <div x-data="{
-                                answered: @if ($item->answer != null) true @else false @endif,
-                                soal_id: `{{ $item->id }}`,
-                                key: '{{ $item->correct_answer }}',
-                                answer_status: @if ($item->answer != null) @if ($item->result == 1) true @else false @endif
+                                answered: @if ($slide->answers[0]) true @else false @endif,
+                                soal_id: `{{ $slide->id }}`,
+                                key: '{{ $slide->format['correct_answer'] }}',
+                                answer_status: @if ($slide->answers[0]) @if ($slide->answers[0]->result == 1) true @else false @endif
                                 @else
                                 false @endif,
-                                user_answer: '{{ $item->answer }}',
+                                user_answer: '{{ $slide->answers[0]->answer }}',
                                 warning: false,
                                 warning_text: 'Jawaban tidak boleh kosong',
                                 submit() {

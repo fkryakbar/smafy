@@ -533,7 +533,7 @@
             if (value == 'file_attachment') {
                 youtube_box.classList.add('hidden');
                 pilihan_ganda_box.classList.add('hidden');
-                manual_correction_box.classList.remove('hidden');
+                manual_correction_box.classList.add('hidden');
                 correct_answer_short_answer.classList.add('hidden');
                 correct_answer_long_answer.classList.add('hidden');
                 reasons.classList.remove('hidden');

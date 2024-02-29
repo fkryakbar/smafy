@@ -38,7 +38,6 @@ class SlideController extends Controller
         if ($request->type == 'file_attachment') {
             $request->merge([
                 'format' => [
-                    'manual_correction' => $request->manual_correction,
                     'explanation' => $request->reasons,
                 ]
             ]);

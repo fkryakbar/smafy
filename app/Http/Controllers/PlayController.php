@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
 use App\Models\Collection;
 use App\Models\JawabanModel;
+use App\Models\Lesson;
 use App\Models\PackageModel;
+use App\Models\Participant;
 use App\Models\QuestionsModel;
 use App\Models\SiswaCollection;
 use App\Models\SiswaModel;
+use App\Models\Slide;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,341 +22,209 @@ class PlayController extends Controller
 {
     public function index($slug)
     {
-        // dd(session($slug));
-
-        $collection = Collection::where('slug', $slug)->with(['packages' => function ($query) {
-            $query->orderBy('created_at', 'asc');;
-        }])->firstOrFail();
-
-        if (session()->has($slug)) {
-            if (SiswaCollection::where('u_id', session($slug)['u_id'])->first()) {
-            } else {
+        $lesson = Lesson::where('slug', $slug)->with('sublessons')->firstOrFail();
+        if (session($slug)) {
+            if (!Participant::where('id', session($slug)['participant_id'])->first()) {
                 session()->forget([$slug]);
+            } else {
+                $participant = Participant::where('id', session($slug)['participant_id'])->first();
+                return view('play.dashboard', compact('lesson', 'participant'));
             }
         }
-        if (session()->has($slug)) {
-            $siswaCollection = SiswaCollection::where('u_id', session($slug)['u_id'])->where('collection_slug', $slug)->firstOrFail();
-            foreach ($collection->packages as $key => $package) {
-                if (!Arr::has(session($slug)['activities'], $package->slug)) {
-                    $data =  session($slug)['activities'][$package->slug] = [
-                        'score' => 0,
-                        'package_id' => $package->slug,
-                        'time_left' => 0,
-                        'is_finished' => false,
-                        'expired_time' => null
-                    ];
-                    session([$slug . '.activities' . '.' . $package->slug => $data]);
-                    $siswaCollection->update([
-                        'activities' => session($slug)['activities']
-                    ]);
-                }
-            }
-            session([$slug . '.activities'  =>  $siswaCollection->activities]);
-        }
-
-        // dd(session($collection->slug));
-        return view('play.register', [
-            'collection' => $collection
-        ]);
+        return view('play.register', compact('lesson'));
     }
 
     public function create_session(Request $request, $slug)
     {
+        Lesson::where('slug', $slug)->first();
         $request->validate([
-            'name' => 'required|max:25',
+            'name' => 'required|max:40',
             'kelas' => 'required|max:15'
         ], [
             'name.required' => 'Nama wajib diisi',
             'kelas.required' => 'Kelas wajib diisi',
-            'name.max' => 'Maksimal nama adalah 25 huruf',
+            'name.max' => 'Maksimal nama adalah 40 huruf',
             'kelas.max' => 'Maksimal kelas adalah 15 huruf',
         ]);
 
-        $u_id = Str::random(8);
-        $collection = Collection::where('slug', $slug)->with('packages')->first();
-        $activities = [];
-        foreach ($collection->packages as $key => $package) {
-            $activities[$package->slug] = [
-                'score' => 0,
-                'package_id' => $package->slug,
-                'time_left' => 0,
-                'is_finished' => false,
-                'expired_time' => null
-            ];
-        }
+
+        $participant =  Participant::create([
+            'lesson_slug' => $slug,
+            'name' => $request->name,
+            'kelas' => $request->kelas,
+            'score_total' => 0
+        ]);
 
         $request->session()->put($slug, [
-            'name' => $request->name,
-            'kelas' => $request->kelas,
-            'u_id' => $u_id,
-            'collection_slug' => $slug,
-            'activities' => $activities
-        ]);
-        SiswaCollection::create([
-            'u_id' => $u_id,
-            'collection_slug' => $slug,
-            'name' => $request->name,
-            'kelas' => $request->kelas,
-            'activities' => $activities
+            'name' => $participant->name,
+            'kelas' => $participant->kelas,
+            'participant_id' => $participant->id,
+            'lesson_slug' => $slug,
+            'finished_sublessons' => []
         ]);
         return back();
     }
 
 
-    public function play($collection_slug, $package_slug)
+    public function play($slug, $sublesson_slug)
     {
-        if (session()->has($collection_slug) && SiswaCollection::where('u_id', session($collection_slug)['u_id'])->first()) {
-            $collection = Collection::where('slug', $collection_slug)->firstOrFail();
-            $package = PackageModel::where('slug', '=', $package_slug)->firstOrFail();
+        if (session()->has($slug)) {
+            if (Participant::where('id', session($slug)['participant_id'])->first()) {
+                $lesson = Lesson::where('slug', $slug)->whereHas('sublessons', function ($query) use ($sublesson_slug) {
+                    $query->where('slug', $sublesson_slug);
+                })->with(['sublessons' => function ($query) use ($sublesson_slug) {
+                    $query->where('slug', $sublesson_slug);
+                }])->firstOrFail();
 
-            $soal = DB::table('questions')->where('package_slug', $package_slug)->leftJoin('jawaban', function ($join) use ($collection_slug) {
-                $join->on('questions.id', '=', 'jawaban.soal_id')->where('jawaban.u_id', '=', session()->get($collection_slug)['u_id']);
-            })->orderBy('order_id', 'asc')->get(['questions.id', 'user_id', 'package_slug', 'type', 'order_id', 'title', 'content', 'image_path', 'youtube_link', 'a', 'b', 'c', 'd', 'e', 'correct_answer', 'reasons', 'u_id', 'package_id', 'soal_id', 'answer', 'result']);
+                $slides = Slide::where('sublesson_slug', $sublesson_slug)->with(['answers' => function ($query) use ($slug) {
+                    $query->where('participants_id', session($slug)['participant_id']);
+                }])->get();
 
-            $quiz = QuestionsModel::where('package_slug', '=', $package_slug)->Where(function ($query) {
-                $query->where('type', '=', 'pilihan_ganda')->orWhere('type', '=', 'isian')->orWhere('type', '=', 'file_attachment');
-            })->get();
-            if ($package->topic_type == 'materi') {
-                return view('play.materi', [
-                    'package' => $package,
-                    'soal' => $soal,
-                    'quiz' => $quiz,
-                    'collection' => $collection
+                if (!isset(session($slug)['start_time'][$sublesson_slug])) {
+                    session()->put($slug . '.start_time.' . $sublesson_slug, [
+                        'time' => time()
+                    ]);
+                }
+                // dd(session($slug));
+                if ($lesson->sublessons[0]->sublesson_type == 'materi') {
+                    return view('play.materi2', compact('lesson', 'slides'));
+                }
+                return view('play.quiz2', compact('lesson', 'slides'));
+            }
+            session()->forget($slug);
+        }
+
+        return redirect()->to('/play/' . $slug);
+    }
+
+    public function save($slug, $sublesson_slug)
+    {
+        $lesson = Lesson::where('slug', $slug)->with(['sublessons' => function ($query) use ($sublesson_slug) {
+            $query->where('slug', $sublesson_slug);
+        }])->firstOrFail();
+        if (session()->has($slug)) {
+
+            $answers = Answer::where('participants_id', session($slug)['participant_id'])->where('lesson_slug', $slug)->where('sublesson_slug', $sublesson_slug)->get();
+            $questions = $lesson->sublessons[0]->questions;
+
+            $trueAnswer =  $answers->filter(function ($answer) {
+                return $answer->result == 1;
+            });
+            $score_total = 100;
+            if (count($questions) > 0) {
+                $score_total = round((count($trueAnswer) / count($questions)) * 100, 2);
+            }
+
+            $participant = Participant::where('id', session($slug)['participant_id'])->firstOrFail();
+
+
+            if (!isset(session($slug)['finished_sublessons'][$sublesson_slug])) {
+                $participant->update([
+                    'score_total' => $participant->score_total + $score_total
+                ]);
+                session()->put($slug . '.finished_sublessons.' . $sublesson_slug, [
+                    'score' => $score_total
                 ]);
             }
-            if ($package->topic_type == 'kuis') {
-                if (session($collection_slug)['activities'][$package->slug]['expired_time'] == null) {
-                    $expire_time = time() + $package->timer;
-                    session([$collection_slug . '.activities' . '.' . $package->slug . '.expired_time' => $expire_time]);
-                    $siswa = SiswaCollection::where('u_id', session($collection_slug)['u_id'])->where('collection_slug', $collection_slug)->first();
-                    $siswaActivities = $siswa->activities;
-                    $siswaActivities[$package_slug]['expired_time'] = $expire_time;
-                    $siswa->activities = $siswaActivities;
-                    $siswa->save();
-                }
-                // dd(session($collection_slug)['activities'][$package->slug]);
-                return view('play.quiz', [
-                    'package' => $package,
-                    'soal' => $soal,
-                    'quiz' => $quiz,
-                    'collection' => $collection
-                ]);
-            }
+            return view('play.result', compact('lesson', 'score_total', 'trueAnswer', 'questions'));
         }
-
-        return redirect()->to('/play/' . $collection_slug);
+        return redirect()->to('/play/' . $slug);
     }
 
-    public function save($collection_slug, $package_slug)
+    public function restart($slug)
     {
-        if (session()->has($collection_slug)) {
-            // dd(session($collection_slug));
-            $collection = Collection::where('slug', $collection_slug)->firstOrFail();
-            $result = JawabanModel::where('u_id', session($collection_slug)['u_id'])->where('package_id', $package_slug)->get();
-
-            $benar = 0;
-            $total = count(QuestionsModel::where('package_slug', $package_slug)->where(function (Builder $query) {
-                return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian')->orWhere('type', 'file_attachment');
-            })->get());
-            foreach ($result as $value) {
-                if ($value->result == 1) {
-                    $benar = $benar + 1;
-                }
-            }
-            $skor = 0;
-            if ($total > 0) {
-                $skor = round(($benar / $total) * 100, 2);
-            }
-            $time_left = 0;
-            if ((int) session($collection_slug)['activities'][$package_slug]['expired_time'] - time() > 0) {
-                $time_left = (int) session($collection_slug)['activities'][$package_slug]['expired_time'] - time();
-            }
-            $siswa = SiswaCollection::where('u_id', session($collection_slug)['u_id'])->first();
-            $siswaActivities = $siswa->activities;
-            $siswaActivities[$package_slug]['time_left'] = $time_left;
-            $siswaActivities[$package_slug]['is_finished'] = true;
-            $siswaActivities[$package_slug]['score'] = $skor;
-            $siswa->activities = $siswaActivities;
-            $siswa->save();
-
-            session([$collection_slug . '.activities' => $siswa->activities]);
-
-            return view('play.result', [
-                'skor' => $siswa->activities[$package_slug]['score'],
-                'total' => $total,
-                'benar' => $benar,
-                'package' => PackageModel::where('slug', $package_slug)->first(),
-                'collection_slug' => $collection_slug,
-                'collection' => $collection
-            ]);
-        }
-    }
-
-    public function restart($collection_slug)
-    {
-        if (session()->has($collection_slug)) {
-            $collection = Collection::where('slug', $collection_slug)->firstOrFail();
-            if ($collection->allow_to_restart_activity == 1) {
-                session([$collection_slug . '.u_id' => Str::random(8)]);
-            }
+        if (session()->has($slug)) {
+            session()->forget($slug);
         }
 
-        return redirect('/play/' . $collection_slug);
+        return redirect('/play/' . $slug);
     }
 
-    public function submit_jawaban_api(Request $request, $collection_slug)
+    public function api_save_answer(Request $request)
     {
         $item = $request->all();
-        $isFinished = SiswaCollection::where('u_id', session($collection_slug)['u_id'])->first();
-        $isFinished = $isFinished->activities[$item['package_id']]['is_finished'];
-        if ($isFinished == true) {
-            return response([
-                'message' => 'Sudah selesai'
-            ], 419);
-        }
-        JawabanModel::create([
-            'u_id' => session($collection_slug)['u_id'],
-            'package_id' => $item['package_id'],
-            'soal_id' => $item['soal_id'],
-            'answer' => $item['user_answer'],
-            'result' => $item['result']
-        ]);
-        $result = JawabanModel::where('u_id', session($collection_slug)['u_id'])->where('package_id', $item['package_id'])->get();
-        if (count($result) > 0) {
-            $benar = 0;
-            $total_soal = count(QuestionsModel::where('package_slug', $item['package_id'])->where(function (Builder $query) {
-                return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian')->orWhere('type', 'file_attachment');
-            })->get());
-            foreach ($result as $value) {
-                if ($value->result == 1) {
-                    $benar = $benar + 1;
-                }
-            }
-            $skor = 0;
-            if ($total_soal > 0) {
-                $skor = round(($benar / $total_soal) * 100, 2);
-            }
-            $siswa = SiswaCollection::where('u_id', session($collection_slug)['u_id'])->first();
-            $siswaActivities = $siswa->activities;
-            $siswaActivities[$item['package_id']]['score'] = $skor;
-            $siswa->activities = $siswaActivities;
-            $siswa->save();
-            return response([
-                'message' => 'success'
+
+        $checkAnswer = Answer::where('participants_id', session($item['lesson_slug'])['participant_id'])->where('slide_id', $item['slide_id'])->first();
+        if (!$checkAnswer) {
+            $answer =  Answer::create([
+                'participants_id' => session($item['lesson_slug'])['participant_id'],
+                'lesson_slug' => $item['lesson_slug'],
+                'lesson_slug' => $item['lesson_slug'],
+                'sublesson_slug' => $item['sublesson_slug'],
+                'slide_id' => $item['slide_id'],
+                'answer' => $item['answer'],
+                'result' => $item['result'],
             ]);
+
+            return response($answer);
         }
+
+        return response('sudah dijawab');
+    }
+    public function api_save_answer_kuis(Request $request)
+    {
+        $item = $request->all();
+
+        $checkAnswer = Answer::where('participants_id', session($item['lesson_slug'])['participant_id'])->where('slide_id', $item['slide_id'])->first();
+        if (!$checkAnswer) {
+            $answer =  Answer::create([
+                'participants_id' => session($item['lesson_slug'])['participant_id'],
+                'lesson_slug' => $item['lesson_slug'],
+                'lesson_slug' => $item['lesson_slug'],
+                'sublesson_slug' => $item['sublesson_slug'],
+                'slide_id' => $item['slide_id'],
+                'answer' => $item['answer'],
+                'result' => $item['result'],
+            ]);
+
+            return response($answer);
+        }
+        $checkAnswer->update([
+            'participants_id' => session($item['lesson_slug'])['participant_id'],
+            'lesson_slug' => $item['lesson_slug'],
+            'lesson_slug' => $item['lesson_slug'],
+            'sublesson_slug' => $item['sublesson_slug'],
+            'slide_id' => $item['slide_id'],
+            'answer' => $item['answer'],
+            'result' => $item['result'],
+        ]);
+
+        return response($checkAnswer);
     }
 
-
-    public function submit_jawaban_file_api(Request $request, $collection_slug)
+    public function api_save_file(Request $request)
     {
         $request->validate([
-            'user_answer' => 'mimes:jpeg,png,jpg,gif,svg,pdf|max:6144',
+            'file' => 'mimes:jpeg,png,jpg,gif,svg,pdf|max:6144',
         ], [
-            'user_answer.mimes' => 'File harus bertipe jpeg, png, jpg, dan pdf',
-            'user_answer.max' => 'Ukuran file maksimal 6 MB'
+            'file.mimes' => 'File harus bertipe jpeg, png, jpg, dan pdf',
+            'file.max' => 'Ukuran file maksimal 6 MB'
         ]);
-        $isFinished = SiswaCollection::where('u_id', session($collection_slug)['u_id'])->first();
-        $isFinished = $isFinished->activities[$request->package_id]['is_finished'];
-        if ($isFinished == true) {
-            return response([
-                'message' => 'Sudah selesai'
-            ], 419);
-        }
-        $answer_path =  $request->file('user_answer')->store('/storage/user/upload');
-
-        JawabanModel::create([
-            'u_id' => session($collection_slug)['u_id'],
-            'package_id' => $request->package_id,
-            'soal_id' => $request->soal_id,
-            'answer' => $answer_path,
-            'result' => 1
-        ]);
-        $result = JawabanModel::where('u_id', session($collection_slug)['u_id'])->where('package_id', $request->package_id)->get();
-
-        $benar = 0;
-        $total_soal = count(QuestionsModel::where('package_slug', $request->package_id)->where(function (Builder $query) {
-            return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian')->orWhere('type', 'file_attachment');
-        })->get());
-        foreach ($result as $value) {
-            if ($value->result == 1) {
-                $benar = $benar + 1;
-            }
-        }
-        $skor = 0;
-        if ($total_soal > 0) {
-            $skor = round(($benar / $total_soal) * 100, 2);
-        }
-        $siswa = SiswaCollection::where('u_id', session($collection_slug)['u_id'])->first();
-        $siswaActivities = $siswa->activities;
-        $siswaActivities[$request->package_id]['score'] = $skor;
-        $siswa->activities = $siswaActivities;
-        $siswa->save();
-        return response([
-            'message' => 'success',
-            'answer_path' => $answer_path
-        ]);
-
-        // return response($request->all());
-    }
-
-    public function submit_jawaban_kuis_api(Request $request, $collection_slug)
-    {
         $item = $request->all();
-        $isFinished = SiswaCollection::where('u_id', session($collection_slug)['u_id'])->first();
-        $isFinished = $isFinished->activities[$item['package_id']]['is_finished'];
-        if ($isFinished == true) {
-            return response([
-                'message' => 'Sudah selesai'
-            ], 419);
+
+        $checkAnswer = Answer::where('participants_id', session($item['lesson_slug'])['participant_id'])->where('slide_id', $item['slide_id'])->first();
+        $answer_path =  $request->file('file')->store('/storage/user/upload');
+        if (!$checkAnswer) {
+            $answer =  Answer::create([
+                'participants_id' => session($item['lesson_slug'])['participant_id'],
+                'lesson_slug' => $item['lesson_slug'],
+                'lesson_slug' => $item['lesson_slug'],
+                'sublesson_slug' => $item['sublesson_slug'],
+                'slide_id' => $item['slide_id'],
+                'answer' => $answer_path,
+                'result' => true,
+            ]);
+
+            return response($answer);
         }
 
-
-
-        $user_answer = JawabanModel::where('u_id', session($collection_slug)['u_id'])->where('soal_id', $item['soal_id'])->where('package_id', $item['package_id'])->first();
-        if ($user_answer) {
-            $user_answer->update([
-                'answer' => $item['user_answer'],
-                'result' => $item['result']
-            ]);
-        } else {
-            JawabanModel::create([
-                'u_id' => session($collection_slug)['u_id'],
-                'package_id' => $item['package_id'],
-                'soal_id' => $item['soal_id'],
-                'answer' => $item['user_answer'],
-                'result' => $item['result']
-            ]);
-        }
-        $result = JawabanModel::where('u_id', session($collection_slug)['u_id'])->where('package_id', $item['package_id'])->get();
-        if (count($result) > 0) {
-            $benar = 0;
-            $total_soal = count(QuestionsModel::where('package_slug', $item['package_id'])->where(function (Builder $query) {
-                return $query->where('type', 'pilihan_ganda')->orWhere('type', 'isian')->orWhere('type', 'file_attachment');
-            })->get());
-            foreach ($result as $value) {
-                if ($value->result == 1) {
-                    $benar = $benar + 1;
-                }
-            }
-            $skor = 0;
-            if ($total_soal > 0) {
-                $skor = round(($benar / $total_soal) * 100, 2);
-            }
-
-            $siswa = SiswaCollection::where('u_id', session($collection_slug)['u_id'])->first();
-            $siswaActivities = $siswa->activities;
-            $siswaActivities[$item['package_id']]['score'] = $skor;
-            $siswa->activities = $siswaActivities;
-            $siswa->save();
-            return response([
-                'message' => 'success'
-            ]);
-        }
+        return response('sudah dijawab');
     }
-    public function get_saved_answer_api($u_id, $package_slug)
+
+
+    public function api_get_saved_answer($participant_id, $sublesson_slug)
     {
-        $data = JawabanModel::where('u_id', $u_id)->where('package_id', $package_slug)->get();
-        return response()->json(['body' => $data]);
+        $data = Answer::where('participants_id', $participant_id)->where('sublesson_slug', $sublesson_slug)->get(['slide_id', 'answer', 'lesson_slug', 'sublesson_slug']);
+        return response($data);
     }
 }
