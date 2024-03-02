@@ -52,7 +52,11 @@ class PlayController extends Controller
             'lesson_slug' => $slug,
             'name' => $request->name,
             'kelas' => $request->kelas,
-            'score_total' => 0
+            'score_total' => 0,
+            'details' => [
+                'start_time' => [],
+                'finished_sublessons' => []
+            ]
         ]);
 
         $request->session()->put($slug, [
@@ -69,7 +73,9 @@ class PlayController extends Controller
     public function play($slug, $sublesson_slug)
     {
         if (session()->has($slug)) {
-            if (Participant::where('id', session($slug)['participant_id'])->first()) {
+            $participant = Participant::where('id', session($slug)['participant_id'])->first();
+            if ($participant) {
+                // dd($participant->details);
                 $lesson = Lesson::where('slug', $slug)->whereHas('sublessons', function ($query) use ($sublesson_slug) {
                     $query->where('slug', $sublesson_slug);
                 })->with(['sublessons' => function ($query) use ($sublesson_slug) {
@@ -81,11 +87,18 @@ class PlayController extends Controller
                 }])->get();
 
                 if (!isset(session($slug)['start_time'][$sublesson_slug])) {
+                    $time = time();
+
                     session()->put($slug . '.start_time.' . $sublesson_slug, [
-                        'time' => time()
+                        'time' => $time
+                    ]);
+
+                    $payload = $participant->details;
+                    $payload['start_time'][$sublesson_slug]['time'] = $time;
+                    $participant->update([
+                        'details' => $payload
                     ]);
                 }
-                // dd(session($slug));
                 if ($lesson->sublessons[0]->sublesson_type == 'materi') {
                     return view('play.materi2', compact('lesson', 'slides'));
                 }
@@ -104,26 +117,23 @@ class PlayController extends Controller
         }])->firstOrFail();
         if (session()->has($slug)) {
 
-            $answers = Answer::where('participants_id', session($slug)['participant_id'])->where('lesson_slug', $slug)->where('sublesson_slug', $sublesson_slug)->get();
-            $questions = $lesson->sublessons[0]->questions;
-
-            $trueAnswer =  $answers->filter(function ($answer) {
-                return $answer->result == 1;
-            });
-            $score_total = 100;
-            if (count($questions) > 0) {
-                $score_total = round((count($trueAnswer) / count($questions)) * 100, 2);
-            }
-
             $participant = Participant::where('id', session($slug)['participant_id'])->firstOrFail();
 
+            $result = $participant->sublesson_result($sublesson_slug);
+            $trueAnswer = $result->trueAnswer;
+            $questions = $result->questions;
+            $score_total = $result->score_total;
 
             if (!isset(session($slug)['finished_sublessons'][$sublesson_slug])) {
+                $payload = $participant->details;
+
+                $payload['finished_sublessons'][$sublesson_slug]['score'] = $result->score_total;
                 $participant->update([
-                    'score_total' => $participant->score_total + $score_total
+                    'details' => $payload
                 ]);
+
                 session()->put($slug . '.finished_sublessons.' . $sublesson_slug, [
-                    'score' => $score_total
+                    'score' => $result->score_total
                 ]);
             }
             return view('play.result', compact('lesson', 'score_total', 'trueAnswer', 'questions'));

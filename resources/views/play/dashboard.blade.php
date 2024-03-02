@@ -132,9 +132,7 @@
                     @endif
                 @else
                     @php
-                        $sublessons = session($lesson->slug)['finished_sublessons'];
-                        $finished = count($sublessons);
-                        $progress = round(($finished / count($lesson->sublessons)) * 100);
+                        $progress = $participant->progress();
                     @endphp
                     {{-- @dd(session($lesson->slug)) --}}
                     <div class="mx-4 mt-4 max-w-[400px]">
@@ -148,7 +146,7 @@
                                 <p class="mt-2 text-gray-500 text-sm">
                                     Skor Kamu saat ini
                                 </p>
-                                <p class="font-bold text-amber-500">{{ $participant->score_total }}</p>
+                                <p class="font-bold text-amber-500">{{ $participant->score_total() }}</p>
                             @endif
                             <p class="mt-5 text-center text-sm">Klik Aktivitas di bawah untuk lanjut belajar</p>
                         </div>
@@ -164,7 +162,7 @@
                                                     class="rounded-full bg-green-500 p-1 text-white flex justify-center items-center w-10 h-10">
                                                     @if (isset(session($lesson->slug)['finished_sublessons'][$sublesson->slug]) && $lesson->show_final_score == 1)
                                                         <p class="font-bold text-sm">
-                                                            {{ session($lesson->slug)['finished_sublessons'][$sublesson->slug]['score'] }}
+                                                            {{ $participant->sublesson_result($sublesson->slug)->score_total }}
                                                         </p>
                                                     @else
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -180,7 +178,7 @@
                                                     class="rounded-full bg-amber-500 p-1 text-white flex justify-center items-center w-10 h-10">
                                                     @if (isset(session($lesson->slug)['finished_sublessons'][$sublesson->slug]) && $lesson->show_final_score == 1)
                                                         <p class="font-bold text-sm">
-                                                            {{ session($lesson->slug)['finished_sublessons'][$sublesson->slug]['score'] }}
+                                                            {{ $participant->sublesson_result($sublesson->slug)->score_total }}
                                                         </p>
                                                     @else
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"

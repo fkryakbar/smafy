@@ -15,6 +15,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PlayController;
 use App\Http\Controllers\PreviewController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\ResultController;
 use App\Http\Controllers\SlideController;
 use App\Http\Controllers\SublessonController;
 use App\Models\Sublesson;
@@ -49,40 +50,19 @@ Route::group(['middleware' => 'auth.user', 'prefix' => 'dashboard'], function ()
     Route::get('/lessons/{slug}/{sublesson_slug}/hapus', [SublessonController::class, 'delete']);
     Route::post('/lessons/{slug}/settings', [LessonController::class, 'update']);
 
-
-
-    Route::get('/lessons/add', [LessonController::class, 'tambah_materi']);
-    Route::post('/lessons/add', [LessonController::class, 'post_tambah_materi']);
+    Route::get('/result', [ResultController::class, 'index']);
 
     Route::get('/lesson/{slug}/input', [LessonController::class, 'input_materi_package']);
     Route::post('/lesson/{slug}/input', [LessonController::class, 'post_input_materi_package']);
     Route::get('/lesson/{slug}/{id}/hapus', [LessonController::class, 'slide_hapus']);
     Route::get('/lesson/{slug}/{id}/edit', [LessonController::class, 'slide_edit']);
     Route::post('/lesson/{slug}/{id}/edit', [LessonController::class, 'slide_edit_simpan']);
-    Route::get('/hasil', [DashboardController::class, 'list_hasil']);
     Route::get('/hasil/{slug}', [DashboardController::class, 'hasil_materi']);
     Route::get('/hasil/{slug}/export', [DashboardController::class, 'export']);
     Route::get('/hasil/{u_id}/hapus', [DashboardController::class, 'hapus_jawaban']);
     Route::get('/hasil/{slug}/{u_id}', [DashboardController::class, 'hasil_materi_detail']);
-
-    Route::get('/result/{collection_slug}', [CollectionResultController::class, 'index']);
-    Route::get('/result/{collection_slug}/{u_id}', [CollectionResultController::class, 'detail']);
-    Route::get('/result/{collection_slug}/{u_id}/hapus', [CollectionResultController::class, 'hapus']);
-
-
-    Route::get('/koleksi/tambah', [CollectionController::class, 'index']);
-    Route::post('/koleksi/tambah', [CollectionController::class, 'store']);
-    Route::get('/koleksi/{slug}/hapus', [CollectionController::class, 'delete']);
-    Route::get('/koleksi/{slug}', [CollectionController::class, 'detail']);
-    Route::post('/koleksi/{slug}', [CollectionController::class, 'update']);
 });
 
-// Route::get('/learn/{code}', [LearnController::class, 'index'])->name('learn');
-// Route::post('/learn/{code}', [LearnController::class, 'create_session']);
-// Route::get('/learn/{code}/result', [LearnController::class, 'show_result']);
-// Route::get('/flush', [LearnController::class, 'flush_session']);
-// Route::get('/clear_session', [LearnController::class, 'clear_session']);
-// Route::get('/clear_history/{slug}', [LearnController::class, 'clear_history']);
 
 
 Route::get('/play/{slug}', [PlayController::class, 'index']);
@@ -98,13 +78,3 @@ Route::post('/api/submit-jawaban', [PlayController::class, 'api_save_answer']);
 Route::post('/api/submit-jawaban-kuis', [PlayController::class, 'api_save_answer_kuis']);
 Route::post('/api/submit-file', [PlayController::class, 'api_save_file']);
 Route::get('/api/get-saved-answer/{participant_id}/{sublesson_slug}', [PlayController::class, 'api_get_saved_answer']);
-
-
-Route::post('/api/submit-jawaban/quiz', [LearnController::class, 'submit_jawaban_quiz']);
-// Route::get('/api/get-saved-answer/{u_id}', [LearnController::class, 'get_saved']);
-
-Route::post('/api/change-answer', [DashboardController::class, 'change_answer']);
-
-Route::post('/api/collection/submit-jawaban/{collection_slug}', [PlayController::class, 'submit_jawaban_api']);
-Route::post('/api/collection/submit-jawaban-kuis/{collection_slug}', [PlayController::class, 'submit_jawaban_kuis_api']);
-Route::post('/api/collection/submit-jawaban-file/{collection_slug}', [PlayController::class, 'submit_jawaban_file_api']);

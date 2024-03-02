@@ -133,7 +133,7 @@
                                 <div id="content">
                                     <div class="flex justify-between items-center">
                                         <div>
-                                            @if (in_array($slide->type, ['file_attachment', 'short_answer', 'long_answer']))
+                                            @if (in_array($slide->type, ['short_answer', 'long_answer']))
                                                 @if ($slide->format['manual_correction'])
                                                     <p
                                                         class="text-xs text-white bg-blue-500 rounded-full font-semibold w-fit px-2 py-1 mb-2 flex gap-1 items-center">
@@ -184,7 +184,11 @@
                                     @if ($slide->type == 'youtube_video')
                                         @php
                                             $code = $slide->format['youtube_link'];
-                                            preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user|shorts)\/))([^\?&\"'>]+)/", $code, $matches);
+                                            preg_match(
+                                                "/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user|shorts)\/))([^\?&\"'>]+)/",
+                                                $code,
+                                                $matches,
+                                            );
                                         @endphp
                                         <div class="w-full mx-auto mb-5"><iframe class="w-full aspect-video"
                                                 src="https://www.youtube.com/embed/{{ $matches[1] }}" frameborder="0"

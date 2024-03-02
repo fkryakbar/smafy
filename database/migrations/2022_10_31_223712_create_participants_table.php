@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('kelas');
             $table->string('score_total');
+            $table->json('details')->nullable();
             $table->timestamps();
         });
     }

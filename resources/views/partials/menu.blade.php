@@ -46,7 +46,7 @@
                         aria-hidden="true"></span>
                 @endif
                 <a class="inline-flex items-center w-full text-sm font-semibold @if (Request::is('dashboard/hasil*') || Request::is('dashboard/result*')) text-amber-400 @endif transition-colors duration-150 hover:text-gray-800 "
-                    href="/dashboard/hasil">
+                    href="/dashboard/result">
                     <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
                         stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                         <path
@@ -158,7 +158,7 @@
                         aria-hidden="true"></span>
                 @endif
                 <a class="inline-flex items-center w-full text-sm font-semibold  @if (Request::is('dashboard/hasil*') || Request::is('dashboard/result*')) text-amber-400 @endif transition-colors duration-150 hover:text-gray-800 "
-                    href="/dashboard/hasil">
+                    href="/dashboard/result">
                     <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
                         stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                         <path
