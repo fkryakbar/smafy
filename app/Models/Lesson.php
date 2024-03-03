@@ -21,8 +21,20 @@ class Lesson extends Model
         return $this->hasMany(Sublesson::class, 'lesson_slug', 'slug');
     }
 
-    public function students(): HasMany
+    public function participants(): HasMany
     {
-        return $this->hasMany(SiswaCollection::class, 'collection_slug', 'slug');
+        return $this->hasMany(Participant::class, 'lesson_slug', 'slug');
+    }
+
+    public function accuracy()
+    {
+        $participants = $this->participants;
+
+        $score_total = 0;
+
+        foreach ($participants as $key => $participant) {
+            $score_total += $participant->score_total();
+        }
+        return round(($score_total / count($participants)), 2);
     }
 }

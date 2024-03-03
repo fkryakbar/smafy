@@ -61,6 +61,27 @@ class Participant extends Model
 
         return round(($finished_sublessons_total / $sublessons_total) * 100);
     }
+
+    public function finished_sublessons_total()
+    {
+        return count($this->details['finished_sublessons']);
+    }
+    public function sublessons_total()
+    {
+        return count(Lesson::where('slug', $this->lesson_slug)->with('sublessons')->first()->sublessons);
+    }
+
+    public function average_score()
+    {
+        $sublessons_total  = count(Lesson::where('slug', $this->lesson_slug)->with('sublessons')->first()->sublessons);
+
+        return round(($this->score_total() / $sublessons_total), 2);
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class, 'participants_id', 'id');
+    }
 }
 
 class Builder

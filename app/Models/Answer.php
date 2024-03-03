@@ -12,8 +12,12 @@ class Answer extends Model
     protected $table = 'answers';
     protected $guarded = [];
 
-    // public function get_soal()
-    // {
-    //     return $this->hasOne(QuestionsModel::class, 'id', 'soal_id');
-    // }
+    public function slide()
+    {
+        return $this->belongsTo(Slide::class, 'slide_id', 'id');
+    }
+    public function sublesson()
+    {
+        return $this->belongsTo(Sublesson::class, 'sublesson_slug', 'slug');
+    }
 }

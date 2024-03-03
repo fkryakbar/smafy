@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Answer;
 use App\Models\Slide;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +28,7 @@ class RemoveUnusedFile extends Command
      */
     public function handle(): void
     {
-        $localFiles = Storage::files('storage/user/img');
+        $localFiles = Storage::allFiles('storage/user');
 
         $localFiles = collect($localFiles);
 
@@ -35,13 +36,17 @@ class RemoveUnusedFile extends Command
             return $file != null;
         });
 
+        $fileAttachment =  Answer::whereHas('slide', function ($query) {
+            $query->where('type', 'file_attachment');
+        })->get()->pluck('answer');
+
+
+        $databaseFiles =  $databaseFiles->merge($fileAttachment);
         $unusedFiles =  $localFiles->diff($databaseFiles);
 
         $unusedFiles->each(function ($item) {
             Storage::disk('public')->delete($item);
         });
-
-
         $this->info($unusedFiles->count() . ' Unused files deleted');
     }
 }

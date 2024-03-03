@@ -33,7 +33,7 @@
                                     Topik
                                 </p>
                                 <p class="text-lg font-semibold text-gray-700 ">
-                                    0
+                                    {{ count($topics) }}
                                 </p>
                             </div>
                         </div>
@@ -48,10 +48,10 @@
                             </div>
                             <div>
                                 <p class="mb-2 text-sm font-medium text-gray-400 ">
-                                    Total siswa
+                                    Total Peserta Didik
                                 </p>
                                 <p class="text-lg font-semibold text-gray-700 ">
-                                    0
+                                    {{ $participants_total }}
                                 </p>
                             </div>
                         </div>

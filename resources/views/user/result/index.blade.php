@@ -68,7 +68,7 @@
                                     <img src="/image/documents.png" alt="logo" width="100%">
                                 </div>
                                 <div class="block lg:basis-[95%] basis-[75%]">
-                                    <a href="/dashboard/lessons/{{ $topic->slug }}">
+                                    <a href="/dashboard/result/{{ $topic->slug }}">
                                         <p class="text-lg font-semibold text-slate-600">
                                             {{ $topic->title }}
                                         </p>
@@ -88,7 +88,7 @@
                                                     <path
                                                         d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
                                                 </svg>
-                                                0
+                                                {{ count($topic->participants) }}
                                             </p>
                                             <p class="text-xs text-slate-400 flex gap-1 items-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -97,8 +97,7 @@
                                                         d="M2.25 2.25a.75.75 0 0 0 0 1.5H3v10.5a3 3 0 0 0 3 3h1.21l-1.172 3.513a.75.75 0 0 0 1.424.474l.329-.987h8.418l.33.987a.75.75 0 0 0 1.422-.474l-1.17-3.513H18a3 3 0 0 0 3-3V3.75h.75a.75.75 0 0 0 0-1.5H2.25Zm6.04 16.5.5-1.5h6.42l.5 1.5H8.29Zm7.46-12a.75.75 0 0 0-1.5 0v6a.75.75 0 0 0 1.5 0v-6Zm-3 2.25a.75.75 0 0 0-1.5 0v3.75a.75.75 0 0 0 1.5 0V9Zm-3 2.25a.75.75 0 0 0-1.5 0v1.5a.75.75 0 0 0 1.5 0v-1.5Z"
                                                         clip-rule="evenodd" />
                                                 </svg>
-
-                                                0
+                                                {{ $topic->accuracy() }}
                                             </p>
                                         </div>
                                     </a>
@@ -121,82 +120,6 @@
 
     </div>
 
-
-    <script>
-        function copy_link(slug) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            })
-
-            Toast.fire({
-                icon: 'success',
-                title: 'Link berhasil disalin'
-            })
-            navigator.clipboard.writeText(`{{ env('APP_URL') }}/play/${slug}`);
-        }
-
-        function delete_lesson(slug) {
-            Swal.fire({
-                title: 'Kamu Yakin?',
-                text: "Topik yang dihapus tidak dapat dikembalikan",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = `/dashboard/lessons/${slug}/hapus`
-                }
-            })
-        }
-
-        function copy_link_koleksi(slug) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            })
-
-            Toast.fire({
-                icon: 'success',
-                title: 'Link berhasil disalin'
-            })
-            navigator.clipboard.writeText(`{{ env('APP_URL') }}/play/${slug}`);
-        }
-
-        function hapus_koleksi(slug) {
-            Swal.fire({
-                title: 'Kamu Yakin?',
-                text: "Koleksi yang dihapus tidak dapat dikembalikan",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = `/dashboard/koleksi/${slug}/hapus`
-                }
-            })
-        }
-    </script>
 
 </body>
 

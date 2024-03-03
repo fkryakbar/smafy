@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lesson;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -49,10 +50,11 @@ class LessonController extends Controller
             'title' => 'required|max:200',
             'description' => 'required|max:400',
         ]);
-
+        // dd(strtotime($request->deadline_time_date . ' ' . $request->deadline_time_time));
         if ($request->deadline_time) {
             $request->merge([
-                'deadline_time' => strtotime($request->deadline_time_date . ' ' . $request->deadline_time_time)
+                'deadline_time' => strtotime($request->deadline_time_date . ' ' . $request->deadline_time_time),
+                // 'deadline_time' => (new DateTime($request->deadline_time_date . ' ' . $request->deadline_time_time))->getTimestamp(),
             ]);
         } else {
             $request->merge([
