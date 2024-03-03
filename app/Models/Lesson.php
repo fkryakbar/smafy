@@ -35,6 +35,9 @@ class Lesson extends Model
         foreach ($participants as $key => $participant) {
             $score_total += $participant->score_total();
         }
-        return round(($score_total / count($participants)), 2);
+        if (count($participants) > 0) {
+            return round(($score_total / count($participants)), 2);
+        }
+        return  0;
     }
 }

@@ -58,8 +58,10 @@ class Participant extends Model
     {
         $finished_sublessons_total = count($this->details['finished_sublessons']);
         $sublessons_total = count(Lesson::where('slug', $this->lesson_slug)->with('sublessons')->first()->sublessons);
-
-        return round(($finished_sublessons_total / $sublessons_total) * 100);
+        if ($sublessons_total > 0) {
+            return round(($finished_sublessons_total / $sublessons_total) * 100);
+        }
+        return 0;
     }
 
     public function finished_sublessons_total()
@@ -74,8 +76,11 @@ class Participant extends Model
     public function average_score()
     {
         $sublessons_total  = count(Lesson::where('slug', $this->lesson_slug)->with('sublessons')->first()->sublessons);
+        if ($sublessons_total > 0) {
+            return round(($this->score_total() / $sublessons_total), 2);
+        }
 
-        return round(($this->score_total() / $sublessons_total), 2);
+        return 0;
     }
 
     public function answers()

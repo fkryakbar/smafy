@@ -3,7 +3,8 @@
         <a href="/" class="btn btn-ghost normal-case text-white text-xl">Smafy</a>
     </div>
     <div class="dropdown dropdown-end min-[200px]:block lg:hidden">
-        <label tabindex="0" class="btn m-1 bg-amber-400 hover:bg-amber-700 border-none">
+        <label tabindex="0"
+            class="btn m-1 bg-amber-400 hover:bg-amber-700 border-none text-white shadow-none border-none">
             <i x-on:click="sidebar_open=true" x-show="sidebar_open==false" class="bi bi-list text-3xl"></i>
             <svg x-on:click="sidebar_open=false" x-show="sidebar_open==true" xmlns="http://www.w3.org/2000/svg"
                 width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
@@ -19,8 +20,6 @@
             </li>
             <li><a href="/register"
                     class="btn text-white shadow-none bg-amber-400 border-none hover:bg-amber-700">Daftar</a></li>
-            <li><a href="/browse" class="btn text-white shadow-none bg-amber-400 border-none hover:bg-amber-700">Smafy
-                    Library</a></li>
             <li><a href="/about"
                     class="btn text-white shadow-none bg-amber-400 border-none hover:bg-amber-700">Tentang</a></li>
             <li><a href="https://docs.smafy.my.id/" target="_blank"
@@ -67,21 +66,12 @@
             </svg>
             <p class="font-bold">Demo</p>
         </a>
-        <a href="/browse" class="flex mt-3 gap-3 text-white w-full hover:bg-amber-600 p-3 rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
-                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-            </svg>
-            <p class="font-bold">Smafy Library</p>
-        </a>
         <a href="/about" class="flex mt-3 gap-3 text-white w-full hover:bg-amber-600 p-3 rounded-lg">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
             </svg>
-
             <p class="font-bold">Tentang</p>
         </a>
         <a href="https://docs.smafy.my.id/" target="_blank"

@@ -17,11 +17,6 @@
                 </a>
             </div>
             <div class="px-5 py-2">
-                <a href="/browse" class="text-base leading-6 text-gray-500 hover:text-gray-900">
-                    Smafy Library
-                </a>
-            </div>
-            <div class="px-5 py-2">
                 <a target="_blank" href="https://smafy.my.id/play/rsEZ-dyh-xAx"
                     class="text-base leading-6 text-gray-500 hover:text-gray-900">
                     Demo
