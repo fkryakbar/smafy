@@ -106,7 +106,6 @@ class PlayController extends Controller
             }
             session()->forget($slug);
         }
-
         return redirect()->to('/play/' . $slug);
     }
 

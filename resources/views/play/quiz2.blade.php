@@ -228,7 +228,7 @@
         <div class="h-[70px]"></div>
         @if (
             $lesson->sublessons[0]->timer > 0 &&
-                !in_array($lesson->sublessons[0]->slug, session($lesson->slug)['finished_sublessons']))
+                !isset(session($lesson->slug)['finished_sublessons'][$lesson->sublessons[0]->slug]))
             <div>
                 <div class="flex justify-end">
                     <div class="bg-white rounded-md px-4 py-2">

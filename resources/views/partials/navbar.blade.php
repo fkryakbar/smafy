@@ -3,8 +3,7 @@
         <a href="/" class="btn btn-ghost normal-case text-white text-xl">Smafy</a>
     </div>
     <div class="dropdown dropdown-end min-[200px]:block lg:hidden">
-        <label tabindex="0"
-            class="btn m-1 bg-amber-400 hover:bg-amber-700 border-none text-white shadow-none border-none">
+        <label tabindex="0" class="btn m-1 bg-amber-400 hover:bg-amber-700 border-none text-white shadow-none">
             <i x-on:click="sidebar_open=true" x-show="sidebar_open==false" class="bi bi-list text-3xl"></i>
             <svg x-on:click="sidebar_open=false" x-show="sidebar_open==true" xmlns="http://www.w3.org/2000/svg"
                 width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">

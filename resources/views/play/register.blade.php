@@ -128,6 +128,24 @@
             </div>
         </div>
     </div>
+    <script>
+        const exit_button = document.getElementById('exit')
+        exit_button.addEventListener('click', function() {
+            Swal.fire({
+                title: 'Keluar?',
+                text: "Yakin mau keluar sekarang?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Keluar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/";
+                }
+            })
+        })
+    </script>
 </body>
 
 </html>

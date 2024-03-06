@@ -45,91 +45,14 @@
                     of their
                     students, ensuring that each student can learn in a way that works best for them.
                 </p>
-                <p class="my-7 text-justify indent-7">
-                    Our platform is accessible from anywhere, at any time, making it easy for students to access
-                    learning
-                    materials
-                    and resources from home, school, or on-the-go. With Smafy, students can engage with course materials
-                    in a
-                    way
-                    that works best for them, at a pace that suits their learning style.
-                </p>
                 <p class="my-7 text-justify">
-                    - Ahmad Fikri Akbar, Web Engineer
+                    - Ahmad Fikri Akbar, Developer
                 </p>
-                <div class="flex justify-center flex-col gap-2">
-                    <button onclick="clear_session()"
-                        class="btn text-white h-fit py-2 bg-red-500 hover:bg-red-700 border-none mx-auto gap-2"
-                        href="/clear_session">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-trash" viewBox="0 0 16 16">
-                            <path
-                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                            <path fill-rule="evenodd"
-                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-                        </svg>
-                        Hapus Semua Pengerjaan yang tersimpan</button>
-                    <label for="my-modal-4"
-                        class="btn text-white btn-sm bg-amber-500 hover:bg-amber-700 border-none mx-auto gap-2"
-                        href="/clear_session">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-flag" viewBox="0 0 16 16">
-                            <path
-                                d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001M14 1.221c-.22.078-.48.167-.766.255-.81.252-1.872.523-2.734.523-.886 0-1.592-.286-2.203-.534l-.008-.003C7.662 1.21 7.139 1 6.5 1c-.669 0-1.606.229-2.415.478A21.294 21.294 0 0 0 3 1.845v6.433c.22-.078.48-.167.766-.255C4.576 7.77 5.638 7.5 6.5 7.5c.847 0 1.548.28 2.158.525l.028.01C9.32 8.29 9.86 8.5 10.5 8.5c.668 0 1.606-.229 2.415-.478A21.317 21.317 0 0 0 14 7.655V1.222z" />
-                        </svg>
-                        Report and feedback</label>
-
-                </div>
                 <p class="my-7 text-center text-green-400">
-                    App Version 4.0 Stable (Collection is Alpha)
-                </p>
-                <input type="checkbox" id="my-modal-4" class="modal-toggle" />
-                <label for="my-modal-4" class="modal cursor-pointer">
-                    <label class="modal-box relative" for="">
-                        <h3 class="text-lg font-bold">Report and Feedback</h3>
-                        <h3 class="text-sm">Let us know how we're doing</h3>
-                        <hr class="my-3">
-                        <form action="" method="POST" autocomplete="off">
-                            @csrf
-                            <div class="form-control w-full">
-                                <label class="label">
-                                    <span class="label-text">What is your name?</span>
-                                </label>
-                                <input type="text" placeholder="Type here" class="input input-bordered w-full"
-                                    name="reporter" />
-                            </div>
-                            <div class="form-control w-full">
-                                <label class="label">
-                                    <span class="label-text">What is your email?</span>
-                                </label>
-                                <input type="text" placeholder="Type here" class="input input-bordered w-full"
-                                    name="email" />
-                            </div>
-                            <div class="form-control w-full">
-                                <label class="label">
-                                    <span class="label-text">What's kind you want to tell us about?</span>
-                                </label>
-                                <select class="select w-full select-bordered" name="type">
-                                    <option selected>Feedback</option>
-                                    <option>Report</option>
-                                </select>
-                            </div>
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="label-text">Tell us what you think</span>
-                                </label>
-                                <textarea class="textarea textarea-bordered h-24" placeholder="Tell us here..." name="description"></textarea>
-                            </div>
-                            <div class="form-control mt-3">
-                                <button type="submit" class="btn">Submit</button>
-                            </div>
-                        </form>
-                    </label>
-                </label>
+                    App Version 5.0 Stable </p>
             </div>
             <div class="basis-[50%]">
                 <img src="{{ asset('image/About us page-pana.svg') }}" class="hidden lg:block" alt="about">
-                <img src="{{ asset('image/About us page-rafiki.svg') }}" class="hidden lg:block" alt="about2">
             </div>
         </div>
 
@@ -140,31 +63,6 @@
         </path>
     </svg>
     @include('partials.landing_footer')
-    <script>
-        function clear_session() {
-            Swal.fire({
-                title: 'Bersihkan riwayat?',
-                text: "Anda tidak bisa lagi melihat riwayat pengerjaan topik anda!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, hapus',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '/clear_session'
-                }
-            })
-        }
-        @if (session()->has('msg'))
-            Swal.fire(
-                'Success!',
-                '{{ session('msg') }}',
-                'success'
-            )
-        @endif
-    </script>
 </body>
 
 </html>
